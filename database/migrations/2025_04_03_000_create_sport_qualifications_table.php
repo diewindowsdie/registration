@@ -5,18 +5,23 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
+
+    private const TABLE_NAME = "sport_qualifications";
+
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('sport_qualifications', function (Blueprint $table) {
-            $table->string("code", 2)->primary();
-            $table->string("short_title");
-            $table->string("full_title");
-        });
+        if (!Schema::hasTable(self::TABLE_NAME)) {
+            Schema::create(self::TABLE_NAME, function (Blueprint $table) {
+                $table->string("code", 2)->primary();
+                $table->string("short_title");
+                $table->string("full_title");
+            });
+        }
 
-        DB::table("sport_qualifications")->insert([
+        DB::table(self::TABLE_NAME)->insert([
             ["code" => "Z", "short_title" => "ЗМС", "full_title" => "Заслуженный мастер спорта"],
             ["code" => "MM", "short_title" => "МСМК", "full_title" => "Мастер спорта международного класса"],
             ["code" => "M", "short_title" => "МС", "full_title" => "Мастер спорта"],
@@ -36,6 +41,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('sport_qualifications');
+        Schema::dropIfExists(self::TABLE_NAME);
     }
 };

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
 
-    private const TABLE_NAME = "athlete_regions";
+    private const TABLE_NAME = "divisions";
 
     /**
      * Run the migrations.
@@ -15,17 +15,17 @@ return new class extends Migration {
     {
         if (!Schema::hasTable(self::TABLE_NAME)) {
             Schema::create(self::TABLE_NAME, function (Blueprint $table) {
-                $table->string("code", 6)->primary();
-                $table->string("full_name");
+                $table->string("code", 3)->primary();
+                $table->string("title");
             });
         }
 
         DB::table(self::TABLE_NAME)->insert([
-            ["code" => "SPB", "full_name" => "Санкт-Петербург"],
-            ["code" => "LO", "full_name" => "Ленинградская область"],
-            ["code" => "PSO", "full_name" => "Псковская область"],
-            ["code" => "RUS", "full_name" => "Российская федерация"],
-            ["code" => "TJK", "full_name" => "Таджикистан"]
+            ["code" => "R", "title" => "Классический лук"],
+            ["code" => "C", "title" => "Блочный лук"],
+            ["code" => "B", "title" => "Баребоу (Классический лук бесприцельный)"],
+            ["code" => "L", "title" => "Лонгбоу"],
+            ["code" => "T", "title" => "Традиционный (составной) лук"]
         ]);
     }
 
