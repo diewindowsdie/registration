@@ -3,5 +3,5 @@
 @section('title', 'Регистрация')
 
 @section('content')
-    <registration></registration>
+    <registration route-save="{{ route('athletes.save') }}"></registration>
 @endsection
