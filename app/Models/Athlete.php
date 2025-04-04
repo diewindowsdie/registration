@@ -6,5 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Athlete extends Model
 {
-    //
+    protected $casts = [
+        'birth_date' => 'date',
+    ];
 }
