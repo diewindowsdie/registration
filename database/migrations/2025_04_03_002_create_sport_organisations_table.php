@@ -15,7 +15,7 @@ return new class extends Migration {
     {
         if (!Schema::hasTable(self::TABLE_NAME)) {
             Schema::create(self::TABLE_NAME, function (Blueprint $table) {
-                $table->string("code", 10)->primary();
+                $table->string("code", 15)->primary();
                 $table->string("short_title");
                 $table->string("full_title");
             });

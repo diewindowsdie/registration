@@ -20,6 +20,7 @@ return new class extends Migration {
                 $table->string("title");
                 $table->date("start_date");
                 $table->date("end_date");
+                $table->string("created_by");
                 $table->dateTime("registration_start");
                 $table->dateTime("registration_finish");
                 $table->tinyInteger("competition_includes_teams");
