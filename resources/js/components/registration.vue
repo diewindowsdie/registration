@@ -160,6 +160,8 @@ function onSubmit() {
         ...athlete.value,
     }).then(r => {
         const data = r.data;
+        console.log(data);
+        alert('сохранено')
     }).catch(e => {
         console.log(e);
 
