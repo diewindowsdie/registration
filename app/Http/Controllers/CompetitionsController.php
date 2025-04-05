@@ -6,6 +6,7 @@ use App\Http\Requests\Athlete\SaveRequest;
 use App\Models\Athlete;
 use App\Models\Competition;
 use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -24,19 +25,23 @@ class CompetitionsController extends Controller
         return response()->json($fixture);
     }
 
-    public function save(SaveRequest $request): JsonResponse
+    public function new(): View
     {
-        $model = new Athlete();
-        $model->first_name = $request->first_name;
-        $model->surname = $request->surname;
-        $model->patronymic = $request->patronymic;
-        $model->gender = $request->gender;
-        $model->birth_date = $request->birth_date;
-        $model->region_code = $request->region_code;
+        return view('pages.competitions.new');
+    }
 
-        //$model->city = $request->city;
-        //$model->phone = $request->phone;
-        //$model->advertisement = (bool) $request->advertisement;
+    public function create(FormRequest $request): JsonResponse
+    {
+        $model = new Competition();
+        $model->title = $request->title;
+        $model->start_date = $request->start_date;
+        $model->end_date = $request->end_date;
+        $model->registration_start = $request->registration_start;
+        $model->registration_finish = $request->registration_finish;
+        $model->competition_includes_teams = $request->competition_includes_teams;
+        $model->competition_includes_mixed_teams = $request->competition_includes_mixed_teams;
+        $model->participants_list_available_to_anyone = $request->participants_list_available_to_anyone;
+        $model->created_by = "test"; //todo fixme later
 
         $model->save();
 

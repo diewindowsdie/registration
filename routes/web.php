@@ -11,6 +11,8 @@ Route::prefix('athletes')->name('athletes.')->group(function () {
 });
 
 Route::prefix('competitions')->name('competitions.')->group(function () {
-    Route::get('/', [CompetitionsController::class, 'index'])->name('index');
+    Route::get('/', [CompetitionsController::class, 'index'])->name('list');
+    Route::get('new', [CompetitionsController::class, 'new'])->name('new');
+    Route::post('create', [CompetitionsController::class, 'create'])->name('create');
 });
 
