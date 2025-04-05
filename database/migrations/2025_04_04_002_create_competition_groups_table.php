@@ -20,8 +20,8 @@ return new class extends Migration {
                 $table->string("division", 3);
                 $table->string("class", 6);
                 $table->string("allowed_genders");
-                $table->dateTime("min_birth_date");
-                $table->dateTime("max_birth_date");
+                $table->date("min_birth_date");
+                $table->date("max_birth_date");
 
                 $table->unique(["competition_id", "division", "class"]);
             });

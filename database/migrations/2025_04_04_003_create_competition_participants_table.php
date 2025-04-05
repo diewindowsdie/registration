@@ -28,7 +28,7 @@ return new class extends Migration {
                 $table->string("contact_information");
                 $table->string("coach_name")->nullable();
 
-                $table->unique(["athlete_id", "competition_id", "division"]);
+                $table->unique(["athlete_id", "competition_id", "division"], self::TABLE_NAME . "_unique");
             });
         }
     }

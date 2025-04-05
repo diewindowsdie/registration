@@ -4,6 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * 
+ *
+ * @property string $code
+ * @property string $full_name
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AthleteRegion newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AthleteRegion newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AthleteRegion query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AthleteRegion whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AthleteRegion whereFullName($value)
+ * @mixin \Eloquent
+ */
 class AthleteRegion extends Model
 {
     protected $primaryKey = 'code';

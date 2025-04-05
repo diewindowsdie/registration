@@ -5,7 +5,10 @@
 /public/storage
 /storage/*.key
 /storage/pail
+/storage/debugbar
 /vendor
+.phpstorm.meta.php
+_ide_helper.php
 .env
 .env.backup
 .env.production
