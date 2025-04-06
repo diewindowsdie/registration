@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Athlete\SaveRequest;
+use App\Models\ArcheryClass;
 use App\Models\Athlete;
 use App\Models\Competition;
+use App\Models\Division;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
-class CompetitionsController extends Controller
+class RegistrationController extends Controller
 {
     public function index(): View
     {
@@ -18,12 +21,21 @@ class CompetitionsController extends Controller
         return view('pages.competitions.list', ["competitions" => $competitions]);
     }
 
-    public function new(): View
+    public function registrationForm($id): View
     {
-        return view('pages.competitions.new');
+        $competition = Competition::find($id);
+        if ($competition != null) {
+            return view('pages.registration.registrationForm', [
+                "competition" => $competition,
+                "divisions" => Division::all(),
+                "archery_classes" => ArcheryClass::all()
+            ]);
+        }
+
+        return view("errors.404");
     }
 
-    public function create(FormRequest $request): JsonResponse
+    public function register(FormRequest $request): JsonResponse
     {
         $model = new Competition();
         $model->title = $request->title;

@@ -3,5 +3,5 @@
 @section('title', 'Регистрация')
 
 @section('content')
-    <registration route-save="{{ route('competitions.create') }}"></registration>
+    <competition-registration-form route-save="{{ route('competitions.create') }}"></competition-registration-form>
 @endsection

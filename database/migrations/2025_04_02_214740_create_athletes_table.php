@@ -22,7 +22,7 @@ return new class extends Migration
 
             $table->string("qualification", 6)->default("NO");
             $table->tinyInteger("using_chair")->default(0);
-            $table->string("region_code", 6);
+            $table->string("region", 6);
             $table->unique(["surname", "first_name", "patronymic", "gender", "birth_date"]);
         });
     }

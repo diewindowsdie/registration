@@ -11,10 +11,10 @@ const app = createApp({
     }
 });
 
-import Registration from "./components/registration.vue";
+import CompetitionRegistrationForm from "./components/CompetitionRegistrationForm.vue";
 import Competition from "./components/Competition.vue";
 import NewCompetitionForm from "./components/NewCompetitionForm.vue";
-app.component('Registration', Registration);
+app.component('CompetitionRegistrationForm', CompetitionRegistrationForm);
 app.component('Competition', Competition);
 app.component('NewCompetitionForm', NewCompetitionForm);
 

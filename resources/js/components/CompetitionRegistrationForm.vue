@@ -30,30 +30,50 @@
 
                     <div class="sm:col-span-2">
                         <fieldset>
-                            <legend class="text-sm/6 font-semibold text-gray-900">Пол персонажа</legend>
+                            <legend class="text-sm/6 font-semibold text-gray-900">Пол</legend>
                             <div class="mt-2 space-y-0">
                                 <div class="flex items-center gap-x-3">
-                                    <input v-model="athlete.gender" id="female" name="gender" type="radio" value="fe" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden">
-                                    <label for="female" class="block text-sm/6 font-medium text-gray-900">Женский</label>
+                                    <input v-model="athlete.gender" id="F" name="gender" type="radio" value="fe" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden">
+                                    <label for="F" class="block text-sm/6 font-medium text-gray-900">Женский</label>
                                 </div>
                                 <div class="flex items-center gap-x-3">
-                                    <input v-model="athlete.gender" id="male" name="gender" type="radio" value="ma" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden">
-                                    <label for="male" class="block text-sm/6 font-medium text-gray-900">Мужской</label>
-                                </div>
-                                <div class="flex items-center gap-x-3">
-                                    <input v-model="athlete.gender" id="secret-prison" name="gender" type="radio" value="secret-prison" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden">
-                                    <label for="secret-prison" class="block text-sm/6 font-medium text-gray-900">Не определился</label>
+                                    <input v-model="athlete.gender" id="M" name="gender" type="radio" value="ma" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden">
+                                    <label for="M" class="block text-sm/6 font-medium text-gray-900">Мужской</label>
                                 </div>
                             </div>
                         </fieldset>
                     </div>
 
-                    <div class="sm:col-span-4">
+                    <div class="sm:col-span-2">
                         <label for="birth_date" class="block text-sm/6 font-medium text-gray-900">Дата рождения</label>
                         <div class="mt-2">
                             <input v-model="athlete.birth_date" type="date" name="birth_date" id="birth_date" autocomplete="birthday" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                         </div>
                     </div>
+
+                    <div class="sm:col-span-2">
+                        <label for="birth_date" class="block text-sm/6 font-medium text-gray-900">Регион</label>
+                        <div class="mt-2">
+                            <input v-model="athlete.region" type="text" name="birth_date" id="birth_date" autocomplete="birthday" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+                        </div>
+<!--todo region component                        -->
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <label for="division" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Дивизион</label>
+                            <select v-model="athlete.division" id="division" name="division" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option v-for="division in divisions" value="{{ division.code}}">{{ division.title }}</option>
+                            </select>
+                    </div>
+                    <div class="sm:col-span-2">
+<!--                        <label for="group" class="block text-sm/6 font-medium text-gray-900">Класс</label>-->
+<!--                        <div class="mt-2">-->
+<!--                            <select v-model="athlete.archery_class" id="division" name="archery_class"class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">-->
+<!--                                <option v-for="archery_class in archery_classes" value="{{ archery_class.code}}">{{ archery_class.title }}</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
+                    </div>
+
 
                     <div class="sm:col-span-4">
                         <label for="phone" class="block text-sm/6 font-medium text-gray-900">Номер телефона</label>
@@ -134,7 +154,7 @@
 import { ref } from 'vue'
 import axios from "axios";
 
-const props = defineProps(['routeSave'])
+const props = defineProps(['routeSave', "competition", "divisions", "archery_classes"])
 
 const athlete = ref({
     first_name: '',

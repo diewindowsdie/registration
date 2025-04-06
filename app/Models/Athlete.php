@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -37,6 +37,12 @@ use Illuminate\Database\Eloquent\Model;
 class Athlete extends Model
 {
     protected $casts = [
-        'birth_date' => 'date:d.m.Y',
+        'birth_date' => 'date',
     ];
+
+    protected $with = ["region"];
+
+    public function region() {
+        return $this->hasOne(Region::class, "code", "region_code"); //todo "region"
+    }
 }

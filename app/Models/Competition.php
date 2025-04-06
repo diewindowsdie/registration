@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -43,10 +43,10 @@ class Competition extends Model
 {
     protected $with = ["groups"];
     protected $casts = [
-        'start_date' => 'date:d.m.Y',
-        'end_date' => 'date:d.m.Y',
-        'registration_start' => 'datetime:d.m.Y h:i:s',
-        'registration_finish' => 'datetime:d.m.Y h:i:s',
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'registration_start' => 'datetime',
+        'registration_finish' => 'datetime',
     ];
 
     public function groups(): HasMany

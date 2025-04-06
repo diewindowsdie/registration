@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $competition_id
@@ -32,8 +32,8 @@ class CompetitionGroup extends Model
 {
     protected $with = ["division", "archeryClass"];
     protected $casts = [
-        'min_birth_date' => 'date:d.m.Y',
-        'max_birth_date' => 'date:d.m.Y',
+        'min_birth_date' => 'date',
+        'max_birth_date' => 'date',
     ];
 
     public function division(): HasOne

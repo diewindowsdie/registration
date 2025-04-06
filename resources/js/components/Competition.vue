@@ -11,6 +11,7 @@
             <p v-if="group.min_birth_date != null">Дата рождения спортсмена, от: {{group.min_birth_date}}</p>
             <p v-if="group.max_birth_date != null">Дата рождения спортсмена, до: {{group.max_birth_date}}</p>
         </div>
+        <a :href="'registration/' + data.id">Зарегистрироваться: {{data.id}}</a>
     </div>
 </template>
 <script setup>
