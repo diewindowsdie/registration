@@ -43,6 +43,6 @@ class Athlete extends Model
     protected $with = ["region"];
 
     public function region() {
-        return $this->hasOne(Region::class, "code", "region_code"); //todo "region"
+        return $this->hasOne(AthleteRegion::class, "code", "region_code"); //todo "region"
     }
 }

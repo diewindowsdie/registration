@@ -14,8 +14,10 @@ const app = createApp({
 import CompetitionRegistrationForm from "./components/CompetitionRegistrationForm.vue";
 import Competition from "./components/Competition.vue";
 import NewCompetitionForm from "./components/NewCompetitionForm.vue";
+import Athlete from "./components/Athlete.vue";
 app.component('CompetitionRegistrationForm', CompetitionRegistrationForm);
 app.component('Competition', Competition);
 app.component('NewCompetitionForm', NewCompetitionForm);
+app.component('Athlete', Athlete);
 
 app.mount('#app')

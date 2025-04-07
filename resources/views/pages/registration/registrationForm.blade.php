@@ -4,6 +4,7 @@
 
 @section('content')
 <competition-registration-form route-save="{{ route('competitions.register') }}"
+                               route-find-athlete="{{ route('athletes.find') }}"
                                :competition="{{ $competition }}"
                                :divisions="{{ $divisions }}"
                                :archery_classes="{{ $archery_classes }}"

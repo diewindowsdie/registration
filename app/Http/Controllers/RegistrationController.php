@@ -35,6 +35,14 @@ class RegistrationController extends Controller
         return view("errors.404");
     }
 
+    public function findAthletes(Request $request) {
+        $athletes = Athlete::whereLike("surname", $request->get("surname") . "%")->get();
+        return response()->json([
+            'status' => 'ok',
+            'athletes' => $athletes
+        ]);
+    }
+
     public function register(FormRequest $request): JsonResponse
     {
         $model = new Competition();

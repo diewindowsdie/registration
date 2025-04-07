@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [FormController::class, 'index'])->name('index');
 
 Route::prefix('athletes')->name('athletes.')->group(function () {
+    Route::get("find", [RegistrationController::class, "findAthletes"])->name("find");
     Route::post('save', [FormController::class, 'save'])->name('save');
 });
 
