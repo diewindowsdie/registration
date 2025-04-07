@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CompetitionsController extends Controller
 {
@@ -34,7 +35,7 @@ class CompetitionsController extends Controller
         $model->competition_includes_teams = $request->competition_includes_teams;
         $model->competition_includes_mixed_teams = $request->competition_includes_mixed_teams;
         $model->participants_list_available_to_anyone = $request->participants_list_available_to_anyone;
-        $model->created_by = "test"; //todo fixme later
+        $model->created_by = $this->getAuthenticatedUserName();
 
         $model->save();
 
