@@ -34,6 +34,7 @@ class CompetitionGroup extends Model
     protected $casts = [
         'min_birth_date' => 'date',
         'max_birth_date' => 'date',
+        'allowed_genders' => "array"
     ];
 
     public function division(): HasOne

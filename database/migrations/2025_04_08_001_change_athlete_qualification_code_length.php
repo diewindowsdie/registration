@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+
+    private const TABLE_NAME = "athletes";
+
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        if (Schema::hasTable(self::TABLE_NAME)) {
+            Schema::table(self::TABLE_NAME, function (Blueprint $table) {
+                $table->string("qualification", 2)->default("NO")->change();
+            });
+        }
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        if (Schema::hasTable(self::TABLE_NAME)) {
+            Schema::table(self::TABLE_NAME, function (Blueprint $table) {
+                $table->string("qualification", 6)->default("NO")->change();
+            });
+        }
+    }
+};
