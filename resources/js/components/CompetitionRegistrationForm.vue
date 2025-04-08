@@ -213,10 +213,7 @@
 
 <script setup>
 import {ref} from 'vue'
-import Vue from 'vue'
-import Athlete from '/resources/js/components/Athlete.vue'
 import axios from "axios";
-import {Popover} from "flowbite";
 
 const props = defineProps(['routeSave', "routeFindAthlete", "competition", "divisions", "archery_classes"])
 
