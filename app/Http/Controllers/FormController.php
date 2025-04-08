@@ -12,14 +12,8 @@ class FormController extends Controller
 {
     public function index(): View
     {
+        return view('layout2.main');
         return view('pages.registration');
-    }
-
-    public function load(Request $request): JsonResponse
-    {
-        $fixture = [];
-
-        return response()->json($fixture);
     }
 
     public function save(SaveRequest $request): JsonResponse
