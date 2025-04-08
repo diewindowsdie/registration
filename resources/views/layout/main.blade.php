@@ -61,9 +61,18 @@
                     <span class="sr-only">Переключить меню</span>
                 </button>
                 <a href="{{ route('index') }}" class="flex items-center justify-between mr-4">
-                    <img src="https://flowbite.s3.amazonaws.com/logo.svg"
-                         class="mr-3 h-8"
-                         alt="Logo"/>
+                    <svg class="mr-3 h-8" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Голубой круг -->
+                        <circle cx="150" cy="150" r="120" fill="#D0EBF7"/>
+                        <!-- Лук -->
+                        <path d="M90 70 Q60 150, 90 230" fill="none" stroke="#5A381E" stroke-width="8" stroke-linecap="round"/>
+                        <!-- Тетива -->
+                        <line x1="90" y1="70" x2="90" y2="230" stroke="#2F2F2F" stroke-width="4"/>
+                        <!-- Стрела -->
+                        <line x1="85" y1="150" x2="180" y2="150" stroke="#2F2F2F" stroke-width="6" stroke-linecap="round"/>
+                        <!-- Увеличенный наконечник стрелы -->
+                        <polygon points="180,150 160,135 160,165" fill="#E63946"/>
+                    </svg>
                     <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Лучные дела ❤️</span>
                 </a>
             </div>
@@ -86,8 +95,8 @@
                         id="dropdown"
                 >
                     <div class="py-3 px-4">
-                        <span class="block text-sm font-semibold text-gray-900 dark:text-white">Neil Sims</span>
-                        <span class="block text-sm text-gray-900 truncate dark:text-white">name@flowbite.com</span>
+                        <span class="block text-sm font-semibold text-gray-900 dark:text-white">Стрел Рачков</span>
+                        <span class="block text-sm text-gray-900 truncate dark:text-white">blow@job.ru</span>
                     </div>
                     <ul
                             class="py-1 text-gray-700 dark:text-gray-300"
