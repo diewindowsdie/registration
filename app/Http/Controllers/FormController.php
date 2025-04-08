@@ -12,7 +12,6 @@ class FormController extends Controller
 {
     public function index(): View
     {
-        return view('layout2.main');
         return view('pages.registration');
     }
 
