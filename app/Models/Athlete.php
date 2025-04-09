@@ -50,6 +50,6 @@ class Athlete extends Model
 
     public function qualification(): HasOne
     {
-        return $this->hasOne(SportQualification::class, "code", "qualification");
+        return $this->hasOne(SportQualification::class, "code", "qualification_code");
     }
 }

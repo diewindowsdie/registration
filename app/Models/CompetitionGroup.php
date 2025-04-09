@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class CompetitionGroup extends Model
 {
     protected $with = ["division", "archeryClass"];
+
     protected $casts = [
         'min_birth_date' => 'date',
         'max_birth_date' => 'date',
@@ -39,11 +40,11 @@ class CompetitionGroup extends Model
 
     public function division(): HasOne
     {
-        return $this->hasOne(Division::class, "code", "division");
+        return $this->hasOne(Division::class, "code", "division_code");
     }
 
     public function archeryClass(): HasOne
     {
-        return $this->hasOne(ArcheryClass::class, "code", "class");
+        return $this->hasOne(ArcheryClass::class, "code", "class_code");
     }
 }
