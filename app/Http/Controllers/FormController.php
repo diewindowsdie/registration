@@ -15,13 +15,6 @@ class FormController extends Controller
         return view('pages.registration');
     }
 
-    public function load(Request $request): JsonResponse
-    {
-        $fixture = [];
-
-        return response()->json($fixture);
-    }
-
     public function save(SaveRequest $request): JsonResponse
     {
         $model = new Athlete();
