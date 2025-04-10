@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  *
@@ -40,9 +41,15 @@ class Athlete extends Model
         'birth_date' => 'date',
     ];
 
-    protected $with = ["region"];
+    protected $with = ["region", "qualification"];
 
-    public function region() {
-        return $this->hasOne(AthleteRegion::class, "code", "region_code"); //todo "region"
+    public function region(): HasOne
+    {
+        return $this->hasOne(AthleteRegion::class, "code", "region_code");
+    }
+
+    public function qualification(): HasOne
+    {
+        return $this->hasOne(SportQualification::class, "code", "qualification_code");
     }
 }

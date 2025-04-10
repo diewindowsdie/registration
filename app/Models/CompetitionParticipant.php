@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -58,11 +58,11 @@ class CompetitionParticipant extends Model
 
     public function division(): HasOne
     {
-        return $this->hasOne(Division::class, "code", "division");
+        return $this->hasOne(Division::class, "code", "division_code");
     }
 
     public function archeryClass(): HasOne
     {
-        return $this->hasOne(ArcheryClass::class, "code", "class");
+        return $this->hasOne(ArcheryClass::class, "code", "class_code");
     }
 }
