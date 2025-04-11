@@ -21,11 +21,11 @@
                                         }}{{ item.patronymic != null ? " " + item.patronymic : "" }}</b>,
                                         {{ item.qualification.short_title }}</p>
                                     <p v-if="item.gender === 'M'" class="text-right text-gray-400">родился
-                                        {{ moment(item.birth_date).format("DD.MM.YYYY") }},
+                                        {{ dayjs(item.birth_date).format("DD.MM.YYYY") }},
                                         {{ item.region.full_name }}</p>
                                     <p v-else-if="item.gender === 'F'" class="text-right text-gray-400">
                                         родилась
-                                        {{ moment(item.birth_date).format("DD.MM.YYYY") }},
+                                        {{ dayjs(item.birth_date).format("DD.MM.YYYY") }},
                                         {{ item.region.full_name }}</p>
                                 </div>
                             </template>
@@ -192,7 +192,7 @@
 <script setup>
 import {ref} from 'vue';
 import axios from "axios";
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const props = defineProps(['routeSave', "routeFindAthlete", "competition", "divisions", "archery_classes"]);
 const competition_copy = ref(props.competition);
@@ -317,7 +317,7 @@ function fillForm(data) {
     athlete.value.surname = data.surname;
     athlete.value.patronymic = data.patronymic;
     athlete.value.gender = data.gender;
-    athlete.value.birth_date = moment(data.birth_date).format("YYYY-MM-DD");
+    athlete.value.birth_date = dayjs(data.birth_date).format("YYYY-MM-DD");
     athlete.value.region = data.region.full_name;
     athlete.value.region_code = data.region.code;
 
