@@ -32,8 +32,7 @@ class RegistrationController extends Controller
         if ($competition != null) {
             return view('pages.registration.registrationForm', [
                 "competition" => $competition,
-                "divisions" => Division::all(),
-                "archery_classes" => ArcheryClass::all()
+                "qualifications" => SportQualification::all()
             ]);
         }
 
@@ -85,7 +84,7 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
         $athlete->birth_date = $request->input("birth_date");
 
         $athlete->gender = $request->input("gender");
-        $athlete->qualification_code = "M"; //todo поле ввода на форме
+        $athlete->qualification_code = $request->input("qualification");
         $athlete->region_code = $request->input("region_code");
 
         if ($request->input("athlete_id") === null) {

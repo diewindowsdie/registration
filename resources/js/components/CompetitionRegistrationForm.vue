@@ -73,29 +73,13 @@
                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                @change="resetParticipation"/>
                     </div>
-
-                    <!--                        <button id="dropdownDividerButton" data-dropdown-toggle="dropdownDivider" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Dropdown divider <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">-->
-                    <!--                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>-->
-                    <!--                        </svg>-->
-                    <!--                        </button>-->
-
-                    <!--                        &lt;!&ndash; Dropdown menu &ndash;&gt;-->
-                    <!--                        <div id="dropdownDivider" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">-->
-                    <!--                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDividerButton">-->
-                    <!--                                <li>-->
-                    <!--                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>-->
-                    <!--                                </li>-->
-                    <!--                                <li>-->
-                    <!--                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>-->
-                    <!--                                </li>-->
-                    <!--                                <li>-->
-                    <!--                                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>-->
-                    <!--                                </li>-->
-                    <!--                            </ul>-->
-                    <!--                            <div class="py-2">-->
-                    <!--                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Separated link</a>-->
-                    <!--                            </div>-->
-                    <!--                        </div>-->
+                    <div class="sm:col-span-2">
+                        <label for="qualifications" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Спортивный разряд/звание</label>
+                        <select id="qualifications" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            v-model="athlete.qualification">
+                            <option v-for="qualification in qualifications" :value="qualification.code">{{ qualification.full_title }}</option>
+                        </select>
+                    </div>
 
                     <div class="sm:col-span-2">
                         <label for="region"
@@ -118,14 +102,14 @@
                         </div>
                     </div>
 
-                    <div class="sm:col-span-3">
+                    <div class="sm:col-span-2">
                         <label for="sport_school" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Спортивная
                             школа</label>
                         <input type="text" v-model="athlete.sport_school" name="sport_school" id="sport_school"
                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
                     </div>
 
-                    <div class="sm:col-span-3">
+                    <div class="sm:col-span-2">
                         <label for="sport_organisation"
                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Спортивный клуб или
                             организация</label>
@@ -208,7 +192,7 @@ import {ref} from 'vue';
 import axios from "axios";
 import dayjs from 'dayjs';
 
-const props = defineProps(['routeSave', "routeFindAthlete", "routeFindRegion", "competition", "divisions", "archery_classes"]);
+const props = defineProps(['routeSave', "routeFindAthlete", "routeFindRegion", "competition", "qualifications"]);
 const competition_copy = ref(props.competition);
 
 const athlete = ref({
@@ -219,6 +203,7 @@ const athlete = ref({
     patronymic: '',
     gender: '',
     birth_date: '',
+    qualification: '',
     region_code: '',
     region: '',
     sport_school: '',
@@ -351,6 +336,7 @@ function onClear() {
         patronymic: '',
         gender: '',
         birth_date: '',
+        qualification: '',
         region: '',
         region_code: '',
         sport_school: '',
@@ -369,6 +355,7 @@ function fillForm(data) {
     athlete.value.birth_date = dayjs(data.birth_date).format("YYYY-MM-DD");
     athlete.value.region = data.region.full_name;
     athlete.value.region_code = data.region.code;
+    athlete.value.qualification = data.qualification.code;
 
     athletes.value = [];
     resetParticipation();

@@ -7,7 +7,6 @@
                                route-find-athlete="{{ route('athletes.find') }}"
                                route-find-region="{{ route('regions.find') }}"
                                :competition="{{ $competition }}"
-                               :divisions="{{ $divisions }}"
-                               :archery_classes="{{ $archery_classes }}"
+                               :qualifications="{{ $qualifications }}"
 ></competition-registration-form>
 @endsection
