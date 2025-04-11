@@ -67,9 +67,10 @@
                     </div>
 
                     <div class="sm:col-span-2">
-                        <label for="birth_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Дата рождения</label>
-                            <input v-model="athlete.birth_date" type="date" name="birth_date" id="birth_date"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                        <label for="birth_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Дата
+                            рождения</label>
+                        <input v-model="athlete.birth_date" type="date" name="birth_date" id="birth_date"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
                     </div>
 
                     <!--                        <button id="dropdownDividerButton" data-dropdown-toggle="dropdownDivider" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Dropdown divider <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">-->
@@ -96,70 +97,90 @@
                     <!--                        </div>-->
 
                     <div class="sm:col-span-2">
-                        <label for="region" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Регион</label>
-                            <input type="hidden" v-model="athlete.region_code" id="region_code" name="region_code"/>
-                            <input v-model="athlete.region" type="text" name="region" id="region"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                        <label for="region"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Регион</label>
+                        <input type="hidden" v-model="athlete.region_code" id="region_code" name="region_code"/>
+                        <input v-model="athlete.region" type="text" name="region" id="region"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
                         <!--todo region component                        -->
                     </div>
 
                     <div class="sm:col-span-3">
-                        <label for="sport_school" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Спортивная школа</label>
-                            <input type="text" v-model="athlete.sport_school" name="sport_school" id="sport_school"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                        <label for="sport_school" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Спортивная
+                            школа</label>
+                        <input type="text" v-model="athlete.sport_school" name="sport_school" id="sport_school"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
                     </div>
 
                     <div class="sm:col-span-3">
-                        <label for="sport_organisation" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Спортивный клуб или организация</label>
-                            <input type="text" v-model="athlete.sport_organisation" name="sport_organisation"
-                                   id="sport_organisation"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                        <label for="sport_organisation"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Спортивный клуб или
+                            организация</label>
+                        <input type="text" v-model="athlete.sport_organisation" name="sport_organisation"
+                               id="sport_organisation"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
                     </div>
 
                     <div class="sm:col-span-6">
-                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white select-none">Участие в соревнованиях:</label>
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white select-none">Участие
+                            в соревнованиях:</label>
                         <template v-for="group in competition_copy.groups">
-                            <div class="grid grid-cols-1 gap-x-6 gap-y-0 sm:grid-cols-1 flex items-center p-4 mt-2 text-sm text-gray-800 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
-                                 v-if="group.allowed_genders.includes(athlete.gender) || athlete.gender === ''">
+                            <div
+                                class="grid grid-cols-1 gap-x-6 gap-y-0 sm:grid-cols-1 flex items-center p-4 mt-2 text-sm text-gray-800 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
+                                v-if="isGroupAvailable(group)">
                                 <div class="flex items-center sm:row-span-1">
-                                    <input id="participation_{{group.id}}" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                        v-model="group.participation"/>
-                                    <label for="participation_{{group.id}}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">{{ group.division.title }} {{ group.archery_class.title }}</label>
+                                    <input id="participation_{{group.id}}" type="checkbox" value=""
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                           v-model="group.participation"/>
+                                    <label for="participation_{{group.id}}"
+                                           class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">{{
+                                            group.division.title
+                                        }} {{ group.archery_class.title }}</label>
                                 </div>
-                                <div class="sm:row-span-1 pl-5 mt-5" v-if="group.participation == true">
-                                <div v-if="group.includes_teams == 1" class="flex items-center">
-                                    <input id="participation_team_{{group.id}}" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                           v-model="group.participate_teams"/>
-                                    <label for="participation_team_{{group.id}}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">Участвую в командных соревнованиях</label>
-                                </div>
-                                <div v-if="group.includes_mixed_teams == 1" class="flex items-center">
-                                    <input id="participation_mixed_team_{{group.id}}" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                           v-model="group.participate_mixed_teams"/>
-                                    <label for="participation_mixed_team_{{group.id}}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">Участвую в соревнованиях команд-микс</label>
-                                </div>
+                                <div class="sm:row-span-1 pl-5 mt-5" v-if="group.participation == true && (group.includes_teams == 1 || group.includes_mixed_teams == 1)">
+                                    <div v-if="group.includes_teams == 1" class="flex items-center">
+                                        <input id="participation_team_{{group.id}}" type="checkbox" value=""
+                                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                               v-model="group.participate_teams"/>
+                                        <label for="participation_team_{{group.id}}"
+                                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">Участвую
+                                            в командных соревнованиях</label>
                                     </div>
+                                    <div v-if="group.includes_mixed_teams == 1" class="flex items-center">
+                                        <input id="participation_mixed_team_{{group.id}}" type="checkbox" value=""
+                                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                               v-model="group.participate_mixed_teams"/>
+                                        <label for="participation_mixed_team_{{group.id}}"
+                                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">Участвую
+                                            в соревнованиях команд-микс</label>
+                                    </div>
+                                </div>
                             </div>
                         </template>
                     </div>
 
                     <div class="sm:col-span-3">
-                        <label for="contact_info" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Контактная информация</label>
-                            <input type="text" v-model="athlete.contact_information" name="contact_info"
-                                   id="contact_info"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                        <label for="contact_info" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Контактная
+                            информация</label>
+                        <input type="text" v-model="athlete.contact_information" name="contact_info"
+                               id="contact_info"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
                     </div>
                     <div class="sm:col-span-3">
                         <label for="coach_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Тренер</label>
-                            <input type="text" v-model="athlete.coach_name" name="coach_name" id="coach_name"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                        </div>
+                        <input type="text" v-model="athlete.coach_name" name="coach_name" id="coach_name"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                    </div>
                 </div>
 
-                <button type="button" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600 mr-1" @click.prevent="onClear">
+                <button type="button"
+                        class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600 mr-1"
+                        @click.prevent="onClear">
                     Очистить
                 </button>
 
-                <button type="submit" class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
+                <button type="submit"
+                        class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
                     Сохранить
                 </button>
 
@@ -216,6 +237,19 @@ function searchAthlete(ignoreFormData = false) {
             cache[athlete.value.surname] = response.data.athletes;
         })
     }
+}
+
+function isGroupAvailable(group) {
+    //если пол спортсмена еще неизвестен - не фильтруем по полу
+    const isAthleteGenderKnown = athlete.value.gender != '';
+    const atLeastOneGroupSelected = competition_copy.value.groups.some(c_group => c_group.participation);
+
+    //проверим классы всех групп, где уже заявлено участие - спортсмен может участвовать только в одном классе
+    const genderCriteriaMet = !isAthleteGenderKnown || group.allowed_genders.includes(athlete.value.gender);
+    const sameClassCriteriaMet = !atLeastOneGroupSelected ||
+        competition_copy.value.groups.some(c_group => c_group.participation && c_group.class_code == group.class_code);
+
+    return genderCriteriaMet && sameClassCriteriaMet;
 }
 
 function onSubmit() {
