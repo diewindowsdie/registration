@@ -32,7 +32,7 @@ class RegistrationController extends Controller
         if ($competition != null) {
             return view('pages.registration.registrationForm', [
                 "competition" => $competition,
-                "qualifications" => SportQualification::all()
+                "qualifications" => SportQualification::orderBy("order", "asc")->get()
             ]);
         }
 
