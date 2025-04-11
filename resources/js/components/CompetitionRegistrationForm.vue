@@ -5,7 +5,8 @@
                 <div class="border-gray-300 dark:border-gray-600 rounded-2xl border px-5 py-5">
                     <div class="grid grid-cols-15 gap-x-6 gap-y-8 sm:grid-cols-15">
                         <div class="sm:col-span-15"><label
-                            class="block mb-2 text-2xl font-medium text-gray-900 dark:text-white select-none">Данные спортсмена:</label>
+                            class="block mb-2 text-2xl font-medium text-gray-900 dark:text-white select-none">Данные
+                            спортсмена:</label>
                         </div>
                         <div class="sm:col-span-5">
                             <label for="surname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Фамилия</label>
@@ -19,11 +20,11 @@
                                 <template v-for="item in athletes">
                                     <div @click="fillForm(item)"
                                          class="hover:bg-gray-200 hover:dark:bg-gray-600 px-3 py-3 ">
-                                        <p class="text-left"><b class="font-bold">{{ item.surname }}
-                                            {{
-                                                item.first_name
-                                            }}{{ item.patronymic != null ? " " + item.patronymic : "" }}</b>,
-                                            {{ item.qualification.short_title }}</p>
+                                        <p class="text-left"><b class="font-bold">{{
+                                                item.surname
+                                            }}&nbsp;{{ item.first_name }}{{
+                                                item.patronymic != null ? "&nbsp;" + item.patronymic : ""
+                                            }}</b>, {{ item.qualification.short_title }}</p>
                                         <p v-if="item.gender === 'M'" class="text-right text-gray-400">родился
                                             {{ dayjs(item.birth_date).format("DD.MM.YYYY") }},
                                             {{ item.region.full_name }}</p>

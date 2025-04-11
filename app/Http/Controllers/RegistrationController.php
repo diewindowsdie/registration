@@ -70,6 +70,7 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
 
     private function createNewAthlete(Athlete $athlete): Athlete
     {
+        Log::info("new athlete: " . $athlete);
         $athlete->save();
 
         return $athlete;
@@ -86,6 +87,7 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
         $athlete->gender = $request->input("gender");
         $athlete->qualification_code = $request->input("qualification");
         $athlete->region_code = $request->input("region_code");
+        $athlete->using_chair = $request->input("using_chair") ? 1 : 0;
 
         if ($request->input("athlete_id") === null) {
             return $this->createNewAthlete($athlete);
@@ -117,6 +119,11 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
         if ($athlete->region_code !== $existingAthlete->region_code) {
             $differenceCount++;
         }
+        if ($athlete->using_chair !== $existingAthlete->using_chair) {
+            $differenceCount++;
+        }
+
+        Log::info("existing athlete: " . $existingAthlete);
 
         if ($differenceCount >= 2) {
             return $this->createNewAthlete($athlete);
@@ -130,6 +137,7 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
         $existingAthlete->gender = $athlete->gender;
         $existingAthlete->qualification_code = $athlete->qualification_code;
         $existingAthlete->region_code = $athlete->region_code;
+        $existingAthlete->using_chair = $athlete->using_chair;
         $existingAthlete->save();
 
         return $existingAthlete;
@@ -149,6 +157,15 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
         //todo для каждой группы - если передан ключ "от пары спортсмен-соревнование"- ищем группу по спортсмену, соревнованию и дивизиону, и ставим то, что пришло с фронтенда, если участия нет - удаляем
         //todo если ключа нет - перед созданием проверяем существование группы, если она уже есть - пропускаем, если нет - создаем если включен флаг участия
         $athlete = $this->getRegisteringAthlete($request);
+
+
+        //todo delete me
+        return response()->json([
+            'status' => 'ok',
+            //'id' => $participant->id,
+            //'participant' => $participant,
+        ]);
+
         foreach ($request->input("groups") as $group) {
             if ($group["participation"]) {
                 $participant = new CompetitionParticipant();
