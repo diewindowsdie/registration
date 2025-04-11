@@ -40,9 +40,15 @@ class RegistrationController extends Controller
         return view("errors.404");
     }
 
-    public function findAthletes(Request $request)
+    public function findAthletes(Request $request): JsonResponse
     {
-        $athletes = Athlete::whereLike("surname", $request->get("surname") . "%")->get();
+        //выберем спортсменов, у которых еще нет ни одной записи о регистрации на эти соревнования
+        $athletes = Athlete::fromQuery("select a.* from athletes a
+left join (select count(1) as cnt, athlete_id from competition_participants where competition_id = :competition_id group by athlete_id) s
+                                               on s.athlete_id = a.id
+where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" => $request->get("surname") . "%", ":competition_id" => $request->get("competition_id")]);
+        $athletes->load(["region", "qualification"]);
+
         return response()->json([
             'status' => 'ok',
             'athletes' => $athletes

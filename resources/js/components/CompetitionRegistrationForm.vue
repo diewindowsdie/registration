@@ -208,7 +208,8 @@ function searchAthlete(ignoreFormData = false) {
 
         axios.get(props.routeFindAthlete, {
             params: {
-                surname: athlete.value.surname
+                surname: athlete.value.surname,
+                competition_id: props.competition.id
             }
         }).then((response) => {
             athletes.value = response.data.athletes;
