@@ -293,7 +293,7 @@ function isGroupAvailable(group) {
     const sameClassCriteriaMet = !atLeastOneGroupSelected ||
         competition_copy.value.groups.some(c_group => c_group.participation && c_group.class_code == group.class_code);
 
-    //дата рождения спортсмена должна попадать между минимальной и максимальной датой рождения, определенённой для группы
+    //дата рождения спортсмена должна попадать между минимальной и максимальной датой рождения, определенной для группы
     const birthDateCriteriaMet = !isAthleteBirthdayKnown ||
         (dayjs(athlete.value.birth_date).diff(dayjs(group.min_birth_date)) <= 0 &&
             (dayjs(athlete.value.birth_date).diff(dayjs(group.max_birth_date)) >= 0));

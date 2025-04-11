@@ -18,6 +18,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
+enum RegistrationError implements \JsonSerializable {
+    case ALREADY_EXISTS;
+    case INVALID_GENDER_FOR_GROUP;
+    case INVALID_BIRTH_DATE_FOR_GROUP;
+    case DIFFERENT_CLASSES_IN_SAME_COMPETITION;
+
+    public function jsonSerialize(): string
+    {
+        return $this->name;
+    }
+}
+
 class RegistrationController extends Controller
 {
     public function index(): View
@@ -70,7 +82,6 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
 
     private function createNewAthlete(Athlete $athlete): Athlete
     {
-        Log::info("new athlete: " . $athlete);
         $athlete->save();
 
         return $athlete;
@@ -123,8 +134,6 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
             $differenceCount++;
         }
 
-        Log::info("existing athlete: " . $existingAthlete);
-
         if ($differenceCount >= 2) {
             return $this->createNewAthlete($athlete);
         }
@@ -152,20 +161,73 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
         return $array[$key] == true;
     }
 
+    private static function checkRegistrationBusinessLogicErrors($request): array {
+        //сначала проверим, есть ли регистрация хотя бы в один дивизион у спортсмена, если есть - возвращаем ошибку
+        if ($request->input("athlete_id")) {
+            $existingRegistration = CompetitionParticipant::where([
+                ["athlete_id", "=", $request->input("athlete_id")],
+                ["competition_id", "=", $request->input("competition_id")]
+            ])->count();
+            if ($existingRegistration > 0) {
+                return [RegistrationError::ALREADY_EXISTS];
+            }
+        }
+
+        //проверим, что во всех группах пол спортсмена соответствует разрешенным в группе и возраст спортсмена соответствует требованиям группы
+        //проверим, что во всех группах, куда спортсмен заявился, одинаковый класс
+        $foundClass = "";
+        $gender = $request->input("gender");
+        $birthDate = Carbon::createFromFormat("Y-m-d", $request->input("birth_date"));
+        foreach ($request->input("groups") as $group) {
+            if ($group["participation"]) {
+                $existingGroup = CompetitionGroup::findOrFail($group["id"]);
+
+                if ($foundClass === "") {
+                    $foundClass = $existingGroup->class_code;
+                }
+                if ($foundClass !== $existingGroup->class_code) {
+                    return [RegistrationError::DIFFERENT_CLASSES_IN_SAME_COMPETITION];
+                }
+
+                if (!in_array($gender, $existingGroup->allowed_genders, true)) {
+                    return [RegistrationError::INVALID_GENDER_FOR_GROUP];
+                }
+                if ($birthDate->gt($existingGroup->min_birth_date) ||
+                    $birthDate->lt($existingGroup->max_birth_date)) {
+                    return [RegistrationError::INVALID_BIRTH_DATE_FOR_GROUP];
+                }
+            }
+        }
+
+        foreach ($request->input("groups") as $group) {
+            if ($group["participation"]) {
+                $existingGroup = CompetitionGroup::findOrFail($group["id"]);
+                if (!in_array($gender, $existingGroup->allowed_genders, true)) {
+                    return [RegistrationError::INVALID_GENDER_FOR_GROUP];
+                }
+                if ($birthDate->gt($existingGroup->min_birth_date) ||
+                    $birthDate->lt($existingGroup->max_birth_date)) {
+                    return [RegistrationError::INVALID_BIRTH_DATE_FOR_GROUP];
+                }
+            }
+        }
+
+        return [];
+    }
+
     public function register(FormRequest $request): JsonResponse
     {
-        //todo для каждой группы - если передан ключ "от пары спортсмен-соревнование"- ищем группу по спортсмену, соревнованию и дивизиону, и ставим то, что пришло с фронтенда, если участия нет - удаляем
-        //todo если ключа нет - перед созданием проверяем существование группы, если она уже есть - пропускаем, если нет - создаем если включен флаг участия
+        $errors = self::checkRegistrationBusinessLogicErrors($request);
+        if (count($errors) > 0) {
+            Log::warning("Ошибки при регистрации спортсмена на соревнования: competition_id = {competition_id}, athlete_id = {athlete_id}, errors = {errors}",
+                ["competition_id" => $request->input("competition_id"), "athlete_id" => $request->input("athlete_id"), "errors" => $errors]);
+            return response()->json([
+                'status' => 'error',
+                'error' => array_values($errors)[0]
+            ]);
+        }
+
         $athlete = $this->getRegisteringAthlete($request);
-
-
-        //todo delete me
-        return response()->json([
-            'status' => 'ok',
-            //'id' => $participant->id,
-            //'participant' => $participant,
-        ]);
-
         foreach ($request->input("groups") as $group) {
             if ($group["participation"]) {
                 $participant = new CompetitionParticipant();
@@ -179,7 +241,6 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
                 $existingGroup = CompetitionGroup::findOrFail($group["id"]);
                 $participant->division_code = $existingGroup->division_code;
                 $participant->class_code = $existingGroup->class_code;
-
                 $participant->participate_teams = self::wrapUnsafeBoolean($group, "participate_teams");
                 $participant->participate_mixed_teams = self::wrapUnsafeBoolean($group, "participate_mixed_teams");
 
