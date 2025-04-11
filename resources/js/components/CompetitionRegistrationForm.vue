@@ -240,16 +240,24 @@ function searchAthlete(ignoreFormData = false) {
 }
 
 function isGroupAvailable(group) {
-    //если пол спортсмена еще неизвестен - не фильтруем по полу
+    console.log(group);
     const isAthleteGenderKnown = athlete.value.gender != '';
     const atLeastOneGroupSelected = competition_copy.value.groups.some(c_group => c_group.participation);
+    const isAthleteBirthdayKnown = athlete.value.birth_date != '';
+
+    //если пол спортсмена еще неизвестен - не фильтруем по полу
+    const genderCriteriaMet = !isAthleteGenderKnown || group.allowed_genders.includes(athlete.value.gender);
 
     //проверим классы всех групп, где уже заявлено участие - спортсмен может участвовать только в одном классе
-    const genderCriteriaMet = !isAthleteGenderKnown || group.allowed_genders.includes(athlete.value.gender);
     const sameClassCriteriaMet = !atLeastOneGroupSelected ||
         competition_copy.value.groups.some(c_group => c_group.participation && c_group.class_code == group.class_code);
 
-    return genderCriteriaMet && sameClassCriteriaMet;
+    //дата рождения спортсмена должна попадать между минимальной и максимальной датой рождения, определенённой для группы
+    const birthDateCriteriaMet = !isAthleteGenderKnown ||
+        (dayjs(athlete.value.birth_date).diff(dayjs(group.min_birth_date)) <= 0 &&
+            (dayjs(athlete.value.birth_date).diff(dayjs(group.max_birth_date)) >= 0));
+
+    return genderCriteriaMet && sameClassCriteriaMet && birthDateCriteriaMet;
 }
 
 function onSubmit() {
