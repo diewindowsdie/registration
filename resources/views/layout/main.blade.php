@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@yield('title') | Клуб любителей блочной стрельбы</title>
+    <title>@yield('title')</title>
 
     <!-- Styles / Scripts -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -73,7 +73,7 @@
                         <!-- Увеличенный наконечник стрелы -->
                         <polygon points="180,150 160,135 160,165" fill="#E63946"/>
                     </svg>
-                    <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Лучные дела ❤️</span>
+                    <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">@yield('title')</span>
                 </a>
             </div>
             <div class="flex items-center lg:order-2">
