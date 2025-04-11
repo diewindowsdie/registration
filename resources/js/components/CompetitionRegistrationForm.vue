@@ -10,8 +10,8 @@
                                class="border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                @focusin="searchAthlete()"/>
                         <div
-                            class="absolute border  bg-gray-50 border-gray-300 text-gray-900 text-sm outline-1 -outline-offset-1 outline-gray-300 sm:text-sm/6 z-40 sm:col-span-2 w-90 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                            v-show="athletes.length">
+                            class="absolute border bg-gray-50 border-gray-300 ml-1 mt-1 text-gray-900 w-85 rounded-lg text-sm outline-1 outline-gray-300 z-40  dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:outline-gray-500"
+                            v-show="athletes.length > 0">
                             <template v-for="item in athletes">
                                 <div @click="fillForm(item)"
                                      class="hover:bg-gray-200 hover:dark:bg-gray-600 px-3 py-3 ">
@@ -102,8 +102,20 @@
                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Регион</label>
                         <input type="hidden" v-model="athlete.region_code" id="region_code" name="region_code"/>
                         <input v-model="athlete.region" type="text" name="region" id="region"
-                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                        <!--todo region component                        -->
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               @focusin="searchRegion()"
+                               @input="searchRegion()"
+                        />
+                        <div
+                            class="absolute border bg-gray-50 border-gray-300 ml-1 mt-1 text-gray-900 w-85 rounded-lg text-sm outline-1 outline-gray-300 z-40  dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:outline-gray-500"
+                            v-show="regions.length > 0">
+                            <template v-for="item in regions">
+                                <div @click="fillRegion(item)"
+                                     class="hover:bg-gray-200 hover:dark:bg-gray-600 px-3 py-3 ">
+                                    <p class="text-left">{{ item.full_name }}</p>
+                                </div>
+                            </template>
+                        </div>
                     </div>
 
                     <div class="sm:col-span-3">
@@ -138,7 +150,8 @@
                                             group.division.title
                                         }} {{ group.archery_class.title }}</label>
                                 </div>
-                                <div class="sm:row-span-1 pl-5 mt-5" v-if="group.participation == true && (group.includes_teams == 1 || group.includes_mixed_teams == 1)">
+                                <div class="sm:row-span-1 pl-5 mt-5"
+                                     v-if="group.participation == true && (group.includes_teams == 1 || group.includes_mixed_teams == 1)">
                                     <div v-if="group.includes_teams == 1" class="flex items-center">
                                         <input id="participation_team_{{group.id}}" type="checkbox" value=""
                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
@@ -195,7 +208,7 @@ import {ref} from 'vue';
 import axios from "axios";
 import dayjs from 'dayjs';
 
-const props = defineProps(['routeSave', "routeFindAthlete", "competition", "divisions", "archery_classes"]);
+const props = defineProps(['routeSave', "routeFindAthlete", "routeFindRegion", "competition", "divisions", "archery_classes"]);
 const competition_copy = ref(props.competition);
 
 const athlete = ref({
@@ -215,7 +228,10 @@ const athlete = ref({
 });
 
 const athletes = ref([]);
-let cache = {};
+let athleteRequestsCache = {};
+
+const regions = ref([]);
+let regionRequestsCache = {};
 
 function searchAthlete(ignoreFormData = false) {
     if (!ignoreFormData && (athlete.value.surname.length > 0 || athlete.value.first_name.length > 0 || athlete.value.patronymic.length > 0)) {
@@ -223,8 +239,8 @@ function searchAthlete(ignoreFormData = false) {
     }
 
     if (athlete.value.surname.length > 2) {
-        if (athlete.value.surname in cache) {
-            athletes.value = cache[athlete.value.surname];
+        if (athlete.value.surname in athleteRequestsCache) {
+            athletes.value = athleteRequestsCache[athlete.value.surname];
             return;
         }
 
@@ -235,7 +251,27 @@ function searchAthlete(ignoreFormData = false) {
             }
         }).then((response) => {
             athletes.value = response.data.athletes;
-            cache[athlete.value.surname] = response.data.athletes;
+            athleteRequestsCache[athlete.value.surname] = response.data.athletes;
+        })
+    }
+}
+
+function searchRegion() {
+    athlete.value.region_code = '';
+
+    if (athlete.value.region.length > 0) {
+        if (athlete.value.region in regionRequestsCache) {
+            regions.value = regionRequestsCache[athlete.value.region];
+            return;
+        }
+
+        axios.get(props.routeFindRegion, {
+            params: {
+                query: athlete.value.region
+            }
+        }).then((response) => {
+            regions.value = response.data.regions;
+            regionRequestsCache[athlete.value.region] = response.data.regions;
         })
     }
 }
@@ -285,7 +321,7 @@ function onSubmit() {
     }).then(r => {
         //const data = r.data;
         //console.log(data);
-        cache = {};
+        athleteRequestsCache = {};
         alert('сохранено');
     }).catch(e => {
         console.log(e);
@@ -336,5 +372,12 @@ function fillForm(data) {
 
     athletes.value = [];
     resetParticipation();
+}
+
+function fillRegion(data) {
+    athlete.value.region = data.full_name;
+    athlete.value.region_code = data.code;
+
+    regions.value = [];
 }
 </script>

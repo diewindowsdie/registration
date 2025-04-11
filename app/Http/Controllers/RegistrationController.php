@@ -55,6 +55,20 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
         ]);
     }
 
+    public function findRegion(Request $request): JsonResponse
+    {
+        //ищем по коду региона и названию
+        $regions = AthleteRegion::whereLike("code", $request->input("query") . "%")
+            ->orWhereLike("full_name", $request->input("query") . "%")
+            ->limit(3)
+            ->get();
+
+        return response()->json([
+            'status' => 'ok',
+            'regions' => $regions
+        ]);
+    }
+
     private function createNewAthlete(Athlete $athlete): Athlete
     {
         $athlete->save();

@@ -20,3 +20,5 @@ Route::prefix('competitions')->name('competitions.')->group(function () {
     Route::post("register", [RegistrationController::class, "register"])->name("register");
 });
 
+Route::get("regions/find", [RegistrationController::class, "findRegion"])->name("regions.find");
+
