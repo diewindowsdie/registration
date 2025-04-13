@@ -10,7 +10,9 @@ use App\Models\Competition;
 use App\Models\CompetitionGroup;
 use App\Models\CompetitionParticipant;
 use App\Models\Division;
+use App\Models\SportOrganisation;
 use App\Models\SportQualification;
+use App\Models\SportSchool;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
@@ -44,7 +46,10 @@ class RegistrationController extends Controller
         if ($competition != null) {
             return view('pages.registration.registrationForm', [
                 "competition" => $competition,
-                "qualifications" => SportQualification::orderBy("order", "asc")->get()
+                "qualifications" => SportQualification::orderBy("order", "asc")->get(),
+                "regions" => AthleteRegion::orderBy("full_name", "asc")->get(),
+                "sport_schools" => SportSchool::orderBy("full_title", "asc")->get(),
+                "sport_organisations" => SportOrganisation::orderBy("full_title", "asc")->get()
             ]);
         }
 

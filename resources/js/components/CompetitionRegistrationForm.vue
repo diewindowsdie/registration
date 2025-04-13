@@ -12,8 +12,14 @@
                             <label for="surname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Фамилия</label>
                             <input type="text" v-model="athlete.surname" name="surname" id="surname"
                                    @input="searchAthlete(true)"
-                                   class="border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   @focusin="searchAthlete()"/>
+                                   :class="formErrors.surname ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                   : 'border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                                   @focusin="searchAthlete()"
+                                   @focusout='validateModel(athlete.surname, namePattern, "surname")'
+                            />
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                               v-if="formErrors.surname"><span class="font-medium">Кириллица, латиница и дефис, два символа и больше</span>
+                            </p>
                             <div
                                 class="absolute border bg-gray-50 border-gray-300 ml-1 mt-1 text-gray-900 w-85 rounded-lg text-sm outline-1 outline-gray-300 z-40  dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:outline-gray-500"
                                 v-show="athletes.length > 0">
@@ -41,33 +47,57 @@
                             <label for="first_name"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Имя</label>
                             <input type="text" v-model="athlete.first_name" name="first_name" id="first_name"
-                                   class="border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                                   :class="formErrors.first_name ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                   : 'border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                                   @focusout='validateModel(athlete.first_name, namePattern, "first_name")'
+                            />
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                               v-if="formErrors.first_name"><span class="font-medium">Кириллица, латиница и дефис, два символа и больше</span>
+                            </p>
                         </div>
 
                         <div class="sm:col-span-5">
                             <label for="patronymic"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Отчество</label>
                             <input type="text" v-model="athlete.patronymic" name="patronymic" id="patronymic"
-                                   class="border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                                   :class="formErrors.patronymic ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                   : 'border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                                   @focusout='validateModel(athlete.patronymic, patronymicPattern, "patronymic")'
+                            />
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                               v-if="formErrors.patronymic"><span class="font-medium">Кириллица, латиница и дефис</span>
+                            </p>
                         </div>
 
                         <div class="sm:col-span-2">
                             <label for="gender"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Пол</label>
                             <select id="gender"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    v-model="athlete.gender">
+                                    :class="formErrors.gender ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                    : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                                    v-model="athlete.gender"
+                                    @change="resetParticipation"
+                                    @focusout='validateModel(athlete.gender, genderPattern, "gender")'
+                            >
                                 <option value="M">Мужской</option>
                                 <option value="F">Женский</option>
                             </select>
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                               v-if="formErrors.gender"><span class="font-medium">Выберите пол</span></p>
                         </div>
                         <div class="sm:col-span-3">
                             <label for="birth_date"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Дата
                                 рождения</label>
                             <input v-model="athlete.birth_date" type="date" name="birth_date" id="birth_date"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   @change="resetParticipation"/>
+                                   :class="formErrors.birth_date ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                    : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                                   @change="resetParticipation"
+                                   @focusout="validateBirthDate()"
+                            />
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                               v-if="formErrors.birth_date"><span
+                                class="font-medium">Укажите корректную дату рождения</span></p>
                         </div>
                         <div class="sm:col-span-5">
                             <label for="qualifications"
@@ -76,31 +106,30 @@
                             <select id="qualifications"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     v-model="athlete.qualification">
-                                <option v-for="qualification in qualifications" :value="qualification.code">
+                                <option v-for="qualification in qualifications" :value="qualification.code"
+                                        :selected="qualification.code === 'NO'">
                                     {{ qualification.full_title }}
                                 </option>
                             </select>
                         </div>
 
-                        <div class="sm:col-span-5">
+                        <div class="sm:col-span-5 p-0">
                             <label for="region"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Регион</label>
-                            <input type="hidden" v-model="athlete.region_code" id="region_code" name="region_code"/>
-                            <input v-model="athlete.region" type="text" name="region" id="region"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   @focusin="searchRegion()"
-                                   @input="searchRegion()"
+                            <vSelect
+                                id="region"
+                                :class="formErrors.region ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
+                                    : 'vue-select-tailwind vue-select-tailwind-deselect-hidden'"
+                                v-model="athlete.region_code"
+                                :options="regions"
+                                :reduce="region => region.code"
+                                label="full_name"
+                                @focusin="selectOnFocusIn()"
+                                @focusout="selectOnFocusOut(regionSelectValidate)"
                             />
-                            <div
-                                class="absolute border bg-gray-50 border-gray-300 ml-1 mt-1 text-gray-900 w-85 rounded-lg text-sm outline-1 outline-gray-300 z-40  dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:outline-gray-500"
-                                v-show="regions.length > 0">
-                                <template v-for="item in regions">
-                                    <div @click="fillRegion(item)"
-                                         class="hover:bg-gray-200 hover:dark:bg-gray-600 px-3 py-3 ">
-                                        <p class="text-left">{{ item.full_name }}</p>
-                                    </div>
-                                </template>
-                            </div>
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                               v-if="formErrors.region"><span
+                                class="font-medium">Выберите регион из всплывающего списка</span></p>
                         </div>
 
                         <div class="sm:col-span-15">
@@ -159,8 +188,16 @@
                             <label for="sport_school"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Спортивная
                                 школа</label>
-                            <input type="text" v-model="athlete.sport_school" name="sport_school" id="sport_school"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                            <vSelect
+                                id="sport_school"
+                                class="vue-select-tailwind"
+                                v-model="athlete.sport_school_code"
+                                :options="sport_schools"
+                                :reduce="sport_school => sport_school.code"
+                                label="full_title"
+                                @focusin="selectOnFocusIn()"
+                                @focusout="selectOnFocusOut()"
+                            />
                         </div>
 
                         <div class="sm:col-span-1 -mt-2">
@@ -168,9 +205,16 @@
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Спортивный клуб
                                 или
                                 организация</label>
-                            <input type="text" v-model="athlete.sport_organisation" name="sport_organisation"
-                                   id="sport_organisation"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                            <vSelect
+                                id="sport_school"
+                                class="vue-select-tailwind"
+                                v-model="athlete.sport_organisation_code"
+                                :options="sport_organisations"
+                                :reduce="sport_organisation => sport_organisation.code"
+                                label="full_title"
+                                @focusin="selectOnFocusIn()"
+                                @focusout="selectOnFocusOut()"
+                            />
                         </div>
 
                         <div class="sm:col-span-1 -mt-4">
@@ -179,13 +223,25 @@
                                 информация</label>
                             <input type="text" v-model="athlete.contact_information" name="contact_info"
                                    id="contact_info"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                                   :class="formErrors.contact_information ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                    : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                                   @focusout="validateModel(athlete.contact_information, requiredTextPattern, 'contact_information')"
+                            />
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                               v-if="formErrors.contact_information"><span
+                                class="font-medium">Укажите, как можно с вами связаться</span></p>
                         </div>
                         <div class="sm:col-span-1 -mt-4">
                             <label for="coach_name"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Тренер</label>
                             <input type="text" v-model="athlete.coach_name" name="coach_name" id="coach_name"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                                   :class="formErrors.coach_name ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                    : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                                   @focusout="validateModel(athlete.coach_name, optionalTextPattern, 'coach_name')"
+                            />
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                               v-if="formErrors.coach_name"><span
+                                class="font-medium">Укажите вашего тренера или оставьте поле пустым</span></p>
                         </div>
                     </div>
                 </div>
@@ -209,8 +265,9 @@
 import {ref} from 'vue';
 import axios from "axios";
 import dayjs from 'dayjs';
+import vSelect from 'vue-select';
 
-const props = defineProps(['routeSave', "routeFindAthlete", "routeFindRegion", "competition", "qualifications"]);
+const props = defineProps(['routeSave', "routeFindAthlete", "competition", "qualifications", "regions", "sport_schools", "sport_organisations"]);
 const competition_copy = ref(props.competition);
 
 const athlete = ref({
@@ -221,11 +278,10 @@ const athlete = ref({
     patronymic: '',
     gender: '',
     birth_date: '',
-    qualification: '',
-    region_code: '',
-    region: '',
-    sport_school: '',
-    sport_organisation: '',
+    qualification: 'NO',
+    region_code: null,
+    sport_school_code: '',
+    sport_organisation_code: '',
     contact_information: '',
     coach_name: '',
     using_chair: ''
@@ -234,8 +290,38 @@ const athlete = ref({
 const athletes = ref([]);
 let athleteRequestsCache = {};
 
-const regions = ref([]);
-let regionRequestsCache = {};
+const formErrors = ref({
+    surname: false,
+    first_name: false,
+    patronymic: false,
+    gender: false,
+    birth_date: false,
+    region: false,
+    contact_information: false,
+    coach_name: false
+});
+
+const namePattern = /^[а-яА-Яa-zA-Z\-]{2,}$/;
+const patronymicPattern = /^[а-яА-Яa-zA-Z\-]*$/;
+const genderPattern = /^[MF]{1}$/;
+const requiredTextPattern = /^[а-яА-Я\w\-«»!?:;()\[\]&#№%+ "'.,]{2,}$/;
+const optionalTextPattern = /^[а-яА-Я\w\-«»!?:;()\[\]&#№%+ "'.,]*$/;
+
+function selectOnFocusIn() {
+    $(event.target).parent().parent().addClass('outline-2');
+}
+
+function selectOnFocusOut(validator) {
+    $(event.target).parent().parent().removeClass('outline-2');
+
+    if (validator != null) {
+        validator();
+    }
+}
+
+function regionSelectValidate() {
+    formErrors.value.region = athlete.value.region_code === null;
+}
 
 function searchAthlete(ignoreFormData = false) {
     if (!ignoreFormData && (athlete.value.surname.length > 0 || athlete.value.first_name.length > 0 || athlete.value.patronymic.length > 0)) {
@@ -257,26 +343,6 @@ function searchAthlete(ignoreFormData = false) {
             console.log(response.data);
             athletes.value = response.data.athletes;
             athleteRequestsCache[athlete.value.surname] = response.data.athletes;
-        })
-    }
-}
-
-function searchRegion() {
-    athlete.value.region_code = '';
-
-    if (athlete.value.region.length > 0) {
-        if (athlete.value.region in regionRequestsCache) {
-            regions.value = regionRequestsCache[athlete.value.region];
-            return;
-        }
-
-        axios.get(props.routeFindRegion, {
-            params: {
-                query: athlete.value.region
-            }
-        }).then((response) => {
-            regions.value = response.data.regions;
-            regionRequestsCache[athlete.value.region] = response.data.regions;
         })
     }
 }
@@ -305,7 +371,40 @@ function resetParticipation() {
     competition_copy.value.groups.forEach(group => group.participation = false);
 }
 
+function resetFormErrors() {
+    formErrors.value = {
+        surname: false,
+        first_name: false,
+        patronymic: false,
+        gender: false,
+        birth_date: false,
+        region: false,
+        contact_information: false,
+        coach_name: false
+    }
+}
+
+function validateModel(model, pattern, errorTarget) {
+    formErrors.value[errorTarget] = !pattern.test(model);
+}
+
+function validateBirthDate() {
+    formErrors.value.birth_date = !dayjs(athlete.value.birth_date, 'YYYY-MM-DD', true).isValid() ||
+        dayjs(athlete.value.birth_date).isAfter(dayjs());
+}
+
 function onSubmit() {
+    resetFormErrors();
+
+    formErrors.value.surname = !namePattern.test(athlete.value.surname);
+    formErrors.value.first_name = !namePattern.test(athlete.value.first_name);
+    formErrors.value.patronymic = !patronymicPattern.test(athlete.value.patronymic);
+    formErrors.value.gender = !genderPattern.test(athlete.value.gender);
+    validateBirthDate();
+    regionSelectValidate();
+    formErrors.value.contact_information = !requiredTextPattern.test(athlete.value.contact_information);
+    formErrors.value.coach_name = !optionalTextPattern.test(athlete.value.coach_name);
+
     athlete.value.competition_id = props.competition.id;
 
     axios.post(props.routeSave, {
@@ -373,8 +472,7 @@ function fillForm(data) {
     athlete.value.patronymic = data.patronymic;
     athlete.value.gender = data.gender;
     athlete.value.birth_date = dayjs(data.birth_date).format("YYYY-MM-DD");
-    athlete.value.region = data.region.full_name;
-    athlete.value.region_code = data.region.code;
+    athlete.value.region_code = data.region;
     athlete.value.qualification = data.qualification.code;
     athlete.value.using_chair = data.using_chair == 1;
 
@@ -382,10 +480,4 @@ function fillForm(data) {
     resetParticipation();
 }
 
-function fillRegion(data) {
-    athlete.value.region = data.full_name;
-    athlete.value.region_code = data.code;
-
-    regions.value = [];
-}
 </script>
