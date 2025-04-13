@@ -2,6 +2,9 @@
     <section class="bg-transparent">
         <div class="px-4 mx-auto max-w-6xl">
             <form @submit.prevent="onSubmit" method="post" :action="routeSave">
+                <div>
+                    <p class="block mb-2 text-3xl font-medium text-gray-900 dark:text-white">Регистрация открыта с {{dayjs(competition.registration_start).format("DD.MM.YYYY HH:mm:ss")}} по {{dayjs(competition.registration_finish).format("DD.MM.YYYY HH:mm:ss")}}</p>
+                </div>
                 <div v-if="globalErrors.length > 0" class="border-red-500 text-red-900 placeholder-red-700 rounded-2xl border-2 px-5 py-5 mb-3">
                     <label for="errors" class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Пожалуйста, исправьте следующие ошибки:</label>
                     <ul id="errors" class="mt-5">
@@ -9,9 +12,6 @@
                             <span class="font-medium">{{ errorMessages[error] }}</span>
                         </li>
                     </ul>
-                </div>
-                <div>
-
                 </div>
                 <div class="border-gray-300 dark:border-gray-600 rounded-2xl border px-5 py-5">
                     <div class="grid grid-cols-15 gap-x-6 gap-y-8 sm:grid-cols-15">

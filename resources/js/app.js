@@ -1,7 +1,10 @@
 import './bootstrap';
 
 import { createApp } from 'vue';
-import { initFlowbite } from 'flowbite'
+import { initFlowbite } from 'flowbite';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 
 const app = createApp({
     data() {
@@ -14,6 +17,10 @@ const app = createApp({
         initFlowbite();
     }
 });
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("Europe/Moscow");
 
 import CompetitionRegistrationForm from "./components/CompetitionRegistrationForm.vue";
 import Competition from "./components/Competition.vue";

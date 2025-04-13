@@ -146,7 +146,7 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
             $differenceCount++;
         }
 
-        if ($differenceCount >= 2) {
+        if ($differenceCount >= 3) {
             return $this->createNewAthlete($athlete);
         }
 
@@ -232,13 +232,13 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
     {
         $competition = Competition::find($request->input("competition_id"));
         if ($competition === null) {
-            return view("errors.competitionNotFound");
+            return response()->view("errors.competitionNotFound")->setStatusCode(404);
         }
         if ($competition->registration_start->isAfter(Carbon::now()) ||
             $competition->registration_finish->isBefore(Carbon::now())) {
-            return view("errors.registrationIsNotOpen", [
+            return response()->view("errors.registrationIsNotOpen", [
                 "competition" => $competition
-            ]);
+            ])->setStatusCode(422);
         }
 
         $errors = self::checkRegistrationBusinessLogicErrors($request);
