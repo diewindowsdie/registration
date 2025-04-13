@@ -20,7 +20,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
-enum RegistrationError implements \JsonSerializable {
+enum RegistrationError implements \JsonSerializable
+{
     case ALREADY_EXISTS;
     case INVALID_GENDER_FOR_GROUP;
     case INVALID_BIRTH_DATE_FOR_GROUP;
@@ -43,17 +44,23 @@ class RegistrationController extends Controller
     public function registrationForm($id): View
     {
         $competition = Competition::find($id);
-        if ($competition != null) {
-            return view('pages.registration.registrationForm', [
-                "competition" => $competition,
-                "qualifications" => SportQualification::orderBy("order", "asc")->get(),
-                "regions" => AthleteRegion::orderBy("full_name", "asc")->get(),
-                "sport_schools" => SportSchool::orderBy("full_title", "asc")->get(),
-                "sport_organisations" => SportOrganisation::orderBy("full_title", "asc")->get()
+        if ($competition === null) {
+            return view("errors.competitionNotFound");
+        }
+        if ($competition->registration_start->isAfter(Carbon::now()) ||
+            $competition->registration_finish->isBefore(Carbon::now())) {
+            return view("errors.registrationIsNotOpen", [
+                "competition" => $competition
             ]);
         }
 
-        return view("errors.404");
+        return view('pages.registration.registrationForm', [
+            "competition" => $competition,
+            "qualifications" => SportQualification::orderBy("order", "asc")->get(),
+            "regions" => AthleteRegion::orderBy("full_name", "asc")->get(),
+            "sport_schools" => SportSchool::orderBy("full_title", "asc")->get(),
+            "sport_organisations" => SportOrganisation::orderBy("full_title", "asc")->get()
+        ]);
     }
 
     public function findAthletes(Request $request): JsonResponse
@@ -166,7 +173,8 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
         return $array[$key] == true;
     }
 
-    private static function checkRegistrationBusinessLogicErrors($request): array {
+    private static function checkRegistrationBusinessLogicErrors($request): array
+    {
         //сначала проверим, есть ли регистрация хотя бы в один дивизион у спортсмена, если есть - возвращаем ошибку
         if ($request->input("athlete_id")) {
             $existingRegistration = CompetitionParticipant::where([
@@ -220,16 +228,27 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
         return [];
     }
 
-    public function register(FormRequest $request): JsonResponse
+    public function register(FormRequest $request): object
     {
+        $competition = Competition::find($request->input("competition_id"));
+        if ($competition === null) {
+            return view("errors.competitionNotFound");
+        }
+        if ($competition->registration_start->isAfter(Carbon::now()) ||
+            $competition->registration_finish->isBefore(Carbon::now())) {
+            return view("errors.registrationIsNotOpen", [
+                "competition" => $competition
+            ]);
+        }
+
         $errors = self::checkRegistrationBusinessLogicErrors($request);
         if (count($errors) > 0) {
             Log::warning("Ошибки при регистрации спортсмена на соревнования: competition_id = {competition_id}, athlete_id = {athlete_id}, errors = {errors}",
                 ["competition_id" => $request->input("competition_id"), "athlete_id" => $request->input("athlete_id"), "errors" => $errors]);
             return response()->json([
                 'status' => 'error',
-                'error' => array_values($errors)[0]
-            ]);
+                'errors' => $errors
+            ], 422);
         }
 
         $athlete = $this->getRegisteringAthlete($request);

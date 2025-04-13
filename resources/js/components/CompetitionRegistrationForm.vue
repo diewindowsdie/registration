@@ -1,7 +1,18 @@
 <template>
     <section class="bg-transparent">
-        <div class="py-4 px-4 mx-auto max-w-6xl lg:py-16">
+        <div class="px-4 mx-auto max-w-6xl">
             <form @submit.prevent="onSubmit" method="post" :action="routeSave">
+                <div v-if="globalErrors.length > 0" class="border-red-500 text-red-900 placeholder-red-700 rounded-2xl border-2 px-5 py-5 mb-3">
+                    <label for="errors" class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Пожалуйста, исправьте следующие ошибки:</label>
+                    <ul id="errors" class="mt-5">
+                        <li v-for="error in globalErrors" class="my-2 ml-8 text-sm text-red-600 dark:text-red-500 list-disc">
+                            <span class="font-medium">{{ errorMessages[error] }}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+
+                </div>
                 <div class="border-gray-300 dark:border-gray-600 rounded-2xl border px-5 py-5">
                     <div class="grid grid-cols-15 gap-x-6 gap-y-8 sm:grid-cols-15">
                         <div class="sm:col-span-15"><label
@@ -290,6 +301,13 @@ const athlete = ref({
 const athletes = ref([]);
 let athleteRequestsCache = {};
 
+const errorMessages = {
+    "ALREADY_EXISTS": "Данный спортсмен уже зарегистрирован на эти соревнования",
+    "INVALID_GENDER_FOR_GROUP": "Пол спортсмена не соответствует требованиям выбранного дивизиона и класса",
+    "INVALID_BIRTH_DATE_FOR_GROUP": "Дата рождения спортсмена не соответствует требованиям выбранного дивизиона и класса",
+    "DIFFERENT_CLASSES_IN_SAME_COMPETITION": "Спортсмен не может участвовать в одном соревновании в разных классах"
+}
+
 const formErrors = ref({
     surname: false,
     first_name: false,
@@ -300,6 +318,7 @@ const formErrors = ref({
     contact_information: false,
     coach_name: false
 });
+const globalErrors = ref([]);
 
 const namePattern = /^[а-яА-Яa-zA-Z\-]{2,}$/;
 const patronymicPattern = /^[а-яА-Яa-zA-Z\-]*$/;
@@ -340,7 +359,6 @@ function searchAthlete(ignoreFormData = false) {
                 competition_id: props.competition.id
             }
         }).then((response) => {
-            console.log(response.data);
             athletes.value = response.data.athletes;
             athleteRequestsCache[athlete.value.surname] = response.data.athletes;
         })
@@ -382,6 +400,7 @@ function resetFormErrors() {
         contact_information: false,
         coach_name: false
     }
+    globalErrors.value = [];
 }
 
 function validateModel(model, pattern, errorTarget) {
@@ -407,39 +426,37 @@ function onSubmit() {
 
     athlete.value.competition_id = props.competition.id;
 
-    axios.post(props.routeSave, {
-        groups: competition_copy.value.groups
-            .filter((group) => group.participation == true)
-            .map(function (group) {
-                let result = {};
-                for (const property in group) {
-                    if (["id", "participation", "participate_teams", "participate_mixed_teams"].includes(property)) {
-                        result[property] = group[property];
+    if (Object.values(formErrors.value).every((value) => value === false) && (globalErrors.value.length === 0)) {
+        axios.post(props.routeSave, {
+            groups: competition_copy.value.groups
+                .filter((group) => group.participation == true)
+                .map(function (group) {
+                    let result = {};
+                    for (const property in group) {
+                        if (["id", "participation", "participate_teams", "participate_mixed_teams"].includes(property)) {
+                            result[property] = group[property];
+                        }
                     }
-                }
 
-                return result;
-            }),
-        ...athlete.value,
-    }).then(r => {
-        //const data = r.data;
-        //console.log(data);
-        athleteRequestsCache = {};
-        alert('сохранено');
-    }).catch(e => {
-        console.log(e);
-
-        if (e.response && e.response.data && e.response.data.errors) {
-            this.errors = e.response.data.errors;
-        } else {
-            alert("Произошла ошибка при сохранении объекта");
-            if (e.response) {
-                console.log(e.response);
+                    return result;
+                }),
+            ...athlete.value,
+        }).then(response => {
+            if (response.status === "ok") {
+                athleteRequestsCache = {};
+                alert('сохранено');
             }
-        }
-    }).finally(() => {
-        console.log('athlete saved')
-    });
+        }).catch(e => {
+            if (e.response && e.response.data && e.response.data.errors) {
+                globalErrors.value = e.response.data.errors;
+            } else {
+                alert("Произошла ошибка при сохранении объекта");
+                if (e.response) {
+                    console.log(e.response);
+                }
+            }
+        });
+    }
 }
 
 function onClear() {
@@ -478,6 +495,7 @@ function fillForm(data) {
 
     athletes.value = [];
     resetParticipation();
+    resetFormErrors();
 }
 
 </script>
