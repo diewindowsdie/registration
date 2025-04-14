@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Auth\ClientCertificateOrBasicAuthAuthenticator;
 use App\Http\Requests\Athlete\SaveRequest;
 use App\Models\Athlete;
 use App\Models\Competition;
@@ -35,7 +36,7 @@ class CompetitionsController extends Controller
         $model->competition_includes_teams = $request->competition_includes_teams;
         $model->competition_includes_mixed_teams = $request->competition_includes_mixed_teams;
         $model->participants_list_available_to_anyone = $request->participants_list_available_to_anyone;
-        $model->created_by = $this->getAuthenticatedUserName();
+        $model->created_by = ClientCertificateOrBasicAuthAuthenticator::getAuthenticatedUserName();
 
         $model->save();
 
