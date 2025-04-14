@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property string $code
  * @property string $title
@@ -24,6 +24,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ArcheryClass extends Model
 {
+    protected $casts = [
+        'allowed_genders' => "array"
+    ];
+
     protected $primaryKey = 'code';
     public $incrementing = false;
     protected $keyType = 'string';

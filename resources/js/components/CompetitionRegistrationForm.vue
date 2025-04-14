@@ -161,9 +161,9 @@
                                 в соревнованиях:</label>
                             <template v-for="group in competition_copy.groups">
                                 <div
-                                    class="grid grid-cols-1 gap-x-6 gap-y-0 sm:grid-cols-1 items-center p-4 mt-2 text-sm text-gray-800 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
+                                    class="grid grid-cols-1 gap-x-6 gap-y-0 sm:grid-cols-2 items-center p-4 mt-2 text-sm text-gray-800 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
                                     v-if="isGroupAvailable(group)">
-                                    <div class="flex items-center sm:row-span-1">
+                                    <div class="flex items-center col-span=1 sm:col-span-1">
                                         <input id="participation_{{group.id}}" type="checkbox" value=""
                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                                v-model="group.participation"/>
@@ -172,7 +172,11 @@
                                                 group.division.title
                                             }} {{ group.archery_class.title }}</label>
                                     </div>
-                                    <div class="sm:row-span-1 pl-5 mt-5"
+                                    <div class="col-span-1 text-right">
+                                        <p class="text-xs">Дата рождения: {{dayjs(group.max_birth_date).format("DD.MM.YYYY")}} - {{dayjs(group.min_birth_date).format("DD.MM.YYYY")}}</p>
+                                        <p class="text-xs" v-if="JSON.stringify(group.allowed_genders) !== JSON.stringify(group.archery_class.allowed_genders)">Пол: {{formatGenders(group.allowed_genders)}}</p>
+                                    </div>
+                                    <div class="row-span-1 sm:row-span-1 pl-5 mt-5"
                                          v-if="group.participation == true && (group.includes_teams == 1 || group.includes_mixed_teams == 1)">
                                         <div v-if="group.includes_teams == 1" class="flex items-center">
                                             <input id="participation_team_{{group.id}}" type="checkbox" value=""
@@ -325,6 +329,12 @@ const patronymicPattern = /^[а-яА-Яa-zA-Z\-]*$/;
 const genderPattern = /^[MF]{1}$/;
 const requiredTextPattern = /^[а-яА-Я\w\-«»!?:;()\[\]&#№%+ "'.,]{2,}$/;
 const optionalTextPattern = /^[а-яА-Я\w\-«»!?:;()\[\]&#№%+ "'.,]*$/;
+
+function formatGenders(genders) {
+    return genders
+        .map((gender) => gender === "M" ? "М" : "Ж")
+        .reduce((converted, gender) => converted + (converted !== "" ? ", " : "") + gender, "");
+}
 
 function selectOnFocusIn() {
     $(event.target).parent().parent().addClass('outline-2');
