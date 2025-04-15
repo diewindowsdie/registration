@@ -138,6 +138,7 @@
                                 @focusin="selectOnFocusIn()"
                                 @focusout="selectOnFocusOut(regionSelectValidate)"
                             />
+                            <!--todo сделать нормальные эвенты-->
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
                                v-if="formErrors.region"><span
                                 class="font-medium">Выберите регион из всплывающего списка</span></p>

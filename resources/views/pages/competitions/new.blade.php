@@ -3,5 +3,9 @@
 @section('title', 'Добавить соревнование')
 
 @section('content')
-<new-competition-form route-create="{{ route('competitions.create') }}"></new-competition-form>
+<new-competition-form
+    route-create="{{ route('competitions.create') }}"
+    :divisions="{{ $divisions }}"
+    :archery_classes="{{ $archery_classes }}"
+></new-competition-form>
 @endsection

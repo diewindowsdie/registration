@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Auth\ClientCertificateOrBasicAuthAuthenticator;
 use App\Http\Requests\Athlete\SaveRequest;
+use App\Models\ArcheryClass;
 use App\Models\Athlete;
 use App\Models\Competition;
+use App\Models\Division;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
@@ -22,7 +24,10 @@ class CompetitionsController extends Controller
 
     public function new(): View
     {
-        return view('pages.competitions.new');
+        return view('pages.competitions.new', [
+            "divisions" => Division::all(),
+            "archery_classes" => ArcheryClass::all()
+        ]);
     }
 
     public function create(FormRequest $request): JsonResponse

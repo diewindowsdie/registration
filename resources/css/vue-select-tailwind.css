@@ -8,24 +8,40 @@
     @apply text-white text-sm m-0
 }
 
+.dark .vs--multiple .vs__selected {
+    @apply text-white text-sm bg-gray-500 mr-1 px-1.5 border-1 border-gray-800
+}
+
 .dark .vue-select-tailwind .vs__clear,
 .dark .vue-select-tailwind .vs__open-indicator {
     @apply fill-gray-400;
 }
 
+.dark .vue-select-tailwind .vs__deselect {
+    @apply fill-gray-800 ml-2;
+}
+
 .vue-select-tailwind .vs__search::placeholder,
 .vue-select-tailwind .vs__dropdown-toggle,
 .vue-select-tailwind .vs__dropdown-menu {
-    @apply border text-sm rounded-lg p-2.5 bg-gray-50 border-gray-300  placeholder-gray-400 text-gray-900 outline-blue-500 p-1.5
+    @apply border text-sm rounded-lg bg-gray-50 border-gray-300  placeholder-gray-400 text-gray-900 outline-blue-500 p-1.5
 }
 
 .vue-select-tailwind .vs__selected {
     @apply text-gray-900 m-0
 }
 
+.vs--multiple .vs__selected {
+    @apply text-gray-900 text-sm bg-gray-100 mr-1 px-1.5 border-1 border-gray-300
+}
+
 .vue-select-tailwind .vs__clear,
 .vue-select-tailwind .vs__open-indicator {
     @apply fill-gray-400;
+}
+
+.vue-select-tailwind .vs__deselect {
+    @apply fill-gray-500 ml-2;
 }
 
 .vue-select-tailwind-error {
