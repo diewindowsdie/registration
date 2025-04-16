@@ -27,10 +27,11 @@
                              class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-xs opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
                             <div
                                 class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
-                                <h3 class="font-semibold text-red-600">Внимание</h3>
+                                <h3 class="font-semibold text-green-500">Внимание</h3>
                             </div>
                             <div class="px-3 py-2">
-                                <p class="text-justify">Допустимые даты рождения спортсменов были пересчитаны. Пожалуйста, проверьте их перед сохранением.</p>
+                                <p class="text-justify">Допустимые даты рождения спортсменов были пересчитаны.
+                                    Пожалуйста, проверьте их перед сохранением.</p>
                             </div>
                             <div data-popper-arrow></div>
                         </div>
@@ -66,14 +67,13 @@
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
                         </div>
                     </div>
-                    <div class="sm:col-span-2">
-                        <button type="button"
-                                class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600 mr-1"
-                                @click.prevent="competition.groups.push({})">
-                            +
-                        </button>
-                        <div class="row-span-1 border-gray-300 dark:border-gray-600 rounded-2xl border px-5 py-5 mt-3"
-                             v-for="(group, index) in competition.groups" :key="index"> <!-- :key желателен по документации для всех v-for позволяет добиться ре рендеринга без багов -->
+                    <div class="col-span-1 sm:col-span-2" v-if="competition.groups.length > 0">
+                        <div class="col-span-1 sm:col-span-1 mb-1 flex items-end align-bottom">
+                            <span class="text-xl font-bold text-gray-900 dark:text-white">В соревновании могут
+                                участвовать:</span>
+                        </div>
+                        <div class="border-gray-300 dark:border-gray-600 rounded-2xl border px-5 py-4 col-span-1 sm:col-span-2"
+                            v-for="(group, index) in competition.groups" :key="index">
                             <div class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
                                 <div class="col-span-1 sm:col-span-3">
                                     <label for="division"
@@ -144,89 +144,39 @@
                                     <!--                                        @focusin="selectOnFocusIn()"-->
                                     <!--                                        @focusout="selectOnFocusOut()"-->
                                 </div>
+                                <div class="col-span-1 sm:col-span-2 flex items-center-safe">
+                                    <input id="teams" type="checkbox" v-model="group.includes_teams"
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                    />
+                                    <label for="teams"
+                                           class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">В этой
+                                        группе будут команды</label>
+                                </div>
+                                <div class="col-span-1 sm:col-span-2 flex items-center-safe">
+                                    <input id="mixed_teams" type="checkbox" v-model="group.includes_mixed_teams"
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                    >
+                                    <label for="mixed_teams"
+                                           class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">В этой
+                                        группе будут команды-микс</label>
+                                </div>
+                                <div class="col-span-1 text-2xl sm:col-span-2 text-right -mt-2"><a class="cursor-pointer" @click="competition.groups = competition.groups.filter((v) => v !== group)">❌</a></div>
                             </div>
                         </div>
                     </div>
-
-                    <!--                    <div class="col-span-1">-->
-                    <!--                        <h2 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">На соревновании будут:</h2>-->
-                    <!--                        <div class="flex gap-3">-->
-                    <!--                            <div class="flex h-6 shrink-0 items-center">-->
-                    <!--                                <div class="group grid size-4 grid-cols-1">-->
-                    <!--                                    <input v-model="competition.competition_includes_teams"-->
-                    <!--                                           id="competition_includes_teams" name="competition_includes_teams"-->
-                    <!--                                           type="checkbox" checked=""-->
-                    <!--                                           class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 forced-colors:appearance-auto dark:bg-gray-500 dark:border-gray-700"/>-->
-                    <!--                                    <svg-->
-                    <!--                                        class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"-->
-                    <!--                                        viewBox="0 0 14 14" fill="none">-->
-                    <!--                                        <path class="opacity-0 group-has-checked:opacity-100" d="M3 8L6 11L11 3.5"-->
-                    <!--                                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>-->
-                    <!--                                        <path class="opacity-0 group-has-indeterminate:opacity-100" d="M3 7H11"-->
-                    <!--                                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>-->
-                    <!--                                    </svg>-->
-                    <!--                                </div>-->
-                    <!--                            </div>-->
-                    <!--                            <div class="text-sm/6">-->
-                    <!--                                <label for="competition_includes_teams" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">Команды</label>-->
-                    <!--                            </div>-->
-                    <!--                        </div>-->
-                    <!--                        <div class="flex gap-3">-->
-                    <!--                            <div class="flex h-6 shrink-0 items-center">-->
-                    <!--                                <div class="group grid size-4 grid-cols-1">-->
-                    <!--                                    <input v-model="competition.competition_includes_mixed_teams"-->
-                    <!--                                           id="competition_includes_mixed_teams" name="competition_includes_mixed_teams"-->
-                    <!--                                           type="checkbox" checked=""-->
-                    <!--                                           class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 forced-colors:appearance-auto dark:bg-gray-500 dark:border-gray-700"/>-->
-                    <!--                                    <svg-->
-                    <!--                                        class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"-->
-                    <!--                                        viewBox="0 0 14 14" fill="none">-->
-                    <!--                                        <path class="opacity-0 group-has-checked:opacity-100" d="M3 8L6 11L11 3.5"-->
-                    <!--                                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>-->
-                    <!--                                        <path class="opacity-0 group-has-indeterminate:opacity-100" d="M3 7H11"-->
-                    <!--                                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>-->
-                    <!--                                    </svg>-->
-                    <!--                                </div>-->
-                    <!--                            </div>-->
-                    <!--                            <div class="text-sm/6">-->
-                    <!--                                <label for="competition_includes_mixed_teams" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">Миксы</label>-->
-                    <!--                            </div>-->
-                    <!--                        </div>-->
-
-                    <!--                    </div>-->
-
-                </div>
-
-                <div class="sm:col-span-2">
-                    <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">В соревновании могут
-                        участвовать:</h2>
-                </div>
-
-                <div class="border-b border-gray-900/10 pb-8 dark:border-gray-400/10 sm:col-span-2">
-                    <div class="flex gap-3">
-                        <div class="flex h-6 shrink-0 items-center">
-                            <div class="group grid size-4 grid-cols-1">
-                                <input v-model="competition.participants_list_available_to_anyone"
-                                       id="participants_list_available_to_anyone"
-                                       name="participants_list_available_to_anyone"
-                                       type="checkbox" checked=""
-                                       class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 forced-colors:appearance-auto dark:bg-gray-500 dark:border-gray-700"/>
-                                <svg
-                                    class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"
-                                    viewBox="0 0 14 14" fill="none">
-                                    <path class="opacity-0 group-has-checked:opacity-100" d="M3 8L6 11L11 3.5"
-                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path class="opacity-0 group-has-indeterminate:opacity-100" d="M3 7H11"
-                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="text-sm/6">
-                            <label for="participants_list_available_to_anyone"
-                                   class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">
-                                Список участников соревнования доступен всем
-                            </label>
-                        </div>
+                    <div class="col-span-1 sm:col-span-2 -mt-2">
+                        <button type="button"
+                                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600"
+                                @click.prevent="competition.groups.push({})">
+                            Добавить группу
+                        </button>
+                    </div>
+                    <div class="col-span-1 sm:col-span-2">
+                        <input id="participants_list_available_to_anyone" type="checkbox" checked v-model="competition.participants_list_available_to_anyone"
+                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        >
+                        <label for="participants_list_available_to_anyone"
+                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Список участников соревнования доступен всем</label>
                     </div>
                 </div>
 
