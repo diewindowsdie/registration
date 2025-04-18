@@ -8,10 +8,14 @@
                         <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                             Название соревнований
                         </label>
-                        <div class="mt-2">
-                            <input type="text" v-model="competition.title" name="title" id="title"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                        </div>
+                        <input type="text" v-model="competition.title" name="title" id="title"
+                               :class="formErrors.title ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                    : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                               @focusout.prevent="validateCompetitionTitle()"
+                        />
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                           v-if="formErrors.title"><span
+                            class="font-medium">Укажите корректное название соревнования</span></p>
                     </div>
 
                     <div class="col-span-1">
@@ -19,8 +23,12 @@
                             соревнований</label>
                         <div class="mt-2">
                             <input v-model="competition.start_date" type="date" name="start_date" id="start_date"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   @change="() => {if (competition.start_date !== '') toggleDatesRecalculatedPopup('start_date')}"/>
+                                   :class="formErrors.start_date ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                    : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                                   @focusout="onCompetitionStartDateChange()"/>
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                               v-if="formErrors.start_date"><span
+                                class="font-medium">Укажите дату в будущем</span></p>
                         </div>
 
                         <div id="group_min_max_dates_recalculated_popover" role="tooltip"
@@ -42,8 +50,14 @@
                             соревнований</label>
                         <div class="mt-2">
                             <input v-model="competition.end_date" type="date" name="end_date" id="end_date"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                                   :class="formErrors.end_date ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                    : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                                   @focusout="onCompetitionEndDateChange()"
+                            />
                         </div>
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                           v-if="formErrors.end_date"><span
+                            class="font-medium">Укажите дату не раньше даты начала соревнования</span></p>
                     </div>
 
                     <div class="col-span-1">
@@ -53,8 +67,14 @@
                         <div class="mt-2">
                             <input v-model="competition.registration_start" type="datetime-local"
                                    name="registration_start" id="registration_start"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                                   :class="formErrors.registration_start.length > 0 ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                    : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                                   @focusout="onCompetitionRegistrationStartChange(true)"
+                            />
                         </div>
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                           v-for="errorMessage in formErrors.registration_start"><span
+                            class="font-medium">{{ errorMessage }}</span></p>
                     </div>
 
                     <div class="col-span-1">
@@ -64,46 +84,62 @@
                         <div class="mt-2">
                             <input v-model="competition.registration_finish" type="datetime-local"
                                    name="registration_finish" id="registration_finish"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+                                   :class="formErrors.registration_finish.length > 0 ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                    : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                                   @focusout="onCompetitionRegistrationFinishChange(true)"
+                            />
                         </div>
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                           v-for="errorMessage in formErrors.registration_finish"><span
+                            class="font-medium">{{ errorMessage }}</span></p>
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                           v-if="formErrors.registration_finish"><span
+                            class="font-medium"></span>
+                        </p>
                     </div>
                     <div class="col-span-1 sm:col-span-2" v-if="competition.groups.length > 0">
                         <div class="col-span-1 sm:col-span-1 mb-1 flex items-end align-bottom">
                             <span class="text-xl font-bold text-gray-900 dark:text-white">В соревновании могут
                                 участвовать:</span>
                         </div>
-                        <div class="border-gray-300 dark:border-gray-600 rounded-2xl border px-5 py-4 col-span-1 sm:col-span-2"
-                            v-for="(group, index) in competition.groups" :key="index">
+                        <div
+                            class="border-gray-300 dark:border-gray-600 rounded-2xl border px-5 py-4 col-span-1 sm:col-span-2"
+                            v-for="group in competition.groups" :key="group.id">
                             <div class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
                                 <div class="col-span-1 sm:col-span-3">
                                     <label for="division"
                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Дивизион</label>
                                     <vSelect
-                                        id="division"
-                                        class="vue-select-tailwind"
+                                        :id="`division_${group.id}`"
+                                        :class="formErrors.division[group.id] ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
+                                            : 'vue-select-tailwind vue-select-tailwind-deselect-hidden'"
                                         v-model="group.division"
                                         :options="divisions"
                                         :reduce="division => division.code"
                                         label="title"
+                                        @search:blur="validateDivision(group)"
                                     />
-                                    <!--                                        @focusin="selectOnFocusIn()"-->
-                                    <!--                                        @focusout="selectOnFocusOut()"-->
+                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                                       v-if="formErrors.division[group.id]"><span
+                                        class="font-medium">Выберите дивизион</span></p>
                                 </div>
                                 <div class="col-span-1 sm:col-span-3">
                                     <label for="archery_class"
                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Класс</label>
                                     <vSelect
-                                        :id="`archery_class_${index}`"
-                                        class="vue-select-tailwind vue-select-tailwind-deselect-hidden"
+                                        :id="`archery_class_${group.id}`"
+                                        :class="formErrors.archery_class[group.id] ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
+                                            : 'vue-select-tailwind vue-select-tailwind-deselect-hidden'"
                                         v-model="group.archery_class"
                                         :options="archery_classes"
                                         :reduce="archery_class => archery_class.code"
                                         label="title"
-                                        @option:selected="recalculateAgeAndGenderLimits(group, 'archery_class_' + index)"
+                                        @option:selected="recalculateAgeAndGenderLimits(group, 'archery_class_' + group.id)"
+                                        @search:blur="validateArcheryClass(group)"
                                     />
-
-                                    <!--                  zx ;t                       @focusin="selectOnFocusIn()"-->
-                                    <!--                                        @focusout="selectOnFocusOut()"-->
+                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                                       v-if="formErrors.archery_class[group.id]"><span
+                                        class="font-medium">Выберите класс</span></p>
                                 </div>
                                 <div class="col-span-1 sm:col-span-2">
                                     <label for="max_birth_date"
@@ -111,11 +147,13 @@
                                         рождения спортсмена, от</label>
                                     <input v-model="group.min_birth_date" type="date" name="min_birth_date"
                                            id="min_birth_date"
-                                           :class="false ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                           :class="Array.isArray(formErrors.min_birth_date[group.id]) && formErrors.min_birth_date[group.id].length > 0 ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
                                     : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                                           @focusout="validateMinBirthDate(group)"
                                     />
-                                    <!--                                    @change="resetParticipation"-->
-                                    <!--                                    @focusout="validateBirthDate()"-->
+                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                                       v-for="errorMessage in formErrors.min_birth_date[group.id]"><span
+                                        class="font-medium">{{ errorMessage }}</span></p>
                                 </div>
                                 <div class="col-span-1 sm:col-span-2">
                                     <label for="min_birth_date"
@@ -123,11 +161,13 @@
                                         рождения спортсмена, до</label>
                                     <input v-model="group.max_birth_date" type="date" name="max_birth_date"
                                            id="max_birth_date"
-                                           :class="false ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                           :class="Array.isArray(formErrors.max_birth_date[group.id]) && formErrors.max_birth_date[group.id].length > 0 ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
                                     : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                                           @focusout="validateMaxBirthDate(group)"
                                     />
-                                    <!--                                    @change="resetParticipation"-->
-                                    <!--                                    @focusout="validateBirthDate()"-->
+                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                                       v-for="errorMessage in formErrors.max_birth_date[group.id]"><span
+                                        class="font-medium">{{ errorMessage }}</span></p>
                                 </div>
                                 <div class="col-span-1 sm:col-span-2">
                                     <label for="allowed_genders"
@@ -136,13 +176,17 @@
                                     <vSelect
                                         multiple
                                         id="allowed_genders"
-                                        class="vue-select-tailwind"
+                                        :class="formErrors.allowed_genders[group.id] ? 'vue-select-tailwind vue-select-tailwind-error'
+                                            : 'vue-select-tailwind'"
                                         v-model="group.allowed_genders"
                                         :options="[{label: 'Мужской', code: 'M'}, {label: 'Женский', code: 'F'}]"
                                         :reduce="option => option.code"
+                                        @focusout="validateAllowedGenders(group)"
+                                        @option:deselected="validateAllowedGenders(group)"
                                     />
-                                    <!--                                        @focusin="selectOnFocusIn()"-->
-                                    <!--                                        @focusout="selectOnFocusOut()"-->
+                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                                       v-if="formErrors.allowed_genders[group.id]"><span
+                                        class="font-medium">Укажите пол допущенных спортсменов</span></p>
                                 </div>
                                 <div class="col-span-1 sm:col-span-2 flex items-center-safe">
                                     <input id="teams" type="checkbox" v-model="group.includes_teams"
@@ -160,23 +204,28 @@
                                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">В этой
                                         группе будут команды-микс</label>
                                 </div>
-                                <div class="col-span-1 text-2xl sm:col-span-2 text-right -mt-2"><a class="cursor-pointer" @click="competition.groups = competition.groups.filter((v) => v !== group)">❌</a></div>
+                                <div class="col-span-1 text-2xl sm:col-span-2 text-right -mt-2"><a
+                                    class="cursor-pointer"
+                                    @click="competition.groups = competition.groups.filter((v) => v !== group)">❌</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-span-1 sm:col-span-2 -mt-2">
                         <button type="button"
                                 class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600"
-                                @click.prevent="competition.groups.push({})">
+                                @click="competition.groups.push({ id: -1 * Math.floor(Math.random() * 100000)})">
                             Добавить группу
                         </button>
                     </div>
                     <div class="col-span-1 sm:col-span-2">
-                        <input id="participants_list_available_to_anyone" type="checkbox" checked v-model="competition.participants_list_available_to_anyone"
+                        <input id="participants_list_available_to_anyone" type="checkbox" checked
+                               v-model="competition.participants_list_available_to_anyone"
                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                         >
                         <label for="participants_list_available_to_anyone"
-                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Список участников соревнования доступен всем</label>
+                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Список участников
+                            соревнования доступен всем</label>
                     </div>
                 </div>
 
@@ -203,8 +252,9 @@ import dayjs from 'dayjs';
 import {Popover} from "flowbite";
 import vSelect from 'vue-select';
 
-const props = defineProps(['routeCreate', "divisions", "archery_classes"]);
+const requiredTextPattern = /^[а-яА-Я\w\-«»!?:;()\[\]&#№%+ "'.,]{2,}$/;
 
+const props = defineProps(['routeCreate', "divisions", "archery_classes"]);
 
 const competition = ref({
     title: '',
@@ -213,8 +263,130 @@ const competition = ref({
     registration_start: '',
     registration_finish: '',
     participants_list_available_to_anyone: 'true',
-    groups: ref([])
+    groups: []
 });
+
+const formErrors = ref({});
+resetFormErrors();
+
+function onCompetitionRegistrationStartChange(revalidateRegistrationFinish = false) {
+    //валидный момент времени и раньше даты начала соревнования, если дата начала указана
+    formErrors.value.registration_start = [];
+    const beforeCompetitionStartError = "Начало регистрации должно быть раньше начала соревнования";
+    const beforeRegistrationFinishError = "Начало регистрации должно быть раньше окончания регистрации";
+
+    //момент времени должен парситься
+    if (competition.value.registration_start != "") {
+        if (dayjs(competition.value.registration_start, 'YYYY-MM-DDTHH:mm', true).isValid()) {
+            //если указана дата начала соревнования - мы должны начинать регистрацию до начала соревнования
+            if (dayjs(competition.value.start_date, 'YYYY-MM-DD', true).isValid() &&
+                !dayjs(competition.value.registration_start).isBefore(dayjs(competition.value.start_date))) {
+                formErrors.value.registration_start.push(beforeCompetitionStartError);
+            }
+
+            //если указан момент окончания регистрации - момент начала должен быть до момента окончания
+            if (dayjs(competition.value.registration_finish, 'YYYY-MM-DDTHH:mm', true).isValid() &&
+                !dayjs(competition.value.registration_start).isBefore(dayjs(competition.value.registration_finish))) {
+                formErrors.value.registration_start.push(beforeRegistrationFinishError);
+            }
+        } else {
+            formErrors.value.registration_start.push(beforeCompetitionStartError);
+        }
+    }
+
+    if (revalidateRegistrationFinish) {
+        onCompetitionRegistrationFinishChange(false);
+    }
+}
+
+function onCompetitionRegistrationFinishChange(revalidateRegistrationStart = false) {
+    formErrors.value.registration_finish = ref([]);
+    const beforeCompetitionStartError = "Окончание регистрации должно быть раньше начала соревнования";
+    const beforeRegistrationFinishError = "Окончание регистрации должно быть позже начала регистрации"
+
+    //момент времени должен парситься
+    if (competition.value.registration_finish != "") {
+        if (dayjs(competition.value.registration_finish, 'YYYY-MM-DDTHH:mm', true).isValid()) {
+            //если указана дата начала соревнования - мы должны начинать регистрацию до начала соревнования
+            if (dayjs(competition.value.start_date, 'YYYY-MM-DD', true).isValid() &&
+                !dayjs(competition.value.registration_finish).isBefore(dayjs(competition.value.start_date))) {
+                formErrors.value.registration_finish.push(beforeCompetitionStartError);
+            }
+
+            //если указан момент окончания регистрации - момент начала должен быть до момента окончания
+            if (dayjs(competition.value.registration_start, 'YYYY-MM-DDTHH:mm', true).isValid() &&
+                !dayjs(competition.value.registration_start).isBefore(dayjs(competition.value.registration_finish))) {
+                formErrors.value.registration_finish.push(beforeRegistrationFinishError);
+            }
+        } else {
+            formErrors.value.registration_finish.push(beforeCompetitionStartError);
+        }
+    }
+
+    if (revalidateRegistrationStart) {
+        onCompetitionRegistrationStartChange(false);
+    }
+}
+
+function onCompetitionStartDateChange() {
+    formErrors.value.start_date = !dayjs(competition.value.start_date, 'YYYY-MM-DD', true).isValid() ||
+        dayjs(competition.value.start_date).isBefore(dayjs());
+
+    if (formErrors.value.start_date === false) {
+        //если дата начала валидна - нужно провалидировать дату начала и конца регистрации
+        onCompetitionRegistrationStartChange();
+        onCompetitionRegistrationFinishChange();
+        toggleDatesRecalculatedPopup('start_date');
+    }
+}
+
+function onCompetitionEndDateChange() {
+    //дата должна быть валидной и не быть раньше даты начала, если дата начала указана
+    formErrors.value.end_date = !dayjs(competition.value.end_date, 'YYYY-MM-DD', true).isValid() ||
+        (dayjs(competition.value.start_date, 'YYYY-MM-DD', true).isValid() &&
+            dayjs(competition.value.end_date).isBefore(dayjs(competition.value.start_date)));
+}
+
+function validateMinBirthDate(group) {
+    const validDateInThePast = "Укажите корректную дату в прошлом или оставьте поле пустым";
+    const lessThanMaxBirthDate = "Укажите дату, предшествующую максимальной дате рождения";
+
+    formErrors.value.min_birth_date[group.id] = [];
+
+    //дата может быть не указана
+    if (group.min_birth_date) {
+        //если указана, она должна быть валидной и в прошлом
+        if (dayjs(group.min_birth_date, 'YYYY-MM-DD', true).isValid() && dayjs(group.min_birth_date).isBefore(dayjs())) {
+            //если указана, валидная и в прошлом - она должна быть меньше или равна максимальной даты рождения, если та указана
+            if (dayjs(group.max_birth_date, 'YYYY-MM-DD', true).isValid()) {
+                if (!dayjs(group.min_birth_date).isBefore(dayjs(group.max_birth_date))) {
+                    formErrors.value.min_birth_date[group.id].push(lessThanMaxBirthDate);
+                }
+            }
+        } else {
+            formErrors.value.min_birth_date[group.id].push(validDateInThePast);
+        }
+    }
+}
+
+function validateMaxBirthDate(group) {
+    const validDateInThePast = "Укажите корректную дату в прошлом";
+    const greaterThanMinBirthDate = "Укажите дату, превышающую минимальную дату рождения";
+
+    formErrors.value.max_birth_date[group.id] = [];
+
+    //если указана, она должна быть валидной и в прошлом
+    if (dayjs(group.max_birth_date, 'YYYY-MM-DD', true).isValid() && dayjs(group.max_birth_date).isBefore(dayjs())) {
+        //если указана, валидная и в прошлом - она должна быть меньше или равна максимальной даты рождения, если та указана
+        if (dayjs(group.min_birth_date, 'YYYY-MM-DD', true).isValid()) {
+            if (!dayjs(group.min_birth_date).isBefore(dayjs(group.max_birth_date))) {
+                formErrors.value.max_birth_date[group.id].push(greaterThanMinBirthDate);
+            }
+        }
+    } else {
+        formErrors.value.max_birth_date[group.id].push(validDateInThePast);
+    }
+}
 
 function toggleDatesRecalculatedPopup(triggerId) {
     if (competition.value.groups.length > 0) {
@@ -234,20 +406,72 @@ function recalculateAgeAndGenderLimits(group, targetId = null) {
             group.allowed_genders = fullClass.allowed_genders;
             if (competition.value.start_date !== "") {
                 group.max_birth_date = dayjs(competition.value.start_date).subtract(fullClass.min_age, "year").format("YYYY-MM-DD");
-                if (!Number.isNaN(fullClass.max_age)) {
+                if (Number.isInteger(fullClass.max_age)) {
                     group.min_birth_date = dayjs(competition.value.start_date).subtract(fullClass.max_age, "year")
                         .add(1, "year").date(1).month(0).format("YYYY-MM-DD");
+                } else {
+                    group.min_birth_date = null;
                 }
             }
         }
     }
+    validateMinBirthDate(group);
+    validateMaxBirthDate(group);
+    validateAllowedGenders(group);
 
     if (targetId !== null) {
         toggleDatesRecalculatedPopup(targetId);
     }
 }
 
+function validateCompetitionTitle() {
+    formErrors.title = !requiredTextPattern.test(competition.value.title);
+}
+
+function validateDivision(group) {
+    console.log(group);
+    formErrors.value.division[group.id] = (group.division == null);
+}
+
+function validateArcheryClass(group) {
+    formErrors.value.archery_class[group.id] = (group.archery_class == null);
+}
+
+function validateAllowedGenders(group) {
+    formErrors.value.allowed_genders[group.id] = group.allowed_genders.length === 0;
+}
+
+function resetFormErrors() {
+    formErrors.value = {
+        title: false,
+        start_date: false,
+        end_date: false,
+        registration_start: [],
+        registration_finish: [],
+        division: [],
+        archery_class: [],
+        min_birth_date: [],
+        max_birth_date: [],
+        allowed_genders: []
+    };
+}
+
 function onSubmit() {
+    resetFormErrors();
+    validateCompetitionTitle();
+    onCompetitionStartDateChange();
+    onCompetitionEndDateChange();
+    onCompetitionRegistrationStartChange(true);
+    onCompetitionRegistrationFinishChange(true);
+    competition.value.groups.forEach((group) => {
+        validateDivision(group);
+        validateArcheryClass(group);
+        validateMinBirthDate(group);
+        validateMaxBirthDate(group);
+        validateAllowedGenders(group);
+    })
+
+
     axios.post(props.routeCreate, {
         ...competition.value
     }).then(r => {

@@ -13,7 +13,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        if (!Schema::hasTable(self::TABLE_NAME)) {
+        if (Schema::hasTable(self::TABLE_NAME)) {
             DB::table(self::TABLE_NAME)->where("code", "U14M")->update(["max_age" => 13]);
             DB::table(self::TABLE_NAME)->where("code", "U14W")->update(["max_age" => 13]);
             DB::table(self::TABLE_NAME)->where("code", "U18M")->update(["max_age" => 17]);

@@ -174,7 +174,8 @@
                                             }} {{ group.archery_class.title }}</label>
                                     </div>
                                     <div class="col-span-1 text-right">
-                                        <p class="text-xs">Дата рождения: {{dayjs(group.max_birth_date).format("DD.MM.YYYY")}} - {{dayjs(group.min_birth_date).format("DD.MM.YYYY")}}</p>
+                                        <p class="text-xs" v-if="group.min_birth_date !== null">Дата рождения: {{dayjs(group.min_birth_date).format("DD.MM.YYYY")}} - {{dayjs(group.max_birth_date).format("DD.MM.YYYY")}}</p>
+                                        <p class="text-xs" v-if="group.min_birth_date === null">Дата рождения: от {{dayjs(group.max_birth_date).format("DD.MM.YYYY")}} и старше</p>
                                         <p class="text-xs" v-if="JSON.stringify(group.allowed_genders) !== JSON.stringify(group.archery_class.allowed_genders)">Пол: {{formatGenders(group.allowed_genders)}}</p>
                                     </div>
                                     <div class="row-span-1 sm:row-span-1 pl-5 mt-5"
@@ -388,9 +389,9 @@ function isGroupAvailable(group) {
     const sameClassCriteriaMet = !atLeastOneGroupSelected ||
         competition_copy.value.groups.some(c_group => c_group.participation && c_group.class_code == group.class_code);
 
-    //дата рождения спортсмена должна попадать между минимальной и максимальной датой рождения, определенной для группы
+    //дата рождения спортсмена должна попадать между минимальной (если определена) и максимальной датой рождения, определенной для группы
     const birthDateCriteriaMet = !isAthleteBirthdayKnown ||
-        (dayjs(athlete.value.birth_date).diff(dayjs(group.min_birth_date)) <= 0 &&
+        (group.min_birth_date != null && dayjs(athlete.value.birth_date).diff(dayjs(group.min_birth_date)) <= 0 &&
             (dayjs(athlete.value.birth_date).diff(dayjs(group.max_birth_date)) >= 0));
 
     return genderCriteriaMet && sameClassCriteriaMet && birthDateCriteriaMet;
