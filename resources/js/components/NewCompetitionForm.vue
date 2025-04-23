@@ -188,7 +188,7 @@
                                        v-if="formErrors.allowed_genders[group.id]"><span
                                         class="font-medium">Укажите пол допущенных спортсменов</span></p>
                                 </div>
-                                <div class="col-span-1 sm:col-span-2 flex items-center-safe">
+                                <div class="col-span-1 sm:col-span-3 flex items-center-safe">
                                     <input id="teams" type="checkbox" v-model="group.includes_teams"
                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                     />
@@ -196,15 +196,7 @@
                                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">В этой
                                         группе будут команды</label>
                                 </div>
-                                <div class="col-span-1 sm:col-span-2 flex items-center-safe">
-                                    <input id="mixed_teams" type="checkbox" v-model="group.includes_mixed_teams"
-                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                    >
-                                    <label for="mixed_teams"
-                                           class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">В этой
-                                        группе будут команды-микс</label>
-                                </div>
-                                <div class="col-span-1 text-2xl sm:col-span-2 text-right -mt-2"><a
+                                <div class="col-span-1 text-2xl sm:col-span-3 text-right -mt-2"><a
                                     class="cursor-pointer"
                                     @click="competition.groups = competition.groups.filter((v) => v !== group)">❌</a>
                                 </div>
@@ -217,6 +209,14 @@
                                 @click="competition.groups.push({ id: -1 * Math.floor(Math.random() * 100000)})">
                             Добавить группу
                         </button>
+                    </div>
+                    <div class="col-span-1 sm:col-span-2">
+                        <input id="competition_includes_mixed_team_events" type="checkbox"
+                               v-model="competition.includes_mixed_team_events"
+                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        >
+                        <label for="competition_includes_mixed_team_events"
+                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">На соревновании будут команды-микс</label>
                     </div>
                     <div class="col-span-1 sm:col-span-2">
                         <input id="participants_list_available_to_anyone" type="checkbox" checked
