@@ -23,14 +23,17 @@
                                    :class="formErrors.surname ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
                                    : 'border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
                                    @focusin="searchAthlete()"
-                                   @focusout='validateModel(athlete.surname, namePattern, "surname")'
+                                   @focusout='onSurnameFocusOut()'
                             />
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
                                v-if="formErrors.surname"><span class="font-medium">Кириллица, латиница и дефис, два символа и больше</span>
                             </p>
                             <div
                                 class="absolute border bg-gray-50 border-gray-300 ml-1 mt-1 text-gray-900 w-85 rounded-lg text-sm outline-1 outline-gray-300 z-40  dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:outline-gray-500"
-                                v-show="athletes.length > 0">
+                                v-show="athletes.length > 0"
+                                @mouseenter="preventAthletesSearchResultsCleanup = true"
+                                @mouseleave="preventAthletesSearchResultsCleanup = false"
+                            >
                                 <template v-for="item in athletes">
                                     <div @click="fillForm(item)"
                                          class="hover:bg-gray-200 hover:dark:bg-gray-600 px-3 py-3 ">
@@ -410,6 +413,15 @@ function resetFormErrors() {
         coach_name: false
     }
     globalErrors.value = [];
+}
+
+let preventAthletesSearchResultsCleanup = false;
+
+function onSurnameFocusOut() {
+        validateModel(athlete.value.surname, namePattern, "surname");
+        if (!preventAthletesSearchResultsCleanup) {
+            athletes.value = [];
+        }
 }
 
 function validateModel(model, pattern, errorTarget) {

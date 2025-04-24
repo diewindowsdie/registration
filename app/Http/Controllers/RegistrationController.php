@@ -78,24 +78,20 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
         ]);
     }
 
-    public function findRegion(Request $request): JsonResponse
-    {
-        //ищем по коду региона и названию
-        $regions = AthleteRegion::whereLike("code", $request->input("query") . "%")
-            ->orWhereLike("full_name", $request->input("query") . "%")
-            ->limit(3)
-            ->get();
-
-        return response()->json([
-            'status' => 'ok',
-            'regions' => $regions
-        ]);
-    }
-
     private function createNewAthlete(Athlete $athlete): Athlete
     {
-        $athlete->save();
+        $existingAthlete = Athlete::where([
+            ["surname", "=", $athlete->surname],
+            ["first_name", "=", $athlete->first_name],
+            ["patronymic", "=", $athlete->patronymic],
+            ["gender", "=", $athlete->gender],
+            ["birth_date", "=", $athlete->birth_date]
+        ])->first();
+        if ($existingAthlete !== null) {
+            return $existingAthlete;
+        }
 
+        $athlete->save();
         return $athlete;
     }
 
@@ -173,24 +169,20 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
         return $array[$key] == true;
     }
 
-    private static function checkRegistrationBusinessLogicErrors($request): array
+    private static function checkRegistrationBusinessLogicErrors($request, $athlete): array
     {
         //сначала проверим, есть ли регистрация хотя бы в один дивизион у спортсмена, если есть - возвращаем ошибку
-        if ($request->input("athlete_id")) {
-            $existingRegistration = CompetitionParticipant::where([
-                ["athlete_id", "=", $request->input("athlete_id")],
-                ["competition_id", "=", $request->input("competition_id")]
-            ])->count();
-            if ($existingRegistration > 0) {
-                return [RegistrationError::ALREADY_EXISTS];
-            }
+        $existingRegistration = CompetitionParticipant::where([
+            ["athlete_id", "=", $athlete->id],
+            ["competition_id", "=", $request->input("competition_id")]
+        ])->count();
+        if ($existingRegistration > 0) {
+            return [RegistrationError::ALREADY_EXISTS];
         }
 
         //проверим, что во всех группах пол спортсмена соответствует разрешенным в группе и возраст спортсмена соответствует требованиям группы
         //проверим, что во всех группах, куда спортсмен заявился, одинаковый класс
         $foundClass = "";
-        $gender = $request->input("gender");
-        $birthDate = Carbon::createFromFormat("Y-m-d", $request->input("birth_date"));
         foreach ($request->input("groups") as $group) {
             if ($group["participation"]) {
                 $existingGroup = CompetitionGroup::findOrFail($group["id"]);
@@ -202,24 +194,11 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
                     return [RegistrationError::DIFFERENT_CLASSES_IN_SAME_COMPETITION];
                 }
 
-                if (!in_array($gender, $existingGroup->allowed_genders, true)) {
+                if (!in_array($athlete->gender, $existingGroup->allowed_genders, true)) {
                     return [RegistrationError::INVALID_GENDER_FOR_GROUP];
                 }
-                if ($birthDate->gt($existingGroup->min_birth_date) ||
-                    $birthDate->lt($existingGroup->max_birth_date)) {
-                    return [RegistrationError::INVALID_BIRTH_DATE_FOR_GROUP];
-                }
-            }
-        }
-
-        foreach ($request->input("groups") as $group) {
-            if ($group["participation"]) {
-                $existingGroup = CompetitionGroup::findOrFail($group["id"]);
-                if (!in_array($gender, $existingGroup->allowed_genders, true)) {
-                    return [RegistrationError::INVALID_GENDER_FOR_GROUP];
-                }
-                if ($birthDate->gt($existingGroup->min_birth_date) ||
-                    $birthDate->lt($existingGroup->max_birth_date)) {
+                if ($athlete->birth_date->gt($existingGroup->min_birth_date) ||
+                    $athlete->birth_date->lt($existingGroup->max_birth_date)) {
                     return [RegistrationError::INVALID_BIRTH_DATE_FOR_GROUP];
                 }
             }
@@ -241,7 +220,8 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
             ])->setStatusCode(422);
         }
 
-        $errors = self::checkRegistrationBusinessLogicErrors($request);
+        $athlete = $this->getRegisteringAthlete($request);
+        $errors = self::checkRegistrationBusinessLogicErrors($request, $athlete);
         if (count($errors) > 0) {
             Log::warning("Ошибки при регистрации спортсмена на соревнования: competition_id = {competition_id}, athlete_id = {athlete_id}, errors = {errors}",
                 ["competition_id" => $request->input("competition_id"), "athlete_id" => $request->input("athlete_id"), "errors" => $errors]);
@@ -251,7 +231,6 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
             ], 422);
         }
 
-        $athlete = $this->getRegisteringAthlete($request);
         foreach ($request->input("groups") as $group) {
             if ($group["participation"]) {
                 $participant = new CompetitionParticipant();
