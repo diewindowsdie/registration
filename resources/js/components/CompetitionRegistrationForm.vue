@@ -135,10 +135,8 @@
                                 :options="regions"
                                 :reduce="region => region.code"
                                 label="full_name"
-                                @focusin="selectOnFocusIn()"
-                                @focusout="selectOnFocusOut(regionSelectValidate)"
+                                @focusout="regionSelectValidate()"
                             />
-                            <!--todo сделать нормальные эвенты-->
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
                                v-if="formErrors.region"><span
                                 class="font-medium">Выберите регион из всплывающего списка</span></p>
@@ -212,8 +210,6 @@
                                 :options="sport_schools"
                                 :reduce="sport_school => sport_school.code"
                                 label="full_title"
-                                @focusin="selectOnFocusIn()"
-                                @focusout="selectOnFocusOut()"
                             />
                         </div>
 
@@ -229,8 +225,6 @@
                                 :options="sport_organisations"
                                 :reduce="sport_organisation => sport_organisation.code"
                                 label="full_title"
-                                @focusin="selectOnFocusIn()"
-                                @focusout="selectOnFocusOut()"
                             />
                         </div>
 
@@ -336,18 +330,6 @@ function formatGenders(genders) {
     return genders
         .map((gender) => gender === "M" ? "М" : "Ж")
         .reduce((converted, gender) => converted + (converted !== "" ? ", " : "") + gender, "");
-}
-
-function selectOnFocusIn() {
-    $(event.target).parent().parent().addClass('outline-2');
-}
-
-function selectOnFocusOut(validator) {
-    $(event.target).parent().parent().removeClass('outline-2');
-
-    if (validator != null) {
-        validator();
-    }
 }
 
 function regionSelectValidate() {
