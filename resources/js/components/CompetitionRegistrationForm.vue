@@ -1,5 +1,5 @@
 <template>
-    <section class="bg-transparent">
+    <section class="bg-transparent" v-if="registrationSuccess === false">
         <div class="px-4 mx-auto max-w-6xl">
             <form @submit.prevent="onSubmit" method="post" :action="routeSave">
                 <div v-if="globalErrors.length > 0" class="border-red-500 text-red-900 placeholder-red-700 rounded-2xl border-2 px-5 py-5 mb-3">
@@ -263,13 +263,17 @@
                 </button>
 
                 <button type="submit"
-                        class="inline-flex items-center px-5 py-2.5 mt-10 sm:mt-10 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
+                        :class="isAtLeastOneGroupSelected() ? 'inline-flex items-center px-5 py-2.5 mt-10 sm:mt-10 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800'
+                        : 'class=text-white bg-blue-400 dark:bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center'"
+                        :disabled="!isAtLeastOneGroupSelected()"
+                    >
                     Сохранить
                 </button>
 
             </form>
         </div>
     </section>
+    <section v-if="registrationSuccess"><p class="block text-2xl mt-0 ml-2 font-medium text-gray-900 dark:text-white">Вы успешно зарегистрировались для участия в соревновании.</p></section>
 </template>
 
 <script setup>
@@ -278,7 +282,7 @@ import axios from "axios";
 import dayjs from 'dayjs';
 import vSelect from 'vue-select';
 
-const props = defineProps(['routeSave', "routeFindAthlete", "competition", "qualifications", "regions", "sport_schools", "sport_organisations"]);
+const props = defineProps(["routeSave", "routeFindAthlete", "competition", "qualifications", "regions", "sport_schools", "sport_organisations"]);
 const competition_copy = ref(props.competition);
 
 const athlete = ref({
@@ -299,6 +303,7 @@ const athlete = ref({
 });
 
 const athletes = ref([]);
+const registrationSuccess = ref(false)
 let athleteRequestsCache = {};
 
 const errorMessages = {
@@ -360,23 +365,33 @@ function searchAthlete(ignoreFormData = false) {
 }
 
 function isGroupAvailable(group) {
-    const isAthleteGenderKnown = athlete.value.gender != '';
-    const atLeastOneGroupSelected = competition_copy.value.groups.some(c_group => c_group.participation);
-    const isAthleteBirthdayKnown = athlete.value.birth_date != '';
+    const isAthleteDataKnown =
+        athlete.value.surname !== '' && formErrors.value.surname === false &&
+        athlete.value.first_name !== '' && formErrors.value.first_name === false &&
+        athlete.value.patronymic !== '' && formErrors.value.patronymic === false &&
+        athlete.value.gender !== '' && formErrors.value.gender === false &&
+        athlete.value.birth_date !== '' && formErrors.value.birth_date === false &&
+        athlete.value.region_code !== '' && formErrors.value.region === false;
+
+    const atLeastOneGroupSelected = isAtLeastOneGroupSelected();
 
     //если пол спортсмена еще неизвестен - не фильтруем по полу
-    const genderCriteriaMet = !isAthleteGenderKnown || group.allowed_genders.includes(athlete.value.gender);
+    const genderCriteriaMet = isAthleteDataKnown && group.allowed_genders.includes(athlete.value.gender);
 
     //проверим классы всех групп, где уже заявлено участие - спортсмен может участвовать только в одном классе
     const sameClassCriteriaMet = !atLeastOneGroupSelected ||
         competition_copy.value.groups.some(c_group => c_group.participation && c_group.class_code == group.class_code);
 
     //дата рождения спортсмена должна попадать между минимальной (если определена) и максимальной датой рождения, определенной для группы
-    const birthDateCriteriaMet = !isAthleteBirthdayKnown ||
-        (group.min_birth_date != null && dayjs(athlete.value.birth_date).diff(dayjs(group.min_birth_date)) <= 0 &&
-            (dayjs(athlete.value.birth_date).diff(dayjs(group.max_birth_date)) >= 0));
+    const birthDateCriteriaMet = isAthleteDataKnown &&
+        (group.min_birth_date != null && dayjs(athlete.value.birth_date).diff(dayjs(group.min_birth_date)) >= 0 &&
+            (dayjs(athlete.value.birth_date).diff(dayjs(group.max_birth_date)) <= 0));
 
     return genderCriteriaMet && sameClassCriteriaMet && birthDateCriteriaMet;
+}
+
+function isAtLeastOneGroupSelected() {
+    return competition_copy.value.groups.some(group => group.participation);
 }
 
 function resetParticipation() {
@@ -416,6 +431,8 @@ function validateBirthDate() {
 }
 
 function onSubmit() {
+    registrationSuccess.value = true;
+    return;
     resetFormErrors();
 
     formErrors.value.surname = !namePattern.test(athlete.value.surname);
@@ -447,23 +464,20 @@ function onSubmit() {
         }).then(response => {
             if (response.status === "ok") {
                 athleteRequestsCache = {};
-                alert('сохранено');
+                registrationSuccess.value = true;
             }
         }).catch(e => {
             if (e.response && e.response.data && e.response.data.errors) {
                 globalErrors.value = e.response.data.errors;
             } else {
                 alert("Произошла ошибка при сохранении объекта");
-                if (e.response) {
-                    console.log(e.response);
-                }
             }
         });
     }
 }
 
 function onClear() {
-    if (!confirm('Вы уверены что хотите очистить данные формы?')) {
+    if (!confirm('Вы уверены, что хотите очистить данные формы?')) {
         return;
     }
 
