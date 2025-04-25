@@ -38,7 +38,8 @@
                                 <h3 class="font-semibold text-green-500">Внимание</h3>
                             </div>
                             <div class="px-3 py-2">
-                                <p class="text-justify">Допустимые даты рождения и пол спортсменов были пересчитаны для всех групп соревнования.
+                                <p class="text-justify">Допустимые даты рождения и пол спортсменов были пересчитаны для
+                                    всех групп соревнования.
                                     Пожалуйста, проверьте их перед сохранением.</p>
                             </div>
                             <div data-popper-arrow></div>
@@ -113,7 +114,7 @@
                                         :id="`division_${group.id}`"
                                         :class="formErrors.division[group.id] ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
                                             : 'vue-select-tailwind vue-select-tailwind-deselect-hidden'"
-                                        v-model="group.division"
+                                        v-model="group.division_code"
                                         :options="divisions"
                                         :reduce="division => division.code"
                                         label="title"
@@ -130,7 +131,7 @@
                                         :id="`archery_class_${group.id}`"
                                         :class="formErrors.archery_class[group.id] ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
                                             : 'vue-select-tailwind vue-select-tailwind-deselect-hidden'"
-                                        v-model="group.archery_class"
+                                        v-model="group.class_code"
                                         :options="archery_classes"
                                         :reduce="archery_class => archery_class.code"
                                         label="title"
@@ -216,7 +217,8 @@
                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                         >
                         <label for="competition_includes_mixed_team_events"
-                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">На соревновании будут команды-микс</label>
+                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">На соревновании будут
+                            команды-микс</label>
                     </div>
                     <div class="col-span-1 sm:col-span-2">
                         <input id="participants_list_available_to_anyone" type="checkbox" checked
@@ -262,7 +264,8 @@ const competition = ref({
     end_date: '',
     registration_start: '',
     registration_finish: '',
-    participants_list_available_to_anyone: 'true',
+    participants_list_available_to_anyone: true,
+    includes_mixed_team_events: false,
     groups: []
 });
 
@@ -328,9 +331,13 @@ function onCompetitionRegistrationFinishChange(revalidateRegistrationStart = fal
     }
 }
 
-function onCompetitionStartDateChange() {
+function validateCompetitionStartDate() {
     formErrors.value.start_date = !dayjs(competition.value.start_date, 'YYYY-MM-DD', true).isValid() ||
         dayjs(competition.value.start_date).isBefore(dayjs());
+}
+
+function onCompetitionStartDateChange() {
+    validateCompetitionStartDate();
 
     if (formErrors.value.start_date === false) {
         //если дата начала валидна - нужно провалидировать дату начала и конца регистрации
@@ -348,15 +355,21 @@ function onCompetitionEndDateChange() {
 }
 
 function validateMinBirthDate(group) {
-    const validDateInThePast = "Укажите корректную дату в прошлом или оставьте поле пустым";
+    //если указана валидная дата начала соревнования, сравнивать будем с ней, иначе - с текущей датой
+    const validDateInThePast = (competition.value.start_date != "" && dayjs(competition.value.start_date, 'YYYY-MM-DD', true).isValid())
+        ? "Укажите корректную дату, не превышающую дату начала соревнования, или оставьте поле пустым"
+        : "Укажите корректную дату в прошлом или оставьте поле пустым";
     const lessThanMaxBirthDate = "Укажите дату, предшествующую максимальной дате рождения";
+    const dateToCompareWith = (competition.value.start_date != "" && dayjs(competition.value.start_date, 'YYYY-MM-DD', true).isValid())
+        ? dayjs(competition.value.start_date)
+        : dayjs();
 
     formErrors.value.min_birth_date[group.id] = [];
 
     //дата может быть не указана
     if (group.min_birth_date) {
-        //если указана, она должна быть валидной и в прошлом
-        if (dayjs(group.min_birth_date, 'YYYY-MM-DD', true).isValid() && dayjs(group.min_birth_date).isBefore(dayjs())) {
+        //если указана, она должна быть валидной и быть не позже даты начала соревнования, или в прошлом
+        if (dayjs(group.min_birth_date, 'YYYY-MM-DD', true).isValid() && !dayjs(group.min_birth_date).isAfter(dateToCompareWith)) {
             //если указана, валидная и в прошлом - она должна быть меньше или равна максимальной даты рождения, если та указана
             if (dayjs(group.max_birth_date, 'YYYY-MM-DD', true).isValid()) {
                 if (!dayjs(group.min_birth_date).isBefore(dayjs(group.max_birth_date))) {
@@ -370,13 +383,19 @@ function validateMinBirthDate(group) {
 }
 
 function validateMaxBirthDate(group) {
-    const validDateInThePast = "Укажите корректную дату в прошлом";
+    //если указана валидная дата начала соревнования, сравнивать будем с ней, иначе - с текущей датой
+    const validDateInThePast = (competition.value.start_date != "" && dayjs(competition.value.start_date, 'YYYY-MM-DD', true).isValid())
+        ? "Укажите корректную дату, не превышающую дату начала соревнования, или оставьте поле пустым"
+        : "Укажите корректную дату в прошлом или оставьте поле пустым";
     const greaterThanMinBirthDate = "Укажите дату, превышающую минимальную дату рождения";
+    const dateToCompareWith = (competition.value.start_date != "" && dayjs(competition.value.start_date, 'YYYY-MM-DD', true).isValid())
+        ? dayjs(competition.value.start_date)
+        : dayjs();
 
     formErrors.value.max_birth_date[group.id] = [];
 
-    //если указана, она должна быть валидной и в прошлом
-    if (dayjs(group.max_birth_date, 'YYYY-MM-DD', true).isValid() && dayjs(group.max_birth_date).isBefore(dayjs())) {
+    //если указана, она должна быть валидной и быть не позже даты начала соревнования, или в прошлом
+    if (dayjs(group.max_birth_date, 'YYYY-MM-DD', true).isValid() && !dayjs(group.max_birth_date).isAfter(dateToCompareWith)) {
         //если указана, валидная и в прошлом - она должна быть меньше или равна максимальной даты рождения, если та указана
         if (dayjs(group.min_birth_date, 'YYYY-MM-DD', true).isValid()) {
             if (!dayjs(group.min_birth_date).isBefore(dayjs(group.max_birth_date))) {
@@ -400,8 +419,8 @@ function toggleDatesRecalculatedPopup(triggerId) {
 }
 
 function recalculateAgeAndGenderLimits(group, targetId = null) {
-    if (group.archery_class !== "") {
-        const fullClass = props.archery_classes.find(c => c.code === group.archery_class);
+    if (group.class_code !== "") {
+        const fullClass = props.archery_classes.find(c => c.code === group.class_code);
         if (fullClass) {
             group.allowed_genders = fullClass.allowed_genders;
             if (competition.value.start_date !== "") {
@@ -429,12 +448,11 @@ function validateCompetitionTitle() {
 }
 
 function validateDivision(group) {
-    console.log(group);
-    formErrors.value.division[group.id] = (group.division == null);
+    formErrors.value.division[group.id] = (group.division_code == null);
 }
 
 function validateArcheryClass(group) {
-    formErrors.value.archery_class[group.id] = (group.archery_class == null);
+    formErrors.value.archery_class[group.id] = (group.class_code == null);
 }
 
 function validateAllowedGenders(group) {
@@ -459,7 +477,7 @@ function resetFormErrors() {
 function onSubmit() {
     resetFormErrors();
     validateCompetitionTitle();
-    onCompetitionStartDateChange();
+    validateCompetitionStartDate();
     onCompetitionEndDateChange();
     onCompetitionRegistrationStartChange(true);
     onCompetitionRegistrationFinishChange(true);

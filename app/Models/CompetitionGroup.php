@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class CompetitionGroup extends Model
 {
+    public $timestamps = false;
     protected $with = ["division", "archeryClass"];
 
     protected $casts = [

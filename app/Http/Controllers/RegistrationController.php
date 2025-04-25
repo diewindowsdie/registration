@@ -160,15 +160,6 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
         return $existingAthlete;
     }
 
-    private static function wrapUnsafeBoolean(array $array, string $key): int
-    {
-        if (!isset($array[$key])) {
-            return 0;
-        }
-
-        return $array[$key] == true;
-    }
-
     private static function checkRegistrationBusinessLogicErrors($request, $athlete): array
     {
         //сначала проверим, есть ли регистрация хотя бы в один дивизион у спортсмена, если есть - возвращаем ошибку

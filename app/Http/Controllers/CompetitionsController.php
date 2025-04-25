@@ -7,6 +7,7 @@ use App\Http\Requests\Athlete\SaveRequest;
 use App\Models\ArcheryClass;
 use App\Models\Athlete;
 use App\Models\Competition;
+use App\Models\CompetitionGroup;
 use App\Models\Division;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Http\FormRequest;
@@ -32,23 +33,33 @@ class CompetitionsController extends Controller
 
     public function create(FormRequest $request): JsonResponse
     {
-        $model = new Competition();
-        $model->title = $request->title;
-        $model->start_date = $request->start_date;
-        $model->end_date = $request->end_date;
-        $model->registration_start = $request->registration_start;
-        $model->registration_finish = $request->registration_finish;
-        $model->competition_includes_teams = $request->competition_includes_teams;
-        $model->competition_includes_mixed_teams = $request->competition_includes_mixed_teams;
-        $model->participants_list_available_to_anyone = $request->participants_list_available_to_anyone;
-        $model->created_by = ClientCertificateOrBasicAuthAuthenticator::getAuthenticatedUserName();
+        $competition = new Competition();
+        $competition->title = $request->input('title');
+        $competition->start_date = $request->input('start_date');
+        $competition->end_date = $request->input('end_date');
+        $competition->registration_start = $request->input('registration_start');
+        $competition->registration_finish = $request->input('registration_finish');
+        $competition->includes_mixed_team_events = self::wrapUnsafeBooleanFromRequest($request, 'includes_mixed_team_events');
+        $competition->participants_list_available_to_anyone = self::wrapUnsafeBooleanFromRequest($request, 'participants_list_available_to_anyone');
+        $competition->created_by = ClientCertificateOrBasicAuthAuthenticator::getAuthenticatedUserName();
 
-        $model->save();
+        $competition->save();
+        foreach($request->input("groups") as $group) {
+            $competitionGroup = new CompetitionGroup();
+            $competitionGroup->competition_id = $competition->id;
+            $competitionGroup->division_code = $group["division_code"];
+            $competitionGroup->class_code = $group["class_code"];
+            $competitionGroup->allowed_genders = $group["allowed_genders"];
+            $competitionGroup->min_birth_date = $group["min_birth_date"];
+            $competitionGroup->max_birth_date = $group["max_birth_date"];
+            $competitionGroup->includes_teams = self::wrapUnsafeBoolean($group, "includes_teams");
+            $competitionGroup->save();
+        }
 
         return response()->json([
             'status' => 'ok',
-            'id' => $model->id,
-            'model' => $model,
+            'id' => $competition->id,
+            'competition' => $competition,
         ]);
     }
 }

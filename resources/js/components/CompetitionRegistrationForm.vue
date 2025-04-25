@@ -171,10 +171,11 @@
                                                 group.division.title
                                             }} {{ group.archery_class.title }}</label>
                                     </div>
-                                    <div class="col-span-1 text-right">
-                                        <p class="text-xs" v-if="group.min_birth_date !== null">Дата рождения: {{dayjs(group.min_birth_date).format("DD.MM.YYYY")}} - {{dayjs(group.max_birth_date).format("DD.MM.YYYY")}}</p>
-                                        <p class="text-xs" v-if="group.min_birth_date === null">Дата рождения: от {{dayjs(group.max_birth_date).format("DD.MM.YYYY")}} и старше</p>
-                                        <p class="text-xs" v-if="JSON.stringify(group.allowed_genders) !== JSON.stringify(group.archery_class.allowed_genders)">Пол: {{formatGenders(group.allowed_genders)}}</p>
+                                    <div class="col-span-1 text-right block">
+                                        <p class="text-xs font-bold">Критерии допуска в группу:</p>
+                                        <p class="text-xs" v-if="group.min_birth_date !== null">Дата рождения: <b>{{dayjs(group.min_birth_date).format("DD.MM.YYYY")}} - {{dayjs(group.max_birth_date).format("DD.MM.YYYY")}}</b></p>
+                                        <p class="text-xs" v-if="group.min_birth_date === null">Дата рождения: от <b>{{dayjs(group.max_birth_date).format("DD.MM.YYYY")}}</b> и старше</p>
+                                        <p class="text-xs" v-if="JSON.stringify(group.allowed_genders) !== JSON.stringify(group.archery_class.allowed_genders)">Пол: <b>{{formatGenders(group.allowed_genders)}}</b></p>
                                     </div>
                                     <div class="row-span-1 sm:row-span-1 pl-5 mt-5"
                                          v-if="group.participation == true && (group.includes_teams == 1 || competition_copy.includes_mixed_team_events == 1)">
@@ -365,6 +366,7 @@ function searchAthlete(ignoreFormData = false) {
 }
 
 function isGroupAvailable(group) {
+    console.log(group);
     const isAthleteDataKnown =
         athlete.value.surname !== '' && formErrors.value.surname === false &&
         athlete.value.first_name !== '' && formErrors.value.first_name === false &&
@@ -384,8 +386,8 @@ function isGroupAvailable(group) {
 
     //дата рождения спортсмена должна попадать между минимальной (если определена) и максимальной датой рождения, определенной для группы
     const birthDateCriteriaMet = isAthleteDataKnown &&
-        (group.min_birth_date != null && dayjs(athlete.value.birth_date).diff(dayjs(group.min_birth_date)) >= 0 &&
-            (dayjs(athlete.value.birth_date).diff(dayjs(group.max_birth_date)) <= 0));
+        (group.min_birth_date === null || (group.min_birth_date != null && dayjs(athlete.value.birth_date).diff(dayjs(group.min_birth_date)) >= 0) &&
+            dayjs(athlete.value.birth_date).diff(dayjs(group.max_birth_date)) <= 0);
 
     return genderCriteriaMet && sameClassCriteriaMet && birthDateCriteriaMet;
 }
