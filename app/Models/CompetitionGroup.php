@@ -6,24 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property int $competition_id
- * @property \App\Models\Division|null $division
- * @property string $class
- * @property string $allowed_genders
- * @property \Illuminate\Support\Carbon $min_birth_date
+ * @property string $division_code
+ * @property string $class_code
+ * @property array<array-key, mixed> $allowed_genders
+ * @property \Illuminate\Support\Carbon|null $min_birth_date
  * @property \Illuminate\Support\Carbon $max_birth_date
+ * @property int $includes_teams
  * @property-read \App\Models\ArcheryClass|null $archeryClass
+ * @property-read \App\Models\Division|null $division
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionGroup newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionGroup newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionGroup query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionGroup whereAllowedGenders($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionGroup whereClass($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionGroup whereClassCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionGroup whereCompetitionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionGroup whereDivision($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionGroup whereDivisionCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionGroup whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionGroup whereIncludesTeams($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionGroup whereMaxBirthDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionGroup whereMinBirthDate($value)
  * @mixin \Eloquent

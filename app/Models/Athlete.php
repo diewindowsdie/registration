@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -16,9 +16,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string|null $patronymic
  * @property string $gender
  * @property \Illuminate\Support\Carbon $birth_date
- * @property string $qualification
+ * @property string $qualification_code
  * @property int $using_chair
  * @property string $region_code
+ * @property-read \App\Models\SportQualification|null $qualification
+ * @property-read \App\Models\AthleteRegion|null $region
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Athlete newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Athlete newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Athlete query()
@@ -28,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Athlete whereGender($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Athlete whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Athlete wherePatronymic($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Athlete whereQualification($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Athlete whereQualificationCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Athlete whereRegionCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Athlete whereSurname($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Athlete whereUpdatedAt($value)
