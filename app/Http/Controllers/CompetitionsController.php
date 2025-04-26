@@ -58,8 +58,7 @@ class CompetitionsController extends Controller
 
         return response()->json([
             'status' => 'ok',
-            'id' => $competition->id,
-            'competition' => $competition,
+            'competition_id' => $competition->id,
         ]);
     }
 }

@@ -366,7 +366,6 @@ function searchAthlete(ignoreFormData = false) {
 }
 
 function isGroupAvailable(group) {
-    console.log(group);
     const isAthleteDataKnown =
         athlete.value.surname !== '' && formErrors.value.surname === false &&
         athlete.value.first_name !== '' && formErrors.value.first_name === false &&
@@ -433,8 +432,6 @@ function validateBirthDate() {
 }
 
 function onSubmit() {
-    registrationSuccess.value = true;
-    return;
     resetFormErrors();
 
     formErrors.value.surname = !namePattern.test(athlete.value.surname);

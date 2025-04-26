@@ -1,5 +1,5 @@
 <template>
-    <section class="bg-transparent">
+    <section class="bg-transparent" v-if="competitionRegistrationUrl === ''">
         <div class="px-4 mx-auto max-w-6xl">
             <h2 class="mb-4 py-2 text-4xl font-bold text-gray-900 dark:text-white">Добавление соревнования</h2>
             <form @submit.prevent="onSubmit" method="post" :action="routeCreate">
@@ -244,10 +244,12 @@
             </form>
         </div>
     </section>
+    <section v-if="competitionRegistrationUrl !== ''">
+        <p class="block text-2xl mt-0 ml-2 font-medium text-gray-900 dark:text-white">Соревнование успешно добавлено.</p>
+        <p class="block text-xl ml-2 font-medium text-gray-900 dark:text-white">Ссылка для регистрации на соревнования: <a class="hover:underline text-blue-600" :href="competitionRegistrationUrl">{{ competitionRegistrationUrl }}</a></p>
+    </section>
 </template>
 <script setup>
-
-
 import {ref, triggerRef} from "vue";
 import axios from "axios";
 import dayjs from 'dayjs';
@@ -256,7 +258,7 @@ import vSelect from 'vue-select';
 
 const requiredTextPattern = /^[а-яА-Я\w\-«»!?:;()\[\]&#№%+ "'.,]{2,}$/;
 
-const props = defineProps(['routeCreate', "divisions", "archery_classes"]);
+const props = defineProps(["routeCreate", "routeRegistration", "divisions", "archery_classes"]);
 
 const competition = ref({
     title: '',
@@ -268,6 +270,8 @@ const competition = ref({
     includes_mixed_team_events: false,
     groups: []
 });
+
+const competitionRegistrationUrl = ref("");
 
 const formErrors = ref({});
 resetFormErrors();
@@ -489,26 +493,16 @@ function onSubmit() {
         validateAllowedGenders(group);
     })
 
-
     axios.post(props.routeCreate, {
         ...competition.value
     }).then(r => {
-        const data = r.data;
-        console.log(data);
-        alert('сохранено')
+        competitionRegistrationUrl.value = props.routeRegistration.replace(':competition_id', r.data.competition_id);
     }).catch(e => {
-        console.log(e);
-
         if (e.response && e.response.data && e.response.data.errors) {
             this.errors = e.response.data.errors;
         } else {
             alert("Произошла ошибка при сохранении объекта");
-            if (e.response) {
-                console.log(e.response);
-            }
         }
-    }).finally(() => {
-        console.log('athlete saved')
     });
 }
 
@@ -523,9 +517,9 @@ function onClear() {
         end_date: '',
         registration_start: '',
         registration_finish: '',
-        competition_includes_teams: '',
-        competition_includes_mixed_teams: '',
-        participants_list_available_to_anyone: '',
+        participants_list_available_to_anyone: true,
+        includes_mixed_team_events: false,
+        groups: []
     }
 }
 </script>

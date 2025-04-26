@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -51,5 +51,8 @@ class Competition extends Model
     {
         return $this->hasMany(CompetitionGroup::class);
     }
-    //
+
+    public function isRegistrationOpen(): bool {
+        return $this->registration_start <= now() && $this->registration_finish >= now();
+    }
 }
