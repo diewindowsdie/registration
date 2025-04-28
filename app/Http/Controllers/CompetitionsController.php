@@ -67,8 +67,12 @@ class CompetitionsController extends Controller
     {
         return view('pages.competitions.participants', [
             "competition" => Competition::find($id),
-            "participants" => CompetitionParticipant::where("competition_id", "=", $id)->get(),
-            //todo ->orderBy("surname", "asc")->orderBy("first_name", "asc")->orderBy("patronymic", "asc")
+            "participants" => CompetitionParticipant::where("competition_id", "=", $id)
+                ->leftJoin("athletes", "athletes.id", "=", "competition_participants.athlete_id")
+                ->orderBy("athletes.surname", "asc")
+                ->orderBy("athletes.first_name", "asc")
+                ->orderBy("athletes.patronymic", "asc")
+                ->get(),
         ]);
     }
 }

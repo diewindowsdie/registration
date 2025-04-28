@@ -188,8 +188,8 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
                 if (!in_array($athlete->gender, $existingGroup->allowed_genders, true)) {
                     return [RegistrationError::INVALID_GENDER_FOR_GROUP];
                 }
-                if ($athlete->birth_date->gt($existingGroup->min_birth_date) ||
-                    $athlete->birth_date->lt($existingGroup->max_birth_date)) {
+                if (($existingGroup->min_birth_date !== null && $athlete->birth_date->lt($existingGroup->min_birth_date)) ||
+                    $athlete->birth_date->gt($existingGroup->max_birth_date)) {
                     return [RegistrationError::INVALID_BIRTH_DATE_FOR_GROUP];
                 }
             }
@@ -227,8 +227,8 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
                 $participant = new CompetitionParticipant();
                 $participant->competition_id = $request->input("competition_id");
                 $participant->athlete_id = $athlete->id;
-                $participant->sport_school = $request->input("sport_school");
-                $participant->sport_organisation = $request->input("sport_organisation");
+                $participant->sport_school_code = $request->input("sport_school_code");
+                $participant->sport_organisation_code = $request->input("sport_organisation_code");
                 $participant->contact_information = $request->input("contact_information");
                 $participant->coach_name = $request->input("coach_name");
 
@@ -244,8 +244,6 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
 
         return response()->json([
             'status' => 'ok',
-            //'id' => $participant->id,
-            //'participant' => $participant,
         ]);
     }
 }

@@ -461,7 +461,7 @@ function onSubmit() {
                 }),
             ...athlete.value,
         }).then(response => {
-            if (response.status === "ok") {
+            if (response.data.status === "ok") {
                 athleteRequestsCache = {};
                 registrationSuccess.value = true;
             }
@@ -487,11 +487,10 @@ function onClear() {
         patronymic: '',
         gender: '',
         birth_date: '',
-        qualification: '',
-        region: '',
-        region_code: '',
-        sport_school: '',
-        sport_organisation: '',
+        qualification: null,
+        region_code: null,
+        sport_school_code: null,
+        sport_organisation_code: null,
         contact_information: '',
         coach_name: '',
         using_chair: false
@@ -505,7 +504,7 @@ function fillForm(data) {
     athlete.value.patronymic = data.patronymic;
     athlete.value.gender = data.gender;
     athlete.value.birth_date = dayjs(data.birth_date).format("YYYY-MM-DD");
-    athlete.value.region_code = data.region;
+    athlete.value.region_code = data.region.code;
     athlete.value.qualification = data.qualification.code;
     athlete.value.using_chair = data.using_chair == 1;
 

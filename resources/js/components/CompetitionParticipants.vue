@@ -23,7 +23,7 @@
                         <tbody data-accordion="open" data-active-classes="text-black dark:text-white bg-white dark:bg-gray-800" data-inactive-classes="text-gray-600 dark:text-gray-400">
                             <template v-for="participant in participants.filter(candidate => candidate.athlete !== null && candidate.division_code === group.division_code && candidate.class_code === group.class_code)">
                                 <tr class="border-t dark:border-gray-700" >
-                                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{participant.athlete.surname}}&nbsp;{{participant.athlete.first_name}}{{participant.athlete.first_name !== null ? " " + participant.athlete.first_name : ""}}</th>
+                                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{participant.athlete.surname}}&nbsp;{{participant.athlete.first_name}}{{participant.athlete.patronymic !== null ? " " + participant.athlete.patronymic : ""}}</th>
                                     <td class="px-4 py-3 hidden sm:table-cell">{{ dayjs(participant.athlete.birth_date).format("DD.MM.YYYY") }}</td>
                                     <td class="px-4 py-3 hidden sm:table-cell">{{ participant.athlete.region.full_name }}</td>
                                     <td class="px-4 py-3 hidden sm:table-cell">{{ participant.athlete.qualification.short_title }}</td>
@@ -68,4 +68,5 @@
 import dayjs from 'dayjs';
 
 const props = defineProps(["competition", "participants"]);
+console.log(props.participants);
 </script>
