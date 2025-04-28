@@ -8,6 +8,7 @@ use App\Models\ArcheryClass;
 use App\Models\Athlete;
 use App\Models\Competition;
 use App\Models\CompetitionGroup;
+use App\Models\CompetitionParticipant;
 use App\Models\Division;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Http\FormRequest;
@@ -59,6 +60,15 @@ class CompetitionsController extends Controller
         return response()->json([
             'status' => 'ok',
             'competition_id' => $competition->id,
+        ]);
+    }
+
+    public function getParticipants($id): View
+    {
+        return view('pages.competitions.participants', [
+            "competition" => Competition::find($id),
+            "participants" => CompetitionParticipant::where("competition_id", "=", $id)->get(),
+            //todo ->orderBy("surname", "asc")->orderBy("first_name", "asc")->orderBy("patronymic", "asc")
         ]);
     }
 }

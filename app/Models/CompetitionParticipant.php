@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -45,16 +45,16 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class CompetitionParticipant extends Model
 {
-    protected $with = ["athlete", "competition", "division", "archeryClass"];
+    protected $with = ["athlete", "competition", "division", "archeryClass", "sportSchool", "sportOrganisation"];
 
     public function athlete(): HasOne
     {
-        return $this->hasOne(Athlete::class);
+        return $this->hasOne(Athlete::class, "id", "athlete_id");
     }
 
     public function competition(): HasOne
     {
-        return $this->hasOne(Competition::class);
+        return $this->hasOne(Competition::class, "id", "competition_id");
     }
 
     public function division(): HasOne
@@ -65,5 +65,15 @@ class CompetitionParticipant extends Model
     public function archeryClass(): HasOne
     {
         return $this->hasOne(ArcheryClass::class, "code", "class_code");
+    }
+
+    public function sportSchool(): HasOne
+    {
+        return $this->hasOne(SportSchool::class, "code", "sport_school_code");
+    }
+
+    public function sportOrganisation(): HasOne
+    {
+        return $this->hasOne(SportOrganisation::class, "code", "sport_organisation_code");
     }
 }

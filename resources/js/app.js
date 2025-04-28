@@ -25,9 +25,11 @@ dayjs.tz.setDefault("Europe/Moscow");
 import CompetitionRegistrationForm from "./components/CompetitionRegistrationForm.vue";
 import Competition from "./components/Competition.vue";
 import NewCompetitionForm from "./components/NewCompetitionForm.vue";
+import CompetitionParticipants from "./components/CompetitionParticipants.vue";
 app.component('CompetitionRegistrationForm', CompetitionRegistrationForm);
 app.component('Competition', Competition);
 app.component('NewCompetitionForm', NewCompetitionForm);
+app.component('CompetitionParticipants', CompetitionParticipants);
 
 app.mount('#app')
 

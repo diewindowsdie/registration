@@ -250,7 +250,7 @@
     </section>
 </template>
 <script setup>
-import {ref, triggerRef} from "vue";
+import {ref} from "vue";
 import axios from "axios";
 import dayjs from 'dayjs';
 import {Popover} from "flowbite";

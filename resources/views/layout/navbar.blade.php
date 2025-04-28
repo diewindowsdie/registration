@@ -70,8 +70,9 @@
                     </g>
                 </svg>
             </div>
-            <div class="col-span-7 text-gray-500 dark:text-gray-400 hover:underline mt-1 px-2 flex items-center-safe">Список
-                участников
+            <div class="col-span-7 text-gray-500 dark:text-gray-400 hover:underline mt-1 px-2 flex items-center-safe"><a
+                    href="{{ route('competitions.participants', $competition_item->id) }}">Список
+                    участников</a>
             </div>
             @endif
             @if(\App\Auth\ClientCertificateOrBasicAuthAuthenticator::isAuthenticated())
