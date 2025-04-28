@@ -6,5 +6,6 @@
 <competition-participants
     :competition="{{ $competition }}"
     :participants="{{ $participants }}"
+    :is-secretary="{{ \App\Auth\ClientCertificateOrBasicAuthAuthenticator::isAuthenticated() }}"
 ></competition-participants>
 @endsection
