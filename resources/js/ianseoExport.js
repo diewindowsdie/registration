@@ -1,4 +1,4 @@
-function ianseoData(participants) {
+export function ianseoData(participants) {
     const TAB = "\t";
     return participants
         .filter(participant => participant.athlete !== null)
@@ -37,4 +37,12 @@ export async function ianseoExportToFile(participants) {
     tempLink.click();
 
     URL.revokeObjectURL(tempLink.href);
+}
+
+export function ianseoExportToClipboard(participants) {
+    new ClipboardJS('#exportViaClipboard', {
+        text: function() {
+            return ianseoData(participants);
+        }
+    });
 }

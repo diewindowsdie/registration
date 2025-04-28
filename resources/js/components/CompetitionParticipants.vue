@@ -92,22 +92,45 @@
                     </table>
                 </div>
             </div>
-            <button v-if="isSecretary" type="button"
+            <button v-if="isSecretary" type="button" id="exportViaClipboard"
                     class="inline-flex items-center px-5 py-2.5 mb-3 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
                 Экспорт в IANSEO (буфер обмена)
             </button>
-            <button v-if="isSecretary" type="button"
+            <button v-if="isSecretary" type="button" data-tooltip-target="copied-tooltip" data-tooltip-trigger="none"
                     @click="ianseoExportToFile(participants)"
                     class="inline-flex items-center px-5 py-2.5 mb-3 ml-3 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
                 Экспорт в IANSEO (файл)
             </button>
+            <div id="copied-tooltip" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
+                Скопировано
+                <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
         </div>
     </section>
 </template>
 <script setup>
 import dayjs from 'dayjs';
-import {ianseoExportToFile} from "../ianseoExport.js";
+import ClipboardJS from "clipboard";
+import {Popover, Tooltip} from 'flowbite';
+import {ianseoExportToFile, ianseoData} from "../ianseoExport.js";
 
 const props = defineProps(["competition", "participants", "isSecretary"]);
-console.log(props.participants);
+// console.log(ClipboardJS.isSupported());
+
+const clipboard = new ClipboardJS('#exportViaClipboard', {
+    text: function() {
+        return ianseoData(props.participants);
+    }
+});
+clipboard.on('success', function(e) {
+    const targetElement = document.getElementById('copied-tooltip');
+    const triggerElement = document.getElementById('exportViaClipboard');
+    const tooltip = new Tooltip(targetElement, triggerElement, {triggerType: "none", placement: "bottom"});
+    tooltip.show();
+    setTimeout(function() {
+        tooltip.hide();
+    }, 2000);
+    e.clearSelection();
+});
+
 </script>
