@@ -17,6 +17,7 @@
                             <th scope="col" class="px-4 py-3 hidden sm:table-cell">Разряд / звание</th>
                             <th scope="col" class="px-4 py-3 hidden sm:table-cell">Спортивная школа</th>
                             <th scope="col" class="px-4 py-3 hidden sm:table-cell">Клуб / организация</th>
+                            <th scope="col" class="px-4 py-3 hidden sm:table-cell">Дата и время регистрации</th>
                             <th scope="col" class="px-4 py-3 table-cell sm:hidden"/>
                         </tr>
                         </thead>
@@ -29,6 +30,7 @@
                                     <td class="px-4 py-3 hidden sm:table-cell">{{ participant.athlete.qualification.short_title }}</td>
                                     <td class="px-4 py-3 hidden sm:table-cell">{{ participant.sport_school !== null ? participant.sport_school.full_title : ""}}</td>
                                     <td class="px-4 py-3 hidden sm:table-cell">{{ participant.sport_organisation !== null ? participant.sport_organisation.full_title : "" }}</td>
+                                    <td class="px-4 py-3 hidden sm:table-cell">{{ dayjs(participant.created_at).format("DD.MM.YYYY HH:mm:ss") }}</td>
                                     <td class="px-4 py-3 flex items-center justify-end sm:hidden"> <!--скрываем этот столбец начиная с размера sm-->
                                         <button :id="'dropdown-button-' + participant.id" class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button"
                                                 aria-expanded="false"
@@ -44,15 +46,14 @@
                                     </td>
                                 </tr>
                                 <tr class="border-t dark:border-gray-700 bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
-                                    <td colspan="7" :id="'dropdown-participant-' + participant.id" class="hidden">
+                                    <td colspan="8" :id="'dropdown-participant-' + participant.id" class="hidden">
                                         <div class="text-left mx-6 my-0.5 p-3">
                                             <p><b>Дата рождения:</b> {{ dayjs(participant.athlete.birth_date).format("DD.MM.YYYY") }}</p>
                                             <p><b>Регион:</b> {{ participant.athlete.region.full_name }}</p>
                                             <p><b>Разряд/звание:</b> {{ participant.athlete.qualification.short_title }}</p>
-                                            <p><b>Спортивная школа:</b> {{ participant.sport_school !== null ? participant.sport_school.full_title : ""}}</p>
-                                            <p><b>Клуб/организация:</b> {{ participant.sport_organisation !== null ? participant.sport_organisation.full_title : "" }}</p>
-
-
+                                            <p v-if="participant.sport_school !== null"><b>Спортивная школа:</b> {{ participant.sport_school.full_title }}</p>
+                                            <p v-if="participant.sport_organisation !== null"><b>Клуб/организация:</b> {{ participant.sport_organisation.full_title }}</p>
+                                            <p><b>Дата и время регистрации:</b> {{ dayjs(participant.created_at).format("DD.MM.YYYY HH:mm:ss") }}</p>
                                         </div>
                                     </td>
                                 </tr>
