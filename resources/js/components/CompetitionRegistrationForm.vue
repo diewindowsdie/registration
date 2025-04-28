@@ -180,7 +180,7 @@
                                     <div class="row-span-1 sm:row-span-1 pl-5 mt-5"
                                          v-if="group.participation == true && (group.includes_teams == 1 || competition_copy.includes_mixed_team_events == 1)">
                                         <div v-if="group.includes_teams == 1" class="flex items-center">
-                                            <input id="participation_team_{{group.id}}" type="checkbox" checked value=""
+                                            <input id="participation_team_{{group.id}}" type="checkbox" value=""
                                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                                    v-model="group.participate_teams"/>
                                             <label for="participation_team_{{group.id}}"
@@ -188,7 +188,7 @@
                                                 в командных соревнованиях</label>
                                         </div>
                                         <div v-if="competition_copy.includes_mixed_team_events == 1" class="flex items-center">
-                                            <input id="participation_mixed_team_{{group.id}}" type="checkbox" checked value=""
+                                            <input id="participation_mixed_team_{{group.id}}" type="checkbox" value=""
                                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                                    v-model="group.participate_mixed_teams"/>
                                             <label for="participation_mixed_team_{{group.id}}"
@@ -285,6 +285,10 @@ import vSelect from 'vue-select';
 
 const props = defineProps(["routeSave", "routeFindAthlete", "competition", "qualifications", "regions", "sport_schools", "sport_organisations"]);
 const competition_copy = ref(props.competition);
+competition_copy.value.groups.forEach(group => {
+    group.participate_teams = true;
+    group.participate_mixed_teams = true;
+});
 
 const athlete = ref({
     athlete_id: '',
