@@ -111,11 +111,10 @@
 <script setup>
 import dayjs from 'dayjs';
 import ClipboardJS from "clipboard";
-import {Popover, Tooltip} from 'flowbite';
+import {Tooltip} from 'flowbite';
 import {ianseoExportToFile, ianseoData} from "../ianseoExport.js";
 
 const props = defineProps(["competition", "participants", "isSecretary"]);
-// console.log(ClipboardJS.isSupported());
 
 const clipboard = new ClipboardJS('#exportViaClipboard', {
     text: function() {
