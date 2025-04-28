@@ -26,10 +26,12 @@ import CompetitionRegistrationForm from "./components/CompetitionRegistrationFor
 import Competition from "./components/Competition.vue";
 import NewCompetitionForm from "./components/NewCompetitionForm.vue";
 import CompetitionParticipants from "./components/CompetitionParticipants.vue";
+import SortOrderIndicator from "./components/SortOrderIndicator.vue";
 app.component('CompetitionRegistrationForm', CompetitionRegistrationForm);
 app.component('Competition', Competition);
 app.component('NewCompetitionForm', NewCompetitionForm);
 app.component('CompetitionParticipants', CompetitionParticipants);
+app.component('SortOrderIndicator', SortOrderIndicator);
 
 app.mount('#app')
 

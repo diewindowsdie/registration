@@ -276,7 +276,6 @@
     </section>
     <section v-if="registrationSuccess"><p class="block text-2xl mt-0 ml-2 font-medium text-gray-900 dark:text-white">Вы успешно зарегистрировались для участия в соревновании.</p></section>
 </template>
-
 <script setup>
 import {ref} from 'vue';
 import axios from "axios";
