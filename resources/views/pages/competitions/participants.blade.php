@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', $competition->title . ' (' . $competition->start_date->format('d.m.Y') . ' - ' . $competition->end_date->format('d.m.Y') . "): Список участников")
+@section('title', 'Список участников соревнований')
 
 @section('content')
 <competition-participants

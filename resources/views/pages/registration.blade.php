@@ -1,7 +1,8 @@
 @extends('layout.main')
 
-@section('title', 'Регистрация')
+@section('title', 'Регистрация на соревнования')
 
 @section('content')
-    <competition-registration-form route-save="{{ route('competitions.create') }}"></competition-registration-form>
+<p class="text-xl -mt-2 p-3">Вы попали на сайт для регистрации участников соревнований Санкт-Петербургской федерации стрельбы из лука.</p>
+<p class="text-xl p-3">Если вы хотите зарегистрироваться на соревнования - выберите в меню слева соревнования и воспользуйтесь ссылкой "Регистрация".</p>
 @endsection

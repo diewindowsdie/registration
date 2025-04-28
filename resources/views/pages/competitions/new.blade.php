@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Добавить соревнование')
+@section('title', 'Добавление соревнований')
 
 @section('content')
 <new-competition-form

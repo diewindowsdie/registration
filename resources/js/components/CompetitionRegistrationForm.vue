@@ -1,6 +1,8 @@
 <template>
     <section class="bg-transparent" v-if="registrationSuccess === false">
         <div class="px-4 mx-auto max-w-6xl">
+            <h2 class="mb-4 py-2 text-4xl font-bold text-gray-900 dark:text-white">{{ competition.title }}, {{ dayjs(competition.start_date).format("DD.MM.YYYY") }} - {{ dayjs(competition.end_date).format("DD.MM.YYYY" )}}</h2>
+            <h2 class="mb-4 py-2 text-2xl text-gray-900 dark:text-white">Регистрация открыта с <b>{{ dayjs(competition.registration_start).format("DD.MM.YYYY HH:mm:ss") }}</b> по <b>{{ dayjs(competition.registration_finish).format("DD.MM.YYYY HH:mm:ss")}}</b></h2>
             <form @submit.prevent="onSubmit" method="post" :action="routeSave">
                 <div v-if="globalErrors.length > 0" class="border-red-500 text-red-900 placeholder-red-700 rounded-2xl border-2 px-5 py-5 mb-3">
                     <label for="errors" class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Пожалуйста, исправьте следующие ошибки:</label>

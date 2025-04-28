@@ -1,7 +1,6 @@
 <template>
     <section class="bg-transparent" v-if="competitionRegistrationUrl === ''">
         <div class="px-4 mx-auto max-w-6xl">
-            <h2 class="mb-4 py-2 text-4xl font-bold text-gray-900 dark:text-white">Добавление соревнования</h2>
             <form @submit.prevent="onSubmit" method="post" :action="routeCreate">
                 <div class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
                     <div class="sm:col-span-2">

@@ -1,6 +1,7 @@
 <template>
     <section class="bg-gray-50 dark:bg-gray-900 p-3">
         <div class="mx-auto max-w-screen-3xl px-4 lg:px-12">
+            <h2 class="mb-4 py-2 text-3xl font-bold text-gray-900 dark:text-white">{{ competition.title }}, <br class="sm:hidden block"/>{{ dayjs(competition.start_date).format("DD.MM.YYYY") }} - {{ dayjs(competition.end_date).format("DD.MM.YYYY" )}}</h2>
             <!--группа-->
             <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden mb-5"
                  v-for="group in competition.groups">

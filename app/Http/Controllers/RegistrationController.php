@@ -37,9 +37,14 @@ class RegistrationController extends Controller
 {
     public function index(): View
     {
-        $competitions = Competition::all();
-        return view('pages.competitions.list', ["competitions" => $competitions]);
+        return view('pages.registration');
     }
+
+//    public function index(): View
+//    {
+//        $competitions = Competition::all();
+//        return view('pages.competitions.list', ["competitions" => $competitions]);
+//    }
 
     public function registrationForm($id): View
     {
