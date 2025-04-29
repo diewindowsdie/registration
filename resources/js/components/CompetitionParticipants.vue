@@ -1,7 +1,9 @@
 <template>
     <section class="bg-gray-50 dark:bg-gray-900 p-3">
         <div class="mx-auto max-w-screen-3xl px-4 lg:px-12">
-            <h2 class="mb-4 py-2 text-3xl font-bold text-gray-900 dark:text-white">{{ competition.title }}, <br class="sm:hidden block"/>{{ dayjs(competition.start_date).format("DD.MM.YYYY") }} - {{ dayjs(competition.end_date).format("DD.MM.YYYY" )}}</h2>
+            <h2 class="mb-4 py-2 text-3xl font-bold text-gray-900 dark:text-white">{{ competition.title }}, <br
+                class="sm:hidden block"/>{{ dayjs(competition.start_date).format("DD.MM.YYYY") }} -
+                {{ dayjs(competition.end_date).format("DD.MM.YYYY") }}</h2>
             <!--группа-->
             <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden mb-5"
                  v-for="group in competition.groups">
@@ -76,6 +78,28 @@
                                 :class_code="group.class_code"
                                 :orderBy="orderBy">
                             </sort-order-indicator>
+                            <template v-if="isSecretary">
+                                <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell"
+                                    @click="toggleOrderBy('contact_information', group.division_code, group.class_code)">
+                                    Контактная информация
+                                </th>
+                                <sort-order-indicator
+                                    field="contact_information"
+                                    :division_code="group.division_code"
+                                    :class_code="group.class_code"
+                                    :orderBy="orderBy">
+                                </sort-order-indicator>
+                                <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell"
+                                    @click="toggleOrderBy('coach_name', group.division_code, group.class_code)">
+                                    Тренер
+                                </th>
+                                <sort-order-indicator
+                                    field="coach_name"
+                                    :division_code="group.division_code"
+                                    :class_code="group.class_code"
+                                    :orderBy="orderBy">
+                                </sort-order-indicator>
+                            </template>
                             <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell"
                                 @click="toggleOrderBy('created_at', group.division_code, group.class_code)">Дата и время
                                 регистрации
@@ -120,6 +144,12 @@
                                         participant.sport_organisation !== null ? participant.sport_organisation.full_title : ""
                                     }}
                                 </td>
+                                <td v-if="isSecretary" class="px-4 py-3 hidden sm:table-cell"
+                                    colspan="2">{{ participant.contact_information }}
+                                </td>
+                                <td v-if="isSecretary" class="px-4 py-3 hidden sm:table-cell"
+                                    colspan="2">{{ participant.coach_name }}
+                                </td>
                                 <td class="px-4 py-3 hidden sm:table-cell" colspan="2">
                                     {{ dayjs(participant.created_at).format("DD.MM.YYYY HH:mm:ss") }}
                                 </td>
@@ -142,7 +172,7 @@
                                 </td>
                             </tr>
                             <tr class="border-t dark:border-gray-700 bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
-                                <td colspan="10" :id="'dropdown-participant-' + participant.id" class="hidden">
+                                <td colspan="3" :id="'dropdown-participant-' + participant.id" class="hidden">
                                     <div class="text-left mx-6 my-0.5 p-3">
                                         <p><b>Дата рождения:</b>
                                             {{ dayjs(participant.athlete.birth_date).format("DD.MM.YYYY") }}</p>
@@ -152,6 +182,10 @@
                                             {{ participant.sport_school.full_title }}</p>
                                         <p v-if="participant.sport_organisation !== null"><b>Клуб/организация:</b>
                                             {{ participant.sport_organisation.full_title }}</p>
+                                        <p v-if="isSecretary"><b>Контактная информация:</b>
+                                            {{ participant.contact_information }}</p>
+                                        <p v-if="isSecretary && participant.coach_name !== null"><b>Тренер:</b>
+                                            {{ participant.coach_name }}</p>
                                         <p><b>Дата и время регистрации:</b>
                                             {{ dayjs(participant.created_at).format("DD.MM.YYYY HH:mm:ss") }}</p>
                                     </div>
@@ -187,6 +221,7 @@ import {ianseoExportToFile, ianseoData} from "../ianseoExport.js";
 import {ref} from "vue";
 
 const props = defineProps(["competition", "participants", "isSecretary"]);
+console.log(props.participants);
 
 const orderBy = ref([]);
 

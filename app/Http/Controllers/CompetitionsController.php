@@ -45,7 +45,7 @@ class CompetitionsController extends Controller
         $competition->created_by = ClientCertificateOrBasicAuthAuthenticator::getAuthenticatedUserName();
 
         $competition->save();
-        foreach($request->input("groups") as $group) {
+        foreach ($request->input("groups") as $group) {
             $competitionGroup = new CompetitionGroup();
             $competitionGroup->competition_id = $competition->id;
             $competitionGroup->division_code = $group["division_code"];
@@ -65,9 +65,15 @@ class CompetitionsController extends Controller
 
     public function getParticipants($id): View
     {
+        $participants = CompetitionParticipant::where("competition_id", "=", $id)
+            ->get();
+        if (!ClientCertificateOrBasicAuthAuthenticator::isAuthenticated()) {
+            $participants = $participants->makeHidden(["contact_information", "coach_name"]);
+        }
+
         return view('pages.competitions.participants', [
             "competition" => Competition::find($id),
-            "participants" => CompetitionParticipant::where("competition_id", "=", $id)->get()
+            "participants" => $participants
         ]);
     }
 }
