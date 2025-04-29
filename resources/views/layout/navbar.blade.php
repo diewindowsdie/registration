@@ -23,7 +23,7 @@
             @endif
         >
             <span
-                class="flex-1 text-left whitespace-nowrap">{{ $competition_item->title }},<br/>{{ $competition_item->start_date->format('d.m') }} - {{ $competition_item->end_date->format('d.m') }}</span>
+                class="flex-1 text-left">{{ $competition_item->title }},<br/>{{ $competition_item->start_date->format('d.m') }} - {{ $competition_item->end_date->format('d.m') }}</span>
             @if(\App\Auth\ClientCertificateOrBasicAuthAuthenticator::isAuthenticated() ||
             $competition_item->isRegistrationOpen())
             <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
