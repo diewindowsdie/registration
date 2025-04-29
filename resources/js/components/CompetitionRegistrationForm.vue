@@ -39,17 +39,16 @@
                                 <template v-for="item in athletes">
                                     <div @click="fillForm(item)"
                                          class="hover:bg-gray-200 hover:dark:bg-gray-600 px-3 py-3 ">
-                                        <!--todo разделить фамилию и остальные данные-->
-                                        <p class="text-left"><b class="font-bold">{{
+                                        <p class="text-left font-bold">{{
                                                 item.surname
                                             }}&nbsp;{{ item.first_name }}{{
                                                 item.patronymic != null ? "&nbsp;" + item.patronymic : ""
-                                            }}</b>, {{ item.qualification.short_title }}</p>
-                                        <p v-if="item.gender === 'M'" class="text-right text-gray-400">родился
+                                            }}</p>
+                                        <p v-if="item.gender === 'M'" class="text-right text-gray-400">{{ item.qualification.short_title }}, родился
                                             {{ dayjs(item.birth_date).format("DD.MM.YYYY") }},
                                             {{ item.region.full_name }}</p>
                                         <p v-else-if="item.gender === 'F'" class="text-right text-gray-400">
-                                            родилась
+                                            {{ item.qualification.short_title }}, родилась
                                             {{ dayjs(item.birth_date).format("DD.MM.YYYY") }},
                                             {{ item.region.full_name }}</p>
                                     </div>
