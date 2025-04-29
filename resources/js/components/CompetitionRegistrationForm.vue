@@ -13,7 +13,7 @@
                     </ul>
                 </div>
                 <div class="border-gray-300 dark:border-gray-600 rounded-2xl border px-5 py-5">
-                    <div class="grid grid-cols-15 gap-x-6 gap-y-8 sm:grid-cols-15">
+                    <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:gap-y-8 sm:grid-cols-15">
                         <div class="sm:col-span-15"><label
                             class="block mb-2 text-2xl font-medium text-gray-900 dark:text-white select-none">Данные
                             спортсмена:</label>
@@ -39,6 +39,7 @@
                                 <template v-for="item in athletes">
                                     <div @click="fillForm(item)"
                                          class="hover:bg-gray-200 hover:dark:bg-gray-600 px-3 py-3 ">
+                                        <!--todo разделить фамилию и остальные данные-->
                                         <p class="text-left"><b class="font-bold">{{
                                                 item.surname
                                             }}&nbsp;{{ item.first_name }}{{
@@ -126,7 +127,7 @@
                             </select>
                         </div>
 
-                        <div class="sm:col-span-5 p-0">
+                        <div class="sm:col-span-5">
                             <label for="region"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Регион</label>
                             <vSelect
@@ -156,7 +157,7 @@
                 </div>
 
                 <div class="border-gray-300 dark:border-gray-600 rounded-2xl border px-5 py-5 mt-3">
-                    <div class="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-2">
+                    <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:gap-y-6 sm:grid-cols-2">
                         <div class="sm:col-span-2">
                             <label class="block mb-2 text-2xl font-medium text-gray-900 dark:text-white select-none">Участие
                                 в соревнованиях:</label>
@@ -173,13 +174,13 @@
                                                 group.division.title
                                             }} {{ group.archery_class.title }}</label>
                                     </div>
-                                    <div class="col-span-1 text-right block">
+                                    <div class="text-right block">
                                         <p class="text-xs font-bold">Критерии допуска в группу:</p>
                                         <p class="text-xs" v-if="group.min_birth_date !== null">Дата рождения: <b>{{dayjs(group.min_birth_date).format("DD.MM.YYYY")}} - {{dayjs(group.max_birth_date).format("DD.MM.YYYY")}}</b></p>
                                         <p class="text-xs" v-if="group.min_birth_date === null">Дата рождения: от <b>{{dayjs(group.max_birth_date).format("DD.MM.YYYY")}}</b> и старше</p>
                                         <p class="text-xs" v-if="JSON.stringify(group.allowed_genders) !== JSON.stringify(group.archery_class.allowed_genders)">Пол: <b>{{formatGenders(group.allowed_genders)}}</b></p>
                                     </div>
-                                    <div class="row-span-1 sm:row-span-1 pl-5 mt-5"
+                                    <div class="pl-5 mt-5"
                                          v-if="group.participation == true && (group.includes_teams == 1 || competition_copy.includes_mixed_team_events == 1)">
                                         <div v-if="group.includes_teams == 1" class="flex items-center">
                                             <input id="participation_team_{{group.id}}" type="checkbox" value=""
@@ -202,7 +203,7 @@
                             </template>
                         </div>
 
-                        <div class="sm:col-span-1 -mt-2">
+                        <div>
                             <label for="sport_school"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Спортивная
                                 школа</label>
@@ -216,7 +217,7 @@
                             />
                         </div>
 
-                        <div class="sm:col-span-1 -mt-2">
+                        <div>
                             <label for="sport_organisation"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Спортивный клуб
                                 или
@@ -231,7 +232,7 @@
                             />
                         </div>
 
-                        <div class="sm:col-span-1 -mt-4">
+                        <div>
                             <label for="contact_info"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Контактная
                                 информация</label>
@@ -245,7 +246,7 @@
                                v-if="formErrors.contact_information"><span
                                 class="font-medium">Укажите, как можно с вами связаться</span></p>
                         </div>
-                        <div class="sm:col-span-1 -mt-4">
+                        <div>
                             <label for="coach_name"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Тренер</label>
                             <input type="text" v-model="athlete.coach_name" name="coach_name" id="coach_name"
@@ -260,13 +261,13 @@
                     </div>
                 </div>
                 <button type="button"
-                        class="inline-flex items-center px-5 py-2.5 mt-10 sm:mt-10 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600 mr-1"
+                        class="inline-flex items-center px-5 py-2.5 mt-5 sm:mt-10 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600 mr-1"
                         @click.prevent="onClear">
                     Очистить
                 </button>
 
                 <button type="submit"
-                        :class="isAtLeastOneGroupSelected() ? 'inline-flex items-center px-5 py-2.5 mt-10 sm:mt-10 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800'
+                        :class="isAtLeastOneGroupSelected() ? 'inline-flex items-center px-5 py-2.5 mt-5 sm:mt-10 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800'
                         : 'class=text-white bg-blue-400 dark:bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center'"
                         :disabled="!isAtLeastOneGroupSelected()"
                     >
