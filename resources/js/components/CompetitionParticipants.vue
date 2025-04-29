@@ -16,7 +16,7 @@
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer"
+                            <th scope="col" class="px-4 py-3 hover:cursor-pointer select-none"
                                 @click="toggleOrderBy('athlete.surname', group.division_code, group.class_code)">
                                 Спортсмен
                             </th>
@@ -28,7 +28,7 @@
                                 :orderBy="orderBy"
                                 :hide-for-narrow-screen="false">
                             </sort-order-indicator>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell"
+                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
                                 @click="toggleOrderBy('athlete.birth_date', group.division_code, group.class_code)">
                                 Дата&nbsp;рождения
                             </th>
@@ -38,7 +38,7 @@
                                 :class_code="group.class_code"
                                 :orderBy="orderBy">
                             </sort-order-indicator>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell"
+                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
                                 @click="toggleOrderBy('athlete.region.full_name', group.division_code, group.class_code)">
                                 Регион
                             </th>
@@ -48,7 +48,7 @@
                                 :class_code="group.class_code"
                                 :orderBy="orderBy">
                             </sort-order-indicator>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell"
+                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
                                 @click="toggleOrderBy('athlete.qualification.order', group.division_code, group.class_code)">
                                 Разряд / звание
                             </th>
@@ -58,7 +58,7 @@
                                 :class_code="group.class_code"
                                 :orderBy="orderBy">
                             </sort-order-indicator>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell"
+                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
                                 @click="toggleOrderBy('sport_school.full_title', group.division_code, group.class_code)">
                                 Спортивная школа
                             </th>
@@ -68,7 +68,7 @@
                                 :class_code="group.class_code"
                                 :orderBy="orderBy">
                             </sort-order-indicator>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell"
+                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
                                 @click="toggleOrderBy('sport_organisation.full_title', group.division_code, group.class_code)">
                                 Клуб / организация
                             </th>
@@ -79,7 +79,7 @@
                                 :orderBy="orderBy">
                             </sort-order-indicator>
                             <template v-if="isSecretary">
-                                <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell"
+                                <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
                                     @click="toggleOrderBy('contact_information', group.division_code, group.class_code)">
                                     Контактная информация
                                 </th>
@@ -89,7 +89,7 @@
                                     :class_code="group.class_code"
                                     :orderBy="orderBy">
                                 </sort-order-indicator>
-                                <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell"
+                                <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
                                     @click="toggleOrderBy('coach_name', group.division_code, group.class_code)">
                                     Тренер
                                 </th>
@@ -100,7 +100,7 @@
                                     :orderBy="orderBy">
                                 </sort-order-indicator>
                             </template>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell"
+                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
                                 @click="toggleOrderBy('created_at', group.division_code, group.class_code)">Дата и время
                                 регистрации
                             </th>
