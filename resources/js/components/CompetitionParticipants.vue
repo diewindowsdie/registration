@@ -38,6 +38,18 @@
                                 :class_code="group.class_code"
                                 :orderBy="orderBy">
                             </sort-order-indicator>
+                            <template v-if="isSecretary">
+                                <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
+                                    @click="toggleOrderBy('athlete.using_chair', group.division_code, group.class_code)">
+                                    Использует стул, коляску
+                                </th>
+                                <sort-order-indicator
+                                    field="athlete.using_chair"
+                                    :division_code="group.division_code"
+                                    :class_code="group.class_code"
+                                    :orderBy="orderBy">
+                                </sort-order-indicator>
+                            </template>
                             <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
                                 @click="toggleOrderBy('athlete.region.full_name', group.division_code, group.class_code)">
                                 Регион
@@ -50,7 +62,7 @@
                             </sort-order-indicator>
                             <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
                                 @click="toggleOrderBy('athlete.qualification.order', group.division_code, group.class_code)">
-                                Разряд / звание
+                                Разряд, звание
                             </th>
                             <sort-order-indicator
                                 field="athlete.qualification.order"
@@ -70,7 +82,7 @@
                             </sort-order-indicator>
                             <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
                                 @click="toggleOrderBy('sport_organisation.full_title', group.division_code, group.class_code)">
-                                Клуб / организация
+                                Клуб, организация
                             </th>
                             <sort-order-indicator
                                 field="sport_organisation.full_title"
@@ -130,6 +142,11 @@
                                 <td class="px-4 py-3 hidden sm:table-cell" colspan="2">
                                     {{ dayjs(participant.athlete.birth_date).format("DD.MM.YYYY") }}
                                 </td>
+                                <td v-if="isSecretary" class="px-4 py-3 hidden sm:table-cell" colspan="2">
+                                    <svg v-if="participant.athlete.using_chair === 1" class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
+                                    </svg>
+                                </td>
                                 <td class="px-4 py-3 hidden sm:table-cell" colspan="2">{{
                                         participant.athlete.region.full_name
                                     }}
@@ -176,6 +193,7 @@
                                     <div class="text-left mx-6 my-0.5 p-3">
                                         <p><b>Дата рождения:</b>
                                             {{ dayjs(participant.athlete.birth_date).format("DD.MM.YYYY") }}</p>
+                                        <p v-if="isSecretary && participant.athlete.using_chair === 1"><b>Использует стул или инвалидную коляску</b></p>
                                         <p><b>Регион:</b> {{ participant.athlete.region.full_name }}</p>
                                         <p><b>Разряд/звание:</b> {{ participant.athlete.qualification.short_title }}</p>
                                         <p v-if="participant.sport_school !== null"><b>Спортивная школа:</b>
