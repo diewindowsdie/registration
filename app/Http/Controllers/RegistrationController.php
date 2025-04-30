@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Athlete\SaveRequest;
-use App\Models\ArcheryClass;
 use App\Models\Athlete;
 use App\Models\AthleteRegion;
 use App\Models\Competition;
 use App\Models\CompetitionGroup;
 use App\Models\CompetitionParticipant;
-use App\Models\Division;
 use App\Models\SportOrganisation;
 use App\Models\SportQualification;
 use App\Models\SportSchool;
@@ -39,12 +37,6 @@ class RegistrationController extends Controller
     {
         return view('pages.registration');
     }
-
-//    public function index(): View
-//    {
-//        $competitions = Competition::all();
-//        return view('pages.competitions.list', ["competitions" => $competitions]);
-//    }
 
     public function registrationForm($id): View
     {
