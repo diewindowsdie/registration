@@ -430,7 +430,7 @@ function recalculateAgeAndGenderLimits(group, targetId = null) {
                 group.max_birth_date = dayjs(competition.value.start_date).subtract(fullClass.min_age, "year").format("YYYY-MM-DD");
                 if (Number.isInteger(fullClass.max_age)) {
                     group.min_birth_date = dayjs(competition.value.start_date).subtract(fullClass.max_age, "year")
-                        .add(1, "year").date(1).month(0).format("YYYY-MM-DD");
+                        .date(1).month(0).format("YYYY-MM-DD");
                 } else {
                     group.min_birth_date = null;
                 }
