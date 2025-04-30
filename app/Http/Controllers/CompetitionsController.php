@@ -63,8 +63,14 @@ class CompetitionsController extends Controller
         ]);
     }
 
-    public function getParticipants($id): View
+    public function getParticipants($id): object
     {
+        $competition = Competition::find($id);
+        if (!$competition->participants_list_available_to_anyone &&
+            !ClientCertificateOrBasicAuthAuthenticator::isAuthenticated()) {
+            return response()->view("errors.forbidden")->setStatusCode(403);
+        }
+
         $participants = CompetitionParticipant::where("competition_id", "=", $id)
             ->get();
         if (!ClientCertificateOrBasicAuthAuthenticator::isAuthenticated()) {
@@ -72,7 +78,7 @@ class CompetitionsController extends Controller
         }
 
         return view('pages.competitions.participants', [
-            "competition" => Competition::find($id),
+            "competition" => $competition,
             "participants" => $participants
         ]);
     }
