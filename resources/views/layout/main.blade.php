@@ -82,7 +82,7 @@
     <!-- Sidebar -->
 
     <aside
-            class="fixed top-0 left-0 z-40 w-68 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+            class="fixed top-0 left-0 z-40 w-[17.5rem] h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
             aria-label="Sidenav"
             id="drawer-navigation"
     >
@@ -105,7 +105,7 @@
         </div>
     </aside>
 
-    <main class="p-4 md:ml-64 h-auto pt-20">
+    <main class="p-4 md:ml-[17.5rem] h-auto pt-20">
         @yield('content')
     </main>
 </div>
