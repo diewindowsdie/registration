@@ -374,7 +374,7 @@ function isGroupAvailable(group) {
     const isAthleteDataKnown =
         athlete.value.surname !== '' && formErrors.value.surname === false &&
         athlete.value.first_name !== '' && formErrors.value.first_name === false &&
-        athlete.value.patronymic !== '' && formErrors.value.patronymic === false &&
+        formErrors.value.patronymic === false &&
         athlete.value.gender !== '' && formErrors.value.gender === false &&
         athlete.value.birth_date !== '' && formErrors.value.birth_date === false &&
         athlete.value.region_code !== '' && formErrors.value.region === false;
