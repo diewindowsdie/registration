@@ -16,6 +16,7 @@
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
+                            <td class="px-4 py-3 hover:cursor-pointer select-none" v-if="isSecretary"></td>
                             <th scope="col" class="px-4 py-3 hover:cursor-pointer select-none"
                                 @click="toggleOrderBy('athlete.surname', group.division_code, group.class_code)">
                                 Спортсмен
@@ -132,19 +133,29 @@
                             <tr class="border-t dark:border-gray-700">
                                 <th scope="row"
                                     class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                    v-if="isSecretary">
+                                    <a class="hover:cursor-pointer"
+                                       @click="confirmDeleteParticipant(participant.id)">❌</a>
+                                </th>
+                                <td scope="row"
+                                    class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                                     colspan="2">
                                     {{ participant.athlete.surname }}&nbsp;{{
                                         participant.athlete.first_name
                                     }}{{
                                         participant.athlete.patronymic !== null ? " " + participant.athlete.patronymic : ""
                                     }}
-                                </th>
+                                </td>
                                 <td class="px-4 py-3 hidden sm:table-cell" colspan="2">
                                     {{ dayjs(participant.athlete.birth_date).format("DD.MM.YYYY") }}
                                 </td>
                                 <td v-if="isSecretary" class="px-4 py-3 hidden sm:table-cell" colspan="2">
-                                    <svg v-if="participant.athlete.using_chair === 1" class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
+                                    <svg v-if="participant.athlete.using_chair === 1"
+                                         class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                         viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                              stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
                                     </svg>
                                 </td>
                                 <td class="px-4 py-3 hidden sm:table-cell" colspan="2">{{
@@ -193,7 +204,8 @@
                                     <div class="text-left mx-6 my-0.5 p-3">
                                         <p><b>Дата рождения:</b>
                                             {{ dayjs(participant.athlete.birth_date).format("DD.MM.YYYY") }}</p>
-                                        <p v-if="isSecretary && participant.athlete.using_chair === 1"><b>Использует стул или инвалидную коляску</b></p>
+                                        <p v-if="isSecretary && participant.athlete.using_chair === 1"><b>Использует
+                                            стул или инвалидную коляску</b></p>
                                         <p><b>Регион:</b> {{ participant.athlete.region.full_name }}</p>
                                         <p><b>Разряд/звание:</b> {{ participant.athlete.qualification.short_title }}</p>
                                         <p v-if="participant.sport_school !== null"><b>Спортивная школа:</b>
@@ -238,10 +250,10 @@ import {Tooltip} from 'flowbite';
 import {ianseoExportToFile, ianseoData} from "../ianseoExport.js";
 import {ref} from "vue";
 
-const props = defineProps(["competition", "participants", "isSecretary"]);
-console.log(props.participants);
+const props = defineProps(["competition", "participants", "isSecretary", "routeDeleteParticipant"]);
 
 const orderBy = ref([]);
+const participants_copy = ref(props.participants);
 
 function sortedParticipants(division_code, class_code) {
     if (orderBy.value[division_code + class_code] == null) {
@@ -251,7 +263,7 @@ function sortedParticipants(division_code, class_code) {
         };
     }
 
-    return props.participants
+    return participants_copy.value
         .filter(candidate => candidate.athlete !== null)
         .filter(candidate => candidate.division_code === division_code && candidate.class_code === class_code)
         .sort((a, b) => {
@@ -306,9 +318,23 @@ function toggleOrderBy(field, division_code, class_code) {
     }
 }
 
+function confirmDeleteParticipant(id) {
+    if (window.confirm("Удалить участника из данного соревнования?")) {
+        const path = props.routeDeleteParticipant.replace(":participant_id", id);
+        axios.delete(path).then(response => {
+            if (response.data.status === "ok") {
+                participants_copy.value = participants_copy.value.filter(participant => participant.id !== id);
+                alert("Спортсмен удален из соревнования.")
+            }
+        }).catch(e => {
+            alert("Произошла ошибка при удалении спортсмена.");
+        });
+    }
+}
+
 const clipboard = new ClipboardJS('#exportViaClipboard', {
     text: function () {
-        return ianseoData(props.participants);
+        return ianseoData(participants_copy);
     }
 });
 clipboard.on('success', function (e) {

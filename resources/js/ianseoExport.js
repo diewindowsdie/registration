@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 
 export function ianseoData(participants) {
     const TAB = "\t";
-    return participants
+    return participants.value
         .filter(participant => participant.athlete !== null)
         .map(participant =>
             participant.id + TAB +

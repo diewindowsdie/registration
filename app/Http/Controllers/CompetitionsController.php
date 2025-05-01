@@ -79,4 +79,13 @@ class CompetitionsController extends Controller
             "participants" => $participants
         ]);
     }
+
+    public function deleteParticipant($id): JsonResponse
+    {
+        CompetitionParticipant::destroy($id);
+
+        return response()->json([
+            'status' => 'ok'
+        ]);
+    }
 }

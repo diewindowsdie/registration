@@ -18,5 +18,6 @@ Route::prefix('competitions')->name('competitions.')->group(function () {
     Route::get("registration/{id}", [RegistrationController::class, "registrationForm"])->name("registrationForm");
     Route::post("register", [RegistrationController::class, "register"])->name("register");
     Route::get("participants/{id}", [CompetitionsController::class, "getParticipants"])->name("participants");
+    Route::delete("participants/delete/{id}", [CompetitionsController::class, "deleteParticipant"])->name("deleteParticipant")->middleware(SecretaryOnlyAccess::class);
 });
 
