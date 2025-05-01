@@ -255,7 +255,7 @@ import dayjs from 'dayjs';
 import {Popover} from "flowbite";
 import vSelect from 'vue-select';
 
-const requiredTextPattern = /^[а-яА-Я\w\-«»!?:;()\[\]&#№%+ "'.,]{2,}$/;
+const requiredTextPattern = /^[а-яА-ЯёË\w\-«»!?:;()\[\]&#№%+ "'.,]{2,}$/;
 
 const props = defineProps(["routeCreate", "routeRegistration", "divisions", "archery_classes"]);
 

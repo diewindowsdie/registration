@@ -331,11 +331,11 @@ const formErrors = ref({
 });
 const globalErrors = ref([]);
 
-const namePattern = /^[а-яА-Яa-zA-Z\-]{2,}$/;
-const patronymicPattern = /^[а-яА-Яa-zA-Z\-]*$/;
+const namePattern = /^[а-яА-ЯёËa-zA-Z\-]{2,}$/;
+const patronymicPattern = /^[а-яА-ЯёËa-zA-Z\-]*$/;
 const genderPattern = /^[MF]{1}$/;
-const requiredTextPattern = /^[а-яА-Я\w\-«»!?:;()\[\]&#№%+ "'.,]{2,}$/;
-const optionalTextPattern = /^[а-яА-Я\w\-«»!?:;()\[\]&#№%+ "'.,]*$/;
+const requiredTextPattern = /^[а-яА-ЯёË\w\-«»!?:;()\[\]&#№%+ "'.,]{2,}$/;
+const optionalTextPattern = /^[а-яА-ЯёË\w\-«»!?:;()\[\]&#№%+ "'.,]*$/;
 
 function formatGenders(genders) {
     return genders
