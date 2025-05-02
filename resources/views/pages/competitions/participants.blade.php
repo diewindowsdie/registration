@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Список участников соревнований')
+@section('title', __("participants.title"))
 
 @section('content')
 <competition-participants

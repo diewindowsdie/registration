@@ -1,5 +1,7 @@
 <?php
 return [
+    "title" => "Список участников соревнования",
+
     "totalRegistered" => "Всего участников: :count",
 
     "athlete" => "Спортсмен",

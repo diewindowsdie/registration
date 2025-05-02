@@ -16,6 +16,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 
 enum RegistrationError implements \JsonSerializable
@@ -44,6 +45,11 @@ class RegistrationController extends Controller
         if ($competition === null) {
             return view("errors.competitionNotFound");
         }
+
+        if ($competition->ui_language !== "RU") {
+            App::setlocale("EN");
+        }
+
         if ($competition->registration_start->isAfter(Carbon::now()) ||
             $competition->registration_finish->isBefore(Carbon::now())) {
             return view("errors.registrationIsNotOpen", [

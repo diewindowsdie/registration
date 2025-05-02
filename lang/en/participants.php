@@ -1,5 +1,7 @@
 <?php
 return [
+    "title" => "Participating athletes list",
+
     "totalRegistered" => "Athletes: :count",
 
     "athlete" => "Athlete name",

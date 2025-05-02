@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Регистрация на соревнования')
+@section('title', __("registration.title"))
 
 @section('content')
 <competition-registration-form route-save="{{ route('competitions.register') }}"

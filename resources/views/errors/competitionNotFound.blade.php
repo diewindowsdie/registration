@@ -1,7 +1,7 @@
 @extends('layout.main')
 
-@section('title', 'Соревнование не найдено')
+@section('title', __("registration.title"))
 
 @section('content')
-<p>Соревнование не найдено</p>
+<p>{{ __("errors.competitionNotFound") }}</p>
 @endsection
