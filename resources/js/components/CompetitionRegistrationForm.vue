@@ -287,8 +287,8 @@ import vSelect from 'vue-select';
 const props = defineProps(["routeSave", "routeFindAthlete", "competition", "qualifications", "regions", "sport_schools", "sport_organisations"]);
 const competition_copy = ref(props.competition);
 competition_copy.value.groups.forEach(group => {
-    group.participate_teams = true;
-    group.participate_mixed_teams = true;
+    group.participate_teams = group.includes_teams === 1;
+    group.participate_mixed_teams = competition_copy.value.includes_mixed_team_events === 1;
 });
 
 const athlete = ref({
