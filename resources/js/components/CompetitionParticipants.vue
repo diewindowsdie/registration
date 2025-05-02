@@ -244,24 +244,24 @@
                 </div>
                 <div class="p-3 bg-gray-100 dark:bg-gray-700" v-if="isSecretary">
                     <button v-if="isSecretary" type="button" :id="group.division_code + '_' + group.class_code"
-                            class="exportViaClipboard inline-flex items-center px-3 py-2.5 mr-2 text-xs font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
+                            class="exportViaClipboard inline-flex items-center px-3 py-2.5 mr-2 text-xs font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-0 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
                         Экспорт группы в IANSEO (буфер обмена)
                     </button>
-                    <button v-if="isSecretary" type="button" data-tooltip-target="copied-tooltip" data-tooltip-trigger="none"
+                    <button v-if="isSecretary" type="button"
                             @click="ianseoExportToFile(sortedParticipants(group.division_code, group.class_code), competition.id, group.division_code + group.class_code)"
-                            class="inline-flex items-center px-3 py-2.5 mr-2 text-xs font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
+                            class="inline-flex items-center px-3 py-2.5 mr-2 text-xs font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-0 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
                         Экспорт группы в IANSEO (файл)
                     </button>
                 </div>
             </div>
             <!--todo когда сделаю алисаы, поменять тут на алиас-->
             <button v-if="isSecretary" type="button"
-                    class="exportViaClipboard inline-flex items-center px-5 py-2.5 mb-3 mr-3 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
+                    class="exportViaClipboard inline-flex items-center px-5 py-2.5 mb-3 mr-3 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-0 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
                 Экспорт всех в IANSEO (буфер обмена)
             </button>
-            <button v-if="isSecretary" type="button" data-tooltip-target="copied-tooltip" data-tooltip-trigger="none"
+            <button v-if="isSecretary" type="button"
                     @click="ianseoExportToFile(participants_copy, competition.id)"
-                    class="inline-flex items-center px-5 py-2.5 mb-3 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
+                    class="inline-flex items-center px-5 py-2.5 mb-3 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-0 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
                 Экспорт всех в IANSEO (файл)
             </button>
             <div id="copied-tooltip" role="tooltip"
@@ -380,7 +380,6 @@ clipboard.on('success', function (e) {
     setTimeout(function () {
         tooltip.hide();
     }, 2000);
-    e.clearSelection();
 });
 
 </script>
