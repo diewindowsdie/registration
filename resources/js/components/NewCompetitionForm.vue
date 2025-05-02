@@ -10,7 +10,7 @@
                         <input type="text" v-model="competition.title" name="title" id="title"
                                :class="formErrors.title ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
                                     : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
-                               @focusout.prevent="validateCompetitionTitle()"
+                               @focusout="validateCompetitionTitle()"
                         />
                         <p class="mt-2 text-sm text-red-600 dark:text-red-500"
                            v-if="formErrors.title"><span
@@ -210,6 +210,17 @@
                             Добавить группу
                         </button>
                     </div>
+                    <div class="col-span-1">
+                        <label for="ui_language"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Язык формы
+                            регистрации и списка участников</label>
+                        <select id="ui_language"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                v-model="competition.ui_language">
+                            <option value="RU">Русский</option>
+                            <option value="EN">Английский</option>
+                        </select>
+                    </div>
                     <div class="col-span-1 sm:col-span-2">
                         <input id="competition_includes_mixed_team_events" type="checkbox"
                                v-model="competition.includes_mixed_team_events"
@@ -237,15 +248,22 @@
                 </button>
 
                 <button type="submit"
-                        class="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
+                        :class="validationSuccessful() ? 'inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800'
+                        : 'text-white bg-blue-400 dark:bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center'"
+                        :disabled="!validationSuccessful()"
+                >
                     Сохранить
                 </button>
             </form>
         </div>
     </section>
     <section v-if="competitionRegistrationUrl !== ''">
-        <p class="block text-2xl mt-0 ml-2 font-medium text-gray-900 dark:text-white">Соревнование успешно добавлено.</p>
-        <p class="block text-xl ml-2 font-medium text-gray-900 dark:text-white">Ссылка для регистрации на соревнования: <a class="hover:underline text-blue-600" :href="competitionRegistrationUrl">{{ competitionRegistrationUrl }}</a></p>
+        <p class="block text-2xl mt-0 ml-2 font-medium text-gray-900 dark:text-white">Соревнование успешно
+            добавлено.</p>
+        <p class="block text-xl ml-2 font-medium text-gray-900 dark:text-white">Ссылка для регистрации на соревнования:
+            <a class="hover:underline text-blue-600" :href="competitionRegistrationUrl">{{
+                    competitionRegistrationUrl
+                }}</a></p>
     </section>
 </template>
 <script setup>
@@ -267,6 +285,7 @@ const competition = ref({
     registration_finish: '',
     participants_list_available_to_anyone: true,
     includes_mixed_team_events: false,
+    ui_language: "RU",
     groups: []
 });
 
@@ -447,7 +466,7 @@ function recalculateAgeAndGenderLimits(group, targetId = null) {
 }
 
 function validateCompetitionTitle() {
-    formErrors.title = !requiredTextPattern.test(competition.value.title);
+    formErrors.value.title = !requiredTextPattern.test(competition.value.title);
 }
 
 function validateDivision(group) {
@@ -477,6 +496,20 @@ function resetFormErrors() {
     };
 }
 
+function validationSuccessful() {
+    return formErrors.value.title === false &&
+        formErrors.value.start_date === false &&
+        formErrors.value.end_date === false &&
+        formErrors.value.registration_start.length === 0 &&
+        formErrors.value.registration_finish.length === 0 &&
+        formErrors.value.division.length === 0 &&
+        formErrors.value.archery_class.length === 0 &&
+        formErrors.value.min_birth_date.length === 0 &&
+        formErrors.value.max_birth_date.length === 0 &&
+        formErrors.value.allowed_genders.length === 0 &&
+        competition.value.groups.length > 0;
+}
+
 function onSubmit() {
     resetFormErrors();
     validateCompetitionTitle();
@@ -490,19 +523,23 @@ function onSubmit() {
         validateMinBirthDate(group);
         validateMaxBirthDate(group);
         validateAllowedGenders(group);
-    })
-
-    axios.post(props.routeCreate, {
-        ...competition.value
-    }).then(r => {
-        competitionRegistrationUrl.value = props.routeRegistration.replace(':competition_id', r.data.competition_id);
-    }).catch(e => {
-        if (e.response && e.response.data && e.response.data.errors) {
-            this.errors = e.response.data.errors;
-        } else {
-            alert("Произошла ошибка при сохранении объекта");
-        }
     });
+
+    if (validationSuccessful()) {
+        if (window.confirm("Вы выбрали язык формы регистрации и списка участников, отличный от русского. Вы уверены?")) {
+            axios.post(props.routeCreate, {
+                ...competition.value
+            }).then(r => {
+                competitionRegistrationUrl.value = props.routeRegistration.replace(':competition_id', r.data.competition_id);
+            }).catch(e => {
+                if (e.response && e.response.data && e.response.data.errors) {
+                    this.errors = e.response.data.errors;
+                } else {
+                    alert("Произошла ошибка при сохранении объекта");
+                }
+            });
+        }
+    }
 }
 
 function onClear() {
@@ -518,6 +555,7 @@ function onClear() {
         registration_finish: '',
         participants_list_available_to_anyone: true,
         includes_mixed_team_events: false,
+        ui_language: "RU",
         groups: []
     }
 }
