@@ -2,10 +2,11 @@
     <section class="bg-transparent" v-if="registrationSuccess === false">
         <div class="px-4 mx-auto max-w-6xl">
             <h2 class="mb-4 py-2 text-4xl font-bold text-gray-900 dark:text-white">{{ competition.title }}, {{ dayjs(competition.start_date).format("DD.MM.YYYY") }} - {{ dayjs(competition.end_date).format("DD.MM.YYYY" )}}</h2>
-            <h2 class="mb-4 py-2 text-2xl text-gray-900 dark:text-white">Регистрация открыта с <b>{{ dayjs(competition.registration_start).format("DD.MM.YYYY HH:mm:ss") }}</b> по <b>{{ dayjs(competition.registration_finish).format("DD.MM.YYYY HH:mm:ss")}}</b></h2>
+            <h2 class="mb-4 py-2 text-2xl text-gray-900 dark:text-white">{{ trans("registration.registrationOpenTitle") }} {{ trans("general.dateFrom") }}
+                <b>{{ dayjs(competition.registration_start).format("DD.MM.YYYY HH:mm:ss") }}</b> {{ trans("general.dateTo") }} <b>{{ dayjs(competition.registration_finish).format("DD.MM.YYYY HH:mm:ss")}}</b></h2>
             <form @submit.prevent="onSubmit" method="post" :action="routeSave">
                 <div v-if="globalErrors.length > 0" class="border-red-500 text-red-900 placeholder-red-700 rounded-2xl border-2 px-5 py-5 mb-3">
-                    <label for="errors" class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Пожалуйста, исправьте следующие ошибки:</label>
+                    <label for="errors" class="block mb-2 text-sm font-bold text-gray-900 dark:text-white">{{ trans("registration.globalErrors") }}</label>
                     <ul id="errors" class="mt-5">
                         <li v-for="error in globalErrors" class="my-2 ml-8 text-sm text-red-600 dark:text-red-500 list-disc">
                             <span class="font-medium">{{ errorMessages[error] }}</span>
@@ -15,11 +16,10 @@
                 <div class="border-gray-300 dark:border-gray-600 rounded-2xl border px-5 py-5">
                     <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:gap-y-8 sm:grid-cols-15">
                         <div class="sm:col-span-15"><label
-                            class="block mb-2 text-2xl font-medium text-gray-900 dark:text-white select-none">Данные
-                            спортсмена:</label>
+                            class="block mb-2 text-2xl font-medium text-gray-900 dark:text-white select-none">{{ trans("registration.athleteInformation") }}</label>
                         </div>
                         <div class="sm:col-span-5">
-                            <label for="surname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Фамилия</label>
+                            <label for="surname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.lastName") }}</label>
                             <input type="text" v-model="athlete.surname" name="surname" id="surname"
                                    @input="searchAthlete(true)"
                                    :class="formErrors.surname ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
@@ -28,7 +28,7 @@
                                    @focusout='onSurnameFocusOut()'
                             />
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                               v-if="formErrors.surname"><span class="font-medium">Кириллица, латиница и дефис, два символа и больше</span>
+                               v-if="formErrors.surname"><span class="font-medium">{{ trans("registration.error.namePatternCyrillic") }}</span>
                             </p>
                             <div
                                 class="absolute border bg-gray-50 border-gray-300 ml-1 mt-1 text-gray-900 w-85 rounded-lg text-sm outline-1 outline-gray-300 z-40  dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:outline-gray-500"
@@ -44,11 +44,10 @@
                                             }}&nbsp;{{ item.first_name }}{{
                                                 item.patronymic != null ? "&nbsp;" + item.patronymic : ""
                                             }}</p>
-                                        <p v-if="item.gender === 'M'" class="text-right text-gray-400">{{ item.qualification.short_title }}, родился
+                                        <p v-if="item.gender === 'M'" class="text-right text-gray-400">{{ item.qualification.short_title }}, {{ trans("registration.bornM") }}
                                             {{ dayjs(item.birth_date).format("DD.MM.YYYY") }},
                                             {{ item.region.full_name }}</p>
-                                        <p v-else-if="item.gender === 'F'" class="text-right text-gray-400">
-                                            {{ item.qualification.short_title }}, родилась
+                                        <p v-else-if="item.gender === 'F'" class="text-right text-gray-400">{{ item.qualification.short_title }}, {{ trans("registration.bornF") }}
                                             {{ dayjs(item.birth_date).format("DD.MM.YYYY") }},
                                             {{ item.region.full_name }}</p>
                                     </div>
@@ -58,33 +57,33 @@
 
                         <div class="sm:col-span-5">
                             <label for="first_name"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Имя</label>
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.firstName") }}</label>
                             <input type="text" v-model="athlete.first_name" name="first_name" id="first_name"
                                    :class="formErrors.first_name ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
                                    : 'border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
                                    @focusout='validateModel(athlete.first_name, namePattern, "first_name")'
                             />
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                               v-if="formErrors.first_name"><span class="font-medium">Кириллица, латиница и дефис, два символа и больше</span>
+                               v-if="formErrors.first_name"><span class="font-medium">{{ trans("registration.error.namePatternCyrillic") }}</span>
                             </p>
                         </div>
 
                         <div class="sm:col-span-5">
                             <label for="patronymic"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Отчество</label>
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.middleName") }}</label>
                             <input type="text" v-model="athlete.patronymic" name="patronymic" id="patronymic"
                                    :class="formErrors.patronymic ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
                                    : 'border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
                                    @focusout='validateModel(athlete.patronymic, patronymicPattern, "patronymic")'
                             />
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                               v-if="formErrors.patronymic"><span class="font-medium">Кириллица, латиница и дефис</span>
+                               v-if="formErrors.patronymic"><span class="font-medium">{{ trans("registration.error.optionalNamePatternCyrillic") }}</span>
                             </p>
                         </div>
 
                         <div class="sm:col-span-2">
                             <label for="gender"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Пол</label>
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.gender") }}</label>
                             <select id="gender"
                                     :class="formErrors.gender ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
                                     : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
@@ -92,16 +91,15 @@
                                     @change="resetParticipation"
                                     @focusout='validateModel(athlete.gender, genderPattern, "gender")'
                             >
-                                <option value="M">Мужской</option>
-                                <option value="F">Женский</option>
+                                <option value="M">{{ trans("registration.gender_M") }}</option>
+                                <option value="F">{{ trans("registration.gender_F") }}</option>
                             </select>
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                               v-if="formErrors.gender"><span class="font-medium">Выберите пол</span></p>
+                               v-if="formErrors.gender"><span class="font-medium">{{ trans("registration.error.gender") }}</span></p>
                         </div>
                         <div class="sm:col-span-3">
                             <label for="birth_date"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Дата
-                                рождения</label>
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.birthDate") }}</label>
                             <input v-model="athlete.birth_date" type="date" name="birth_date" id="birth_date"
                                    :class="formErrors.birth_date ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
                                     : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
@@ -110,12 +108,11 @@
                             />
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
                                v-if="formErrors.birth_date"><span
-                                class="font-medium">Укажите корректную дату рождения</span></p>
+                                class="font-medium">{{ trans("registration.error.birthDate") }}</span></p>
                         </div>
                         <div class="sm:col-span-5">
                             <label for="qualifications"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Спортивный
-                                разряд / звание</label>
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.qualification") }}</label>
                             <select id="qualifications"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     v-model="athlete.qualification">
@@ -128,7 +125,7 @@
 
                         <div class="sm:col-span-5">
                             <label for="region"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Регион</label>
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.region") }}</label>
                             <vSelect
                                 id="region"
                                 :class="formErrors.region ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
@@ -140,8 +137,7 @@
                                 @focusout="regionSelectValidate()"
                             />
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                               v-if="formErrors.region"><span
-                                class="font-medium">Выберите регион из всплывающего списка</span></p>
+                               v-if="formErrors.region"><span class="font-medium">{{ trans("registration.error.region") }}</span></p>
                         </div>
 
                         <div class="sm:col-span-15">
@@ -149,8 +145,7 @@
                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                    v-model="athlete.using_chair"/>
                             <label for="wheelchair"
-                                   class="ms-2 text-l font-medium text-gray-900 dark:text-gray-300 select-none">Использую
-                                стул / инвалидную коляску</label>
+                                   class="ms-2 text-l font-medium text-gray-900 dark:text-gray-300 select-none">{{ trans("registration.usingWheelchair") }}</label>
                         </div>
                     </div>
                 </div>
@@ -158,8 +153,7 @@
                 <div class="border-gray-300 dark:border-gray-600 rounded-2xl border px-5 py-5 mt-3">
                     <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:gap-y-6 sm:grid-cols-2">
                         <div class="sm:col-span-2">
-                            <label class="block mb-2 text-2xl font-medium text-gray-900 dark:text-white select-none">Участие
-                                в соревнованиях:</label>
+                            <label class="block mb-2 text-2xl font-medium text-gray-900 dark:text-white select-none">{{ trans("registration.competitionParticipation") }}</label>
                             <template v-for="group in competition_copy.groups">
                                 <div
                                     class="grid grid-cols-1 gap-x-6 gap-y-0 sm:grid-cols-2 items-center p-4 mt-2 text-sm text-gray-800 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
@@ -174,10 +168,11 @@
                                             }} {{ group.archery_class.title }}</label>
                                     </div>
                                     <div class="text-right block">
-                                        <p class="text-xs font-bold">Критерии допуска в группу:</p>
-                                        <p class="text-xs" v-if="group.min_birth_date !== null">Дата рождения: <b>{{dayjs(group.min_birth_date).format("DD.MM.YYYY")}} - {{dayjs(group.max_birth_date).format("DD.MM.YYYY")}}</b></p>
-                                        <p class="text-xs" v-if="group.min_birth_date === null">Дата рождения: от <b>{{dayjs(group.max_birth_date).format("DD.MM.YYYY")}}</b> и старше</p>
-                                        <p class="text-xs" v-if="JSON.stringify(group.allowed_genders) !== JSON.stringify(group.archery_class.allowed_genders)">Пол: <b>{{formatGenders(group.allowed_genders)}}</b></p>
+                                        <p class="text-xs font-bold">{{ trans("registration.groupEligibilityCriteria") }}</p>
+                                        <p class="text-xs" v-if="group.min_birth_date !== null">{{ trans("registration.birthDateEligibility") }} <b>{{dayjs(group.min_birth_date).format("DD.MM.YYYY")}} {{ trans("registration.birthDateEligibilityTo") }} {{dayjs(group.max_birth_date).format("DD.MM.YYYY")}}</b></p>
+                                        <p class="text-xs" v-if="group.min_birth_date === null">{{ trans("registration.birthDateEligibilityFrom") }} <b>{{dayjs(group.max_birth_date).format("DD.MM.YYYY")}}</b> {{ trans("registration.birthDateEligibilityAndOlder") }}</p>
+                                        <p class="text-xs" v-if="JSON.stringify(group.allowed_genders) !== JSON.stringify(group.archery_class.allowed_genders)">
+                                            {{ trans("registration.gender") }}: <b>{{formatGenders(group.allowed_genders)}}</b></p>
                                     </div>
                                     <div class="pl-5 mt-5"
                                          v-if="group.participation == true && (group.includes_teams == 1 || competition_copy.includes_mixed_team_events == 1)">
@@ -186,16 +181,14 @@
                                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                                    v-model="group.participate_teams"/>
                                             <label for="participation_team_{{group.id}}"
-                                                   class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">Участвую
-                                                в командных соревнованиях</label>
+                                                   class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">{{ trans("registration.teamEventParticipation") }}</label>
                                         </div>
                                         <div v-if="competition_copy.includes_mixed_team_events == 1" class="flex items-center">
                                             <input id="participation_mixed_team_{{group.id}}" type="checkbox" value=""
                                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                                    v-model="group.participate_mixed_teams"/>
                                             <label for="participation_mixed_team_{{group.id}}"
-                                                   class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">Участвую
-                                                в соревнованиях команд-микс</label>
+                                                   class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">{{ trans("registration.mixedTeamEventParticipation") }}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -204,8 +197,7 @@
 
                         <div>
                             <label for="sport_school"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Спортивная
-                                школа</label>
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.sportSchool") }}</label>
                             <vSelect
                                 id="sport_school"
                                 class="vue-select-tailwind"
@@ -218,9 +210,7 @@
 
                         <div>
                             <label for="sport_organisation"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Спортивный клуб
-                                или
-                                организация</label>
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.sportOrganisation") }}</label>
                             <vSelect
                                 id="sport_school"
                                 class="vue-select-tailwind"
@@ -233,8 +223,7 @@
 
                         <div>
                             <label for="contact_info"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Контактная
-                                информация</label>
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.contactInfo") }}</label>
                             <input type="text" v-model="athlete.contact_information" name="contact_info"
                                    id="contact_info"
                                    :class="formErrors.contact_information ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
@@ -243,11 +232,11 @@
                             />
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
                                v-if="formErrors.contact_information"><span
-                                class="font-medium">Укажите, как можно с вами связаться</span></p>
+                                class="font-medium">{{ trans("registration.error.contactInfo") }}</span></p>
                         </div>
                         <div>
                             <label for="coach_name"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Тренер</label>
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.coachInfo") }}</label>
                             <input type="text" v-model="athlete.coach_name" name="coach_name" id="coach_name"
                                    :class="formErrors.coach_name ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
                                     : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
@@ -255,14 +244,14 @@
                             />
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
                                v-if="formErrors.coach_name"><span
-                                class="font-medium">Укажите вашего тренера или оставьте поле пустым</span></p>
+                                class="font-medium">{{ trans("registration.error.coachInfo") }}</span></p>
                         </div>
                     </div>
                 </div>
                 <button type="button"
                         class="inline-flex items-center px-5 py-2.5 mt-5 sm:mt-10 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600 mr-1"
                         @click.prevent="onClear">
-                    Очистить
+                    {{ trans("registration.resetButton") }}
                 </button>
 
                 <button type="submit"
@@ -270,19 +259,21 @@
                         : 'text-white bg-blue-400 dark:bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center'"
                         :disabled="!isAtLeastOneGroupSelected()"
                     >
-                    Сохранить
+                    {{ trans("registration.submitButton") }}
                 </button>
 
             </form>
         </div>
     </section>
-    <section v-if="registrationSuccess"><p class="block text-2xl mt-0 ml-2 font-medium text-gray-900 dark:text-white">Вы успешно зарегистрировались для участия в соревновании.</p></section>
+    <section v-if="registrationSuccess"><p class="block text-2xl mt-0 ml-2 font-medium text-gray-900 dark:text-white">
+        {{ trans("registration.registrationSuccess") }}</p></section>
 </template>
 <script setup>
 import {ref} from 'vue';
 import axios from "axios";
 import dayjs from 'dayjs';
 import vSelect from 'vue-select';
+import {trans, wTrans} from "laravel-vue-i18n";
 
 const props = defineProps(["routeSave", "routeFindAthlete", "competition", "qualifications", "regions", "sport_schools", "sport_organisations"]);
 const competition_copy = ref(props.competition);
@@ -313,10 +304,10 @@ const registrationSuccess = ref(false)
 let athleteRequestsCache = {};
 
 const errorMessages = {
-    "ALREADY_EXISTS": "Данный спортсмен уже зарегистрирован на эти соревнования",
-    "INVALID_GENDER_FOR_GROUP": "Пол спортсмена не соответствует требованиям выбранного дивизиона и класса",
-    "INVALID_BIRTH_DATE_FOR_GROUP": "Дата рождения спортсмена не соответствует требованиям выбранного дивизиона и класса",
-    "DIFFERENT_CLASSES_IN_SAME_COMPETITION": "Спортсмен не может участвовать в одном соревновании в разных классах"
+    "ALREADY_EXISTS": wTrans("registration.error.global.athleteAlreadyRegistered"),
+    "INVALID_GENDER_FOR_GROUP": wTrans("registration.error.global.invalidGenderForGroup"),
+    "INVALID_BIRTH_DATE_FOR_GROUP": wTrans("registration.error.global.invalidBirthDateForGroup"),
+    "DIFFERENT_CLASSES_IN_SAME_COMPETITION": wTrans("registration.error.global.differentClassesInSameCompetition")
 }
 
 const formErrors = ref({
@@ -339,7 +330,7 @@ const optionalTextPattern = /^[а-яА-ЯёË\w\-«»!?:;()\[\]&#№%+ "'.,]*$/;
 
 function formatGenders(genders) {
     return genders
-        .map((gender) => gender === "M" ? "М" : "Ж")
+        .map((gender) => gender === "M" ? trans("registration.gender_M_short") : trans("registration.gender_F_short"))
         .reduce((converted, gender) => converted + (converted !== "" ? ", " : "") + gender, "");
 }
 
@@ -474,14 +465,14 @@ function onSubmit() {
             if (e.response && e.response.data && e.response.data.errors) {
                 globalErrors.value = e.response.data.errors;
             } else {
-                alert("Произошла ошибка при сохранении объекта");
+                alert(trans("registration.error.unknown"));
             }
         });
     }
 }
 
 function onClear() {
-    if (!confirm('Вы уверены, что хотите очистить данные формы?')) {
+    if (!confirm(trans("registration.confirmReset"))) {
         return;
     }
 

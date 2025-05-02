@@ -1,7 +1,57 @@
 <?php
 
 return [
-    "title"=> "Регистрация на соревнования",
+    "title" => "Регистрация на соревнования",
     "registrationOpenTitle" => "Регистрация открыта",
 
+    "globalErrors" => "Пожалуйста, исправьте следующие ошибки:",
+    "athleteInformation" => "Данные спортсмена:",
+    "competitionParticipation" => "Участие в соревнованиях:",
+
+    "lastName" => "Фамилия",
+    "firstName" => "Имя",
+    "middleName" => "Отчество",
+    "gender" => "Пол",
+    "gender_M" => "Мужской",
+    "gender_F" => "Женский",
+    "gender_M_short" => "М",
+    "gender_F_short" => "Ж",
+    "birthDate" => "Дата рождения",
+    "qualification" => "Спортивный разряд / звание",
+    "region" => "Регион",
+    "country" => "Страна",
+    "usingWheelchair" => "Использую стул / инвалидную коляску",
+    "sportSchool" => "Спортивная школа",
+    "sportOrganisation" => "Спортивный клуб или организация",
+    "contactInfo" => "Контактная информация",
+    "coachInfo" => "Тренер",
+    "bornM" => "родился",
+    "bornF" => "родилась",
+
+    "groupEligibilityCriteria" => "Критерии допуска в группу:",
+    "birthDateEligibility" => "Дата рождения:",
+    "birthDateEligibilityTo" => "-",
+    "birthDateEligibilityFrom" => "Дата рождения: от",
+    "birthDateEligibilityAndOlder" => "и старше",
+    "teamEventParticipation" => "Участвую в командных соревнованиях",
+    "mixedTeamEventParticipation" => "Участвую в соревнованиях команд-микс",
+
+    "resetButton" => "Очистить",
+    "submitButton" => "Зарегистрироваться",
+
+    "confirmReset" => "Вы уверены, что хотите очистить данные формы?",
+    "registrationSuccess" => "Вы успешно зарегистрировались для участия в соревновании.",
+
+    "error.namePatternCyrillic" => "Кириллица, латиница и дефис, два символа и больше",
+    "error.optionalNamePatternCyrillic" => "Кириллица, латиница и дефис",
+    "error.gender" => "Выберите пол",
+    "error.birthDate" => "Укажите корректную дату рождения",
+    "error.region" => "Выберите регион",
+    "error.contactInfo" => "Укажите, как можно с вами связаться",
+    "error.coachInfo" => "Укажите вашего тренера или оставьте поле пустым",
+    "error.global.athleteAlreadyRegistered" => "Данный спортсмен уже зарегистрирован на эти соревнования",
+    "error.global.invalidGenderForGroup" => "Пол спортсмена не соответствует требованиям выбранного дивизиона и класса",
+    "error.global.invalidBirthDateForGroup" => "Дата рождения спортсмена не соответствует требованиям выбранного дивизиона и класса",
+    "error.global.differentClassesInSameCompetition" => "Спортсмен не может участвовать в одном соревновании в разных классах",
+    "error.unknown" => "Произошла ошибка во время регистрации :(",
 ];

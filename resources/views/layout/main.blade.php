@@ -1,4 +1,4 @@
-<script src="{{ asset('js/components/pizza.js')}}"></script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
 <head>
     <meta charset="utf-8">
