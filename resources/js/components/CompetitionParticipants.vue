@@ -9,19 +9,19 @@
                  v-for="group in competition.groups">
                 <div
                     class="flex flex-col items-center space-y-3 p-4 text-2xl font-bold text-black dark:text-white bg-gray-300 dark:bg-gray-800">
-                    {{ group.division.title }} {{ group.archery_class.title }}
+                    <span>{{ group.division.title }} {{ group.archery_class.title }}</span>
                 </div>
                 <!--сама таблица-->
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400 ">
                         <tr>
-                            <td class="px-4 py-3 hover:cursor-pointer select-none" v-if="isSecretary"></td>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer select-none"
+                            <th scope="col" class="px-4 py-3 hover:cursor-pointer select-none w-[2.5%] hidden sm:table-cell" v-if="isSecretary"></th>
+                            <th scope="col" class="px-4 py-3 hover:cursor-pointer select-none w-[15%]"
                                 @click="toggleOrderBy('athlete.surname', group.division_code, group.class_code)">
                                 Спортсмен
                             </th>
-                            <th scope="col" class="px-4 py-3 table-cell sm:hidden"/>
+                            <th scope="col" class="px-4 py-3 table-cell sm:hidden w-1"/>
                             <sort-order-indicator
                                 field="athlete.surname"
                                 :division_code="group.division_code"
@@ -29,7 +29,7 @@
                                 :orderBy="orderBy"
                                 :hide-for-narrow-screen="false">
                             </sort-order-indicator>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
+                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[5%]"
                                 @click="toggleOrderBy('athlete.birth_date', group.division_code, group.class_code)">
                                 Дата&nbsp;рождения
                             </th>
@@ -40,9 +40,9 @@
                                 :orderBy="orderBy">
                             </sort-order-indicator>
                             <template v-if="isSecretary">
-                                <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
+                                <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[5%]"
                                     @click="toggleOrderBy('athlete.using_chair', group.division_code, group.class_code)">
-                                    Использует стул, коляску
+                                    Использует стул,&nbsp;коляску
                                 </th>
                                 <sort-order-indicator
                                     field="athlete.using_chair"
@@ -51,7 +51,7 @@
                                     :orderBy="orderBy">
                                 </sort-order-indicator>
                             </template>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
+                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[10%]"
                                 @click="toggleOrderBy('athlete.region.full_name', group.division_code, group.class_code)">
                                 Регион
                             </th>
@@ -61,7 +61,7 @@
                                 :class_code="group.class_code"
                                 :orderBy="orderBy">
                             </sort-order-indicator>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
+                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[2%]"
                                 @click="toggleOrderBy('athlete.qualification.order', group.division_code, group.class_code)">
                                 Разряд, звание
                             </th>
@@ -71,7 +71,7 @@
                                 :class_code="group.class_code"
                                 :orderBy="orderBy">
                             </sort-order-indicator>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
+                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[8%]"
                                 @click="toggleOrderBy('sport_school.full_title', group.division_code, group.class_code)">
                                 Спортивная школа
                             </th>
@@ -81,7 +81,7 @@
                                 :class_code="group.class_code"
                                 :orderBy="orderBy">
                             </sort-order-indicator>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
+                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[6%]"
                                 @click="toggleOrderBy('sport_organisation.full_title', group.division_code, group.class_code)">
                                 Клуб, организация
                             </th>
@@ -92,7 +92,7 @@
                                 :orderBy="orderBy">
                             </sort-order-indicator>
                             <template v-if="isSecretary">
-                                <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
+                                <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[5%]"
                                     @click="toggleOrderBy('contact_information', group.division_code, group.class_code)">
                                     Контактная информация
                                 </th>
@@ -102,7 +102,7 @@
                                     :class_code="group.class_code"
                                     :orderBy="orderBy">
                                 </sort-order-indicator>
-                                <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
+                                <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[6%]"
                                     @click="toggleOrderBy('coach_name', group.division_code, group.class_code)">
                                     Тренер
                                 </th>
@@ -132,7 +132,7 @@
                             v-for="participant in sortedParticipants(group.division_code, group.class_code)">
                             <tr class="border-t dark:border-gray-700">
                                 <th scope="row"
-                                    class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                    class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white hidden sm:table-cell"
                                     v-if="isSecretary">
                                     <a class="hover:cursor-pointer"
                                        @click="confirmDeleteParticipant(participant.id)">❌</a>
@@ -218,6 +218,10 @@
                                             {{ participant.coach_name }}</p>
                                         <p><b>Дата и время регистрации:</b>
                                             {{ dayjs(participant.created_at).format("DD.MM.YYYY HH:mm:ss") }}</p>
+                                        <p v-if="isSecretary" class="mt-3">
+                                            <a class="hover:cursor-pointer"
+                                               @click="confirmDeleteParticipant(participant.id)">❌</a>
+                                        </p>
                                     </div>
                                 </td>
                             </tr>
