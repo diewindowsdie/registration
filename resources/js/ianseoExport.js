@@ -11,10 +11,10 @@ export function ianseoData(toExport) {
             participant.class_code + TAB +
             "" + TAB +
             "1" + TAB +
-            (participant.participate_teams ? "1" : "0") + TAB +
+            participant.participate_teams + TAB +
             "1" + TAB +
-            (participant.participate_teams ? "1" : "0") + TAB +
-            (participant.participate_mixed_teams ? "1" : "0") + TAB +
+            participant.participate_teams + TAB +
+            participant.participate_mixed_teams + TAB +
             participant.athlete.surname + TAB +
             participant.athlete.first_name + TAB +
             participant.athlete.patronymic + TAB +
