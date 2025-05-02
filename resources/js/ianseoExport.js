@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
 
-export function ianseoData(participants) {
+export function ianseoData(toExport) {
     const TAB = "\t";
-    return participants.value
+    return toExport
         .filter(participant => participant.athlete !== null)
         .map(participant =>
             participant.id + TAB +
@@ -28,24 +28,20 @@ export function ianseoData(participants) {
             (participant.sport_organisation !== null ? participant.sport_organisation.code : "") + TAB +
             (participant.sport_organisation !== null ? participant.sport_organisation.full_title : "") + TAB + "\n" +
             "##WHEELCHAIR##" + TAB + participant.id + TAB + (participant.athlete.using_chair ? "1" : "0")
-        ).reduce((exportData, row) => exportData + "\n" + row, "");
+        ).reduce((exportData, row) => exportData + row + "\n", "");
 }
 
-export async function ianseoExportToFile(participants) {
+export async function ianseoExportToFile(participants, competitionCode, divisionAndClassCode = null) {
     var data = new Blob([ianseoData(participants)], {type: 'text/plain'});
     var tempLink = document.createElement("a");
 
+    var fileName = "ianseo_participants_" + competitionCode + ".txt";
+    if (divisionAndClassCode !== null) {
+        fileName = "ianseo_participants_" + competitionCode + "_" + divisionAndClassCode + ".txt";
+    }
     tempLink.setAttribute('href', URL.createObjectURL(data));
-    tempLink.setAttribute('download', `ianseo_participants.txt`);
+    tempLink.setAttribute('download', fileName);
     tempLink.click();
 
     URL.revokeObjectURL(tempLink.href);
-}
-
-export function ianseoExportToClipboard(participants) {
-    new ClipboardJS('#exportViaClipboard', {
-        text: function() {
-            return ianseoData(participants);
-        }
-    });
 }

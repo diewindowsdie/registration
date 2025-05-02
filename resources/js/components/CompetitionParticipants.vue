@@ -9,6 +9,9 @@
                  v-for="group in competition.groups">
                 <div
                     class="flex flex-col items-center space-y-3 p-4 text-2xl font-bold text-black dark:text-white bg-gray-300 dark:bg-gray-800">
+                    <span class="absolute top-10 left-1.5 text-sm">
+                        Всего участников: {{ sortedParticipants(group.division_code, group.class_code).length }}
+                    </span>
                     <span>{{ group.division.title }} {{ group.archery_class.title }}</span>
                 </div>
                 <!--сама таблица-->
@@ -16,7 +19,9 @@
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400 ">
                         <tr>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer select-none w-[2.5%] hidden sm:table-cell" v-if="isSecretary"></th>
+                            <th scope="col"
+                                class="px-4 py-3 hover:cursor-pointer select-none w-[2.5%] hidden sm:table-cell"
+                                v-if="isSecretary"></th>
                             <th scope="col" class="px-4 py-3 hover:cursor-pointer select-none w-[15%]"
                                 @click="toggleOrderBy('athlete.surname', group.division_code, group.class_code)">
                                 Спортсмен
@@ -29,7 +34,8 @@
                                 :orderBy="orderBy"
                                 :hide-for-narrow-screen="false">
                             </sort-order-indicator>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[5%]"
+                            <th scope="col"
+                                class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[5%]"
                                 @click="toggleOrderBy('athlete.birth_date', group.division_code, group.class_code)">
                                 Дата&nbsp;рождения
                             </th>
@@ -40,7 +46,8 @@
                                 :orderBy="orderBy">
                             </sort-order-indicator>
                             <template v-if="isSecretary">
-                                <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[5%]"
+                                <th scope="col"
+                                    class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[5%]"
                                     @click="toggleOrderBy('athlete.using_chair', group.division_code, group.class_code)">
                                     Использует стул,&nbsp;коляску
                                 </th>
@@ -51,7 +58,8 @@
                                     :orderBy="orderBy">
                                 </sort-order-indicator>
                             </template>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[10%]"
+                            <th scope="col"
+                                class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[10%]"
                                 @click="toggleOrderBy('athlete.region.full_name', group.division_code, group.class_code)">
                                 Регион
                             </th>
@@ -61,7 +69,8 @@
                                 :class_code="group.class_code"
                                 :orderBy="orderBy">
                             </sort-order-indicator>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[2%]"
+                            <th scope="col"
+                                class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[2%]"
                                 @click="toggleOrderBy('athlete.qualification.order', group.division_code, group.class_code)">
                                 Разряд, звание
                             </th>
@@ -71,7 +80,8 @@
                                 :class_code="group.class_code"
                                 :orderBy="orderBy">
                             </sort-order-indicator>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[8%]"
+                            <th scope="col"
+                                class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[8%]"
                                 @click="toggleOrderBy('sport_school.full_title', group.division_code, group.class_code)">
                                 Спортивная школа
                             </th>
@@ -81,7 +91,8 @@
                                 :class_code="group.class_code"
                                 :orderBy="orderBy">
                             </sort-order-indicator>
-                            <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[6%]"
+                            <th scope="col"
+                                class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[6%]"
                                 @click="toggleOrderBy('sport_organisation.full_title', group.division_code, group.class_code)">
                                 Клуб, организация
                             </th>
@@ -92,7 +103,8 @@
                                 :orderBy="orderBy">
                             </sort-order-indicator>
                             <template v-if="isSecretary">
-                                <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[5%]"
+                                <th scope="col"
+                                    class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[5%]"
                                     @click="toggleOrderBy('contact_information', group.division_code, group.class_code)">
                                     Контактная информация
                                 </th>
@@ -102,7 +114,8 @@
                                     :class_code="group.class_code"
                                     :orderBy="orderBy">
                                 </sort-order-indicator>
-                                <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[6%]"
+                                <th scope="col"
+                                    class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[6%]"
                                     @click="toggleOrderBy('coach_name', group.division_code, group.class_code)">
                                     Тренер
                                 </th>
@@ -229,15 +242,27 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="p-3 bg-gray-100 dark:bg-gray-700" v-if="isSecretary">
+                    <button v-if="isSecretary" type="button" :id="group.division_code + '_' + group.class_code"
+                            class="exportViaClipboard inline-flex items-center px-3 py-2.5 mr-2 text-xs font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
+                        Экспорт группы в IANSEO (буфер обмена)
+                    </button>
+                    <button v-if="isSecretary" type="button" data-tooltip-target="copied-tooltip" data-tooltip-trigger="none"
+                            @click="ianseoExportToFile(sortedParticipants(group.division_code, group.class_code), competition.id, group.division_code + group.class_code)"
+                            class="inline-flex items-center px-3 py-2.5 mr-2 text-xs font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
+                        Экспорт группы в IANSEO (файл)
+                    </button>
+                </div>
             </div>
-            <button v-if="isSecretary" type="button" id="exportViaClipboard"
-                    class="inline-flex items-center px-5 py-2.5 mb-3 mr-3 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
-                Экспорт в IANSEO (буфер обмена)
+            <!--todo когда сделаю алисаы, поменять тут на алиас-->
+            <button v-if="isSecretary" type="button"
+                    class="exportViaClipboard inline-flex items-center px-5 py-2.5 mb-3 mr-3 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
+                Экспорт всех в IANSEO (буфер обмена)
             </button>
             <button v-if="isSecretary" type="button" data-tooltip-target="copied-tooltip" data-tooltip-trigger="none"
-                    @click="ianseoExportToFile(participants)"
+                    @click="ianseoExportToFile(participants_copy, competition.id)"
                     class="inline-flex items-center px-5 py-2.5 mb-3 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
-                Экспорт в IANSEO (файл)
+                Экспорт всех в IANSEO (файл)
             </button>
             <div id="copied-tooltip" role="tooltip"
                  class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
@@ -336,15 +361,21 @@ function confirmDeleteParticipant(id) {
     }
 }
 
-const clipboard = new ClipboardJS('#exportViaClipboard', {
-    text: function () {
-        return ianseoData(participants_copy);
+const clipboard = new ClipboardJS('.exportViaClipboard', {
+    text: function (trigger) {
+        if (trigger.id) {
+            const args = trigger.id.split("_");
+            if (args[0] !== '' && args[1] !== '') {
+                return ianseoData(sortedParticipants(args[0], args[1]));
+            }
+        }
+
+        return ianseoData(participants_copy.value);
     }
 });
 clipboard.on('success', function (e) {
     const targetElement = document.getElementById('copied-tooltip');
-    const triggerElement = document.getElementById('exportViaClipboard');
-    const tooltip = new Tooltip(targetElement, triggerElement, {triggerType: "none", placement: "bottom"});
+    const tooltip = new Tooltip(targetElement, e.trigger, {triggerType: "none", placement: "bottom"});
     tooltip.show();
     setTimeout(function () {
         tooltip.hide();
