@@ -2,7 +2,7 @@
 @if(\App\Auth\ClientCertificateOrBasicAuthAuthenticator::isAuthenticated())
 <a
     class="flex items-center justify-center px-5 py-2.5 mb-3 mx-1.5 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600"
-    href="{{ route('competitions.new') }}">Добавить соревнование</a>
+    href="{{ route('competitions.new') }}">{{ __("navbar.add_competition") }}</a>
 @endif
 
 <ul class="space-y-2 mt-0" data-accordion="open" data-active-classes="text-black dark:text-white"
@@ -49,7 +49,7 @@
                 </svg>
             </div>
             <div class="col-span-7 text-gray-500 dark:text-gray-400 hover:underline mt-1 px-2 flex items-center-safe"><a
-                    href="{{ route('competitions.registrationForm', $competition_item->id) }}">Регистрация</a></div>
+                    href="{{ route('competitions.registrationForm', $competition_item->id) }}">{{ __("navbar.register") }}</a></div>
             @endif
             @if($competition_item->participants_list_available_to_anyone ||
             \App\Auth\ClientCertificateOrBasicAuthAuthenticator::isAuthenticated())
@@ -71,8 +71,7 @@
                 </svg>
             </div>
             <div class="col-span-7 text-gray-500 dark:text-gray-400 hover:underline mt-1 px-2 flex items-center-safe"><a
-                    href="{{ route('competitions.participants', $competition_item->id) }}">Список
-                    участников</a>
+                    href="{{ route('competitions.participants', $competition_item->id) }}">{{ __("navbar.participants") }}</a>
             </div>
             @endif
             @if(\App\Auth\ClientCertificateOrBasicAuthAuthenticator::isAuthenticated())
@@ -90,9 +89,7 @@
                     </g>
                 </svg>
             </div>
-            <div class="col-span-7 text-gray-500 dark:text-gray-400 hover:underline mt-1 px-2 flex items-center-safe">
-                Настройки
-            </div>
+            <div class="col-span-7 text-gray-500 dark:text-gray-400 hover:underline mt-1 px-2 flex items-center-safe">{{ __("navbar.settings") }}</div>
             <div class="col-span-1 text-gray-500 dark:text-gray-400 mt-1 flex items-center-safe justify-center">
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -104,9 +101,7 @@
                     </g>
                 </svg>
             </div>
-            <div class="col-span-7 text-gray-500 dark:text-gray-400 hover:underline mt-1 px-2 flex items-center-safe">
-                Удалить
-            </div>
+            <div class="col-span-7 text-gray-500 dark:text-gray-400 hover:underline mt-1 px-2 flex items-center-safe">{{ __("navbar.delete") }}</div>
             @endif
 
         </div>

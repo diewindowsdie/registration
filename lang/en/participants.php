@@ -1,0 +1,26 @@
+<?php
+return [
+    "totalRegistered" => "Athletes: :count",
+
+    "athlete" => "Athlete name",
+    "birthDate" => "Birth:whitespacedate",
+    "usingWheelchair" => "Using wheelchair",
+    "usingWheelchairFull" => "Using wheelchair",
+    "region" => "Region",
+    "country" => "Country",
+    "qualification" => "Sport qualification",
+    "sportSchool" => "Sport school",
+    "clubAndOrganisation" => "Club, organisation",
+    "contactInfo" => "Contact information",
+    "coachInfo" => "Coach",
+    "registrationDateTime" => "Registration date and time",
+
+    "exportGroupViaClipboard" => "Export group to IANSEO (clipboard)",
+    "exportGroupViaFile" => "Export group to IANSEO (file)",
+    "exportAllViaClipboard" => "Export everyone to IANSEO (clipboard)",
+    "exportAllViaFile" => "Export everyone to IANSEO (file)",
+
+    "confirmParticipantDelete" => "Delete participant from competition?",
+    "participantDeleted" => "Participant deleted.",
+    "errorDeleteParticipant" => "Error deleting participant :(",
+];

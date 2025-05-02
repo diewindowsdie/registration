@@ -12,6 +12,7 @@ use App\Models\Division;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\App;
 
 class CompetitionsController extends Controller
 {
@@ -66,6 +67,10 @@ class CompetitionsController extends Controller
         if (!$competition->participants_list_available_to_anyone &&
             !ClientCertificateOrBasicAuthAuthenticator::isAuthenticated()) {
             return response()->view("errors.forbidden")->setStatusCode(403);
+        }
+
+        if ($competition->ui_language !== "RU") {
+            App::setlocale("EN");
         }
 
         $participants = CompetitionParticipant::where("competition_id", "=", $id)

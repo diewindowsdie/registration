@@ -1,6 +1,7 @@
 import './bootstrap';
 
 import { createApp } from 'vue';
+import { i18nVue } from 'laravel-vue-i18n';
 import { initFlowbite } from 'flowbite';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -16,6 +17,11 @@ const app = createApp({
     mounted() {
         initFlowbite();
     }
+}).use(i18nVue, {
+    resolve: lang => {
+        const langs = import.meta.glob('../../lang/*.json', { eager: true });
+        return langs[`../../lang/${lang}.json`].default;
+    },
 });
 
 dayjs.extend(utc);
@@ -26,6 +32,7 @@ import CompetitionRegistrationForm from "./components/CompetitionRegistrationFor
 import NewCompetitionForm from "./components/NewCompetitionForm.vue";
 import CompetitionParticipants from "./components/CompetitionParticipants.vue";
 import SortOrderIndicator from "./components/SortOrderIndicator.vue";
+
 app.component('CompetitionRegistrationForm', CompetitionRegistrationForm);
 app.component('NewCompetitionForm', NewCompetitionForm);
 app.component('CompetitionParticipants', CompetitionParticipants);

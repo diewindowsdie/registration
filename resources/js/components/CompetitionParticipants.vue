@@ -10,7 +10,7 @@
                 <div
                     class="flex flex-col items-center space-y-3 p-4 text-2xl font-bold text-black dark:text-white bg-gray-300 dark:bg-gray-800">
                     <span class="absolute top-10 left-1.5 text-sm">
-                        Всего участников: {{ sortedParticipants(group.division_code, group.class_code).length }}
+                        {{ wTrans("participants.totalRegistered", {count: sortedParticipants(group.division_code, group.class_code).length}) }}
                     </span>
                     <span>{{ group.division.title }} {{ group.archery_class.title }}</span>
                 </div>
@@ -24,7 +24,7 @@
                                 v-if="isSecretary"></th>
                             <th scope="col" class="px-4 py-3 hover:cursor-pointer select-none w-[15%]"
                                 @click="toggleOrderBy('athlete.surname', group.division_code, group.class_code)">
-                                Спортсмен
+                                {{ trans("participants.athlete") }}
                             </th>
                             <th scope="col" class="px-4 py-3 table-cell sm:hidden w-1"/>
                             <sort-order-indicator
@@ -37,7 +37,7 @@
                             <th scope="col"
                                 class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[5%]"
                                 @click="toggleOrderBy('athlete.birth_date', group.division_code, group.class_code)">
-                                Дата&nbsp;рождения
+                                {{ trans("participants.birthDate", {whitespace: "&nbsp;"}) }}
                             </th>
                             <sort-order-indicator
                                 field="athlete.birth_date"
@@ -49,7 +49,7 @@
                                 <th scope="col"
                                     class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[5%]"
                                     @click="toggleOrderBy('athlete.using_chair', group.division_code, group.class_code)">
-                                    Использует стул,&nbsp;коляску
+                                    {{ trans("participants.usingWheelchair", {whitespace: "&nbsp;"}) }}
                                 </th>
                                 <sort-order-indicator
                                     field="athlete.using_chair"
@@ -61,7 +61,8 @@
                             <th scope="col"
                                 class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[10%]"
                                 @click="toggleOrderBy('athlete.region.full_name', group.division_code, group.class_code)">
-                                Регион
+                                {{ trans("participants.region") }}
+                                <!--todo если будем использовать флаг "без регионов, тут нужна страна-->
                             </th>
                             <sort-order-indicator
                                 field="athlete.region.full_name"
@@ -72,7 +73,7 @@
                             <th scope="col"
                                 class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[2%]"
                                 @click="toggleOrderBy('athlete.qualification.order', group.division_code, group.class_code)">
-                                Разряд, звание
+                                {{ trans("participants.qualification") }}
                             </th>
                             <sort-order-indicator
                                 field="athlete.qualification.order"
@@ -83,7 +84,7 @@
                             <th scope="col"
                                 class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[8%]"
                                 @click="toggleOrderBy('sport_school.full_title', group.division_code, group.class_code)">
-                                Спортивная школа
+                                {{ trans("participants.sportSchool") }}
                             </th>
                             <sort-order-indicator
                                 field="sport_school.full_title"
@@ -94,7 +95,7 @@
                             <th scope="col"
                                 class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[6%]"
                                 @click="toggleOrderBy('sport_organisation.full_title', group.division_code, group.class_code)">
-                                Клуб, организация
+                                {{ trans("participants.clubAndOrganisation") }}
                             </th>
                             <sort-order-indicator
                                 field="sport_organisation.full_title"
@@ -106,7 +107,7 @@
                                 <th scope="col"
                                     class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[5%]"
                                     @click="toggleOrderBy('contact_information', group.division_code, group.class_code)">
-                                    Контактная информация
+                                    {{ trans("participants.contactInfo") }}
                                 </th>
                                 <sort-order-indicator
                                     field="contact_information"
@@ -117,7 +118,7 @@
                                 <th scope="col"
                                     class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none w-[6%]"
                                     @click="toggleOrderBy('coach_name', group.division_code, group.class_code)">
-                                    Тренер
+                                    {{ trans("participants.coachInfo") }}
                                 </th>
                                 <sort-order-indicator
                                     field="coach_name"
@@ -127,8 +128,8 @@
                                 </sort-order-indicator>
                             </template>
                             <th scope="col" class="px-4 py-3 hover:cursor-pointer hidden sm:table-cell select-none"
-                                @click="toggleOrderBy('created_at', group.division_code, group.class_code)">Дата и время
-                                регистрации
+                                @click="toggleOrderBy('created_at', group.division_code, group.class_code)">
+                                {{ trans("participants.registrationDateTime") }}
                             </th>
                             <sort-order-indicator
                                 field="created_at"
@@ -215,21 +216,23 @@
                             <tr class="border-t dark:border-gray-700 bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
                                 <td colspan="3" :id="'dropdown-participant-' + participant.id" class="hidden">
                                     <div class="text-left mx-6 my-0.5 p-3">
-                                        <p><b>Дата рождения:</b>
+                                        <p><b>{{ trans("participants.birthDate", {whitespace: " "}) }}:</b>
                                             {{ dayjs(participant.athlete.birth_date).format("DD.MM.YYYY") }}</p>
-                                        <p v-if="isSecretary && participant.athlete.using_chair === 1"><b>Использует
-                                            стул или инвалидную коляску</b></p>
-                                        <p><b>Регион:</b> {{ participant.athlete.region.full_name }}</p>
-                                        <p><b>Разряд/звание:</b> {{ participant.athlete.qualification.short_title }}</p>
-                                        <p v-if="participant.sport_school !== null"><b>Спортивная школа:</b>
+                                        <p v-if="isSecretary && participant.athlete.using_chair === 1"><b>{{
+                                                trans("participants.usingWheelchairFull")
+                                            }}</b></p>
+                                        <p><b>{{ trans("participants.region") }}:</b> {{ participant.athlete.region.full_name }}</p>
+                                        <!--todo если будем использовать флаг "без регионов, тут нужна страна-->
+                                        <p><b>{{ trans("participants.qualification") }}:</b> {{ participant.athlete.qualification.full_title }}</p>
+                                        <p v-if="participant.sport_school !== null"><b>{{ trans("participants.sportSchool") }}:</b>
                                             {{ participant.sport_school.full_title }}</p>
-                                        <p v-if="participant.sport_organisation !== null"><b>Клуб/организация:</b>
+                                        <p v-if="participant.sport_organisation !== null"><b>{{ trans("participants.clubAndOrganisation") }}:</b>
                                             {{ participant.sport_organisation.full_title }}</p>
-                                        <p v-if="isSecretary"><b>Контактная информация:</b>
+                                        <p v-if="isSecretary"><b>{{ trans("participants.contactInfo") }}:</b>
                                             {{ participant.contact_information }}</p>
                                         <p v-if="isSecretary && participant.coach_name !== null"><b>Тренер:</b>
                                             {{ participant.coach_name }}</p>
-                                        <p><b>Дата и время регистрации:</b>
+                                        <p><b>{{ trans("participants.registrationDateTime") }}:</b>
                                             {{ dayjs(participant.created_at).format("DD.MM.YYYY HH:mm:ss") }}</p>
                                         <p v-if="isSecretary" class="mt-3">
                                             <a class="hover:cursor-pointer"
@@ -244,25 +247,25 @@
                 </div>
                 <div class="p-3 bg-gray-100 dark:bg-gray-700" v-if="isSecretary">
                     <button v-if="isSecretary" type="button" :id="group.division_code + '_' + group.class_code"
-                            class="exportViaClipboard inline-flex items-center px-3 py-2.5 mr-2 text-xs font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-0 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
-                        Экспорт группы в IANSEO (буфер обмена)
+                            class="exportViaClipboard inline-flex items-center px-3 py-2.5 mr-2 mb-1 sm:mb-0 text-xs font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-0 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
+                        {{ trans("participants.exportGroupViaClipboard") }}
                     </button>
                     <button v-if="isSecretary" type="button"
                             @click="ianseoExportToFile(sortedParticipants(group.division_code, group.class_code), competition.id, group.division_code + group.class_code)"
                             class="inline-flex items-center px-3 py-2.5 mr-2 text-xs font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-0 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
-                        Экспорт группы в IANSEO (файл)
+                        {{ trans("participants.exportGroupViaFile") }}
                     </button>
                 </div>
             </div>
             <!--todo когда сделаю алисаы, поменять тут на алиас-->
             <button v-if="isSecretary" type="button"
-                    class="exportViaClipboard inline-flex items-center px-5 py-2.5 mb-3 mr-3 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-0 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
-                Экспорт всех в IANSEO (буфер обмена)
+                    class="exportViaClipboard inline-flex items-center px-5 py-2.5 mb-1 sm:mb-0 mr-3 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-0 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
+                {{ trans("participants.exportAllViaClipboard") }}
             </button>
             <button v-if="isSecretary" type="button"
                     @click="ianseoExportToFile(participants_copy, competition.id)"
-                    class="inline-flex items-center px-5 py-2.5 mb-3 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-0 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
-                Экспорт всех в IANSEO (файл)
+                    class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-0 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
+                {{ trans("participants.exportAllViaFile") }}
             </button>
             <div id="copied-tooltip" role="tooltip"
                  class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
@@ -278,6 +281,7 @@ import ClipboardJS from "clipboard";
 import {Tooltip} from 'flowbite';
 import {ianseoExportToFile, ianseoData} from "../ianseoExport.js";
 import {ref} from "vue";
+import { trans, wTrans } from 'laravel-vue-i18n'
 
 const props = defineProps(["competition", "participants", "isSecretary", "routeDeleteParticipant"]);
 
@@ -348,15 +352,15 @@ function toggleOrderBy(field, division_code, class_code) {
 }
 
 function confirmDeleteParticipant(id) {
-    if (window.confirm("Удалить участника из данного соревнования?")) {
+    if (window.confirm(trans("participants.confirmParticipantDelete"))) {
         const path = props.routeDeleteParticipant.replace(":participant_id", id);
         axios.delete(path).then(response => {
             if (response.data.status === "ok") {
                 participants_copy.value = participants_copy.value.filter(participant => participant.id !== id);
-                alert("Спортсмен удален из соревнования.")
+                alert(trans("participants.participantDeleted"));
             }
         }).catch(e => {
-            alert("Произошла ошибка при удалении спортсмена.");
+            alert(trans("participants.errorDeleteParticipant"));
         });
     }
 }

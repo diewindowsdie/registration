@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<script src="{{ asset('js/components/pizza.js')}}"></script><!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
 <head>
     <meta charset="utf-8">
@@ -58,7 +58,7 @@
                                 clip-rule="evenodd"
                         ></path>
                     </svg>
-                    <span class="sr-only">Переключить меню</span>
+                    <span class="sr-only">{{ __("layout.menu.toggle") }}</span>
                 </button>
                 <a href="{{ route('index') }}" class="flex items-center justify-between mr-4">
                     <svg class="mr-3 h-8" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
