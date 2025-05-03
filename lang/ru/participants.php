@@ -5,7 +5,7 @@ return [
     "totalRegistered" => "Всего участников: :count",
 
     "athlete" => "Спортсмен",
-    "birthDate" => "Дата:whitespaceрождения",
+    "birthDate" => "Дата рождения",
     "usingWheelchair" => "Использует стул,:whitespaceколяску",
     "usingWheelchairFull" => "Использует стул,:whitespaceколяску",
     "region" => "Регион",

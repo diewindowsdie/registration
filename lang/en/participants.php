@@ -5,7 +5,7 @@ return [
     "totalRegistered" => "Athletes: :count",
 
     "athlete" => "Athlete name",
-    "birthDate" => "Birth:whitespacedate",
+    "birthDate" => "Birth date",
     "usingWheelchair" => "Using wheelchair",
     "usingWheelchairFull" => "Using wheelchair",
     "region" => "Region",
