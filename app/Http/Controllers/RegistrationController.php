@@ -59,7 +59,7 @@ class RegistrationController extends Controller
 
         return view('pages.registration.registrationForm', [
             "competition" => $competition,
-            "qualifications" => SportQualification::orderBy("order", "asc")->get(),
+            "qualifications" => SportQualification::orderBy("order", "desc")->get(),
             "regions" => AthleteRegion::orderBy("full_name", "asc")->get(),
             "sport_schools" => SportSchool::orderBy("full_title", "asc")->get(),
             "sport_organisations" => SportOrganisation::orderBy("full_title", "asc")->get()
