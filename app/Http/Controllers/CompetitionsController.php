@@ -34,6 +34,7 @@ class CompetitionsController extends Controller
         $competition->registration_finish = $request->input('registration_finish');
         $competition->includes_mixed_team_events = self::wrapUnsafeBooleanFromRequest($request, 'includes_mixed_team_events');
         $competition->participants_list_available_to_anyone = self::wrapUnsafeBooleanFromRequest($request, 'participants_list_available_to_anyone');
+        $competition->allow_countries = self::wrapUnsafeBooleanFromRequest($request, 'allow_countries');
         $competition->ui_language = $request->input('ui_language');
         $competition->created_by = ClientCertificateOrBasicAuthAuthenticator::getAuthenticatedUserName();
 
@@ -59,17 +60,18 @@ class CompetitionsController extends Controller
     public function getParticipants($id): object
     {
         $competition = Competition::find($id);
+        if ($competition === null) {
+            return view("errors.competitionNotFound");
+        }
+
         if (!$competition->participants_list_available_to_anyone &&
             !ClientCertificateOrBasicAuthAuthenticator::isAuthenticated()) {
             return response()->view("errors.forbidden")->setStatusCode(403);
         }
 
-        if ($competition->ui_language !== "RU") {
-            App::setlocale("EN");
-        }
+        App::setlocale($competition->ui_language);
 
-        $participants = CompetitionParticipant::where("competition_id", "=", $id)
-            ->get();
+        $participants = CompetitionParticipant::where("competition_id", "=", $id)->get();
         if (!ClientCertificateOrBasicAuthAuthenticator::isAuthenticated()) {
             $participants = $participants->makeHidden(["contact_information", "coach_name"]);
         }

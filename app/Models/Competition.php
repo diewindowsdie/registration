@@ -19,11 +19,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon $registration_finish
  * @property int $participants_list_available_to_anyone
  * @property int $includes_mixed_team_events
+ * @property string $ui_language
+ * @property int $allow_countries
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CompetitionGroup> $groups
  * @property-read int|null $groups_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereAllowCountries($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereCreatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereEndDate($value)
@@ -34,6 +37,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereRegistrationStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereStartDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereUiLanguage($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereUpdatedAt($value)
  * @mixin \Eloquent
  */

@@ -229,6 +229,14 @@
                             команды-микс</label>
                     </div>
                     <div class="col-span-1 sm:col-span-2">
+                        <input id="allow_countries" type="checkbox"
+                               v-model="competition.allow_countries"
+                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        >
+                        <label for="allow_countries"
+                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Разрешить выбирать страны в качестве регионов участников</label>
+                    </div>
+                    <div class="col-span-1 sm:col-span-2">
                         <input id="participants_list_available_to_anyone" type="checkbox" checked
                                v-model="competition.participants_list_available_to_anyone"
                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
@@ -293,6 +301,7 @@ const competition = ref({
     registration_finish: '',
     participants_list_available_to_anyone: true,
     includes_mixed_team_events: false,
+    allow_countries: false,
     ui_language: "RU",
     groups: []
 });
@@ -534,7 +543,7 @@ function onSubmit() {
     });
 
     if (validationSuccessful()) {
-        if (window.confirm("Вы выбрали язык формы регистрации и списка участников, отличный от русского. Вы уверены?")) {
+        if (competition.value.ui_language === "RU" || confirm("Вы выбрали язык формы регистрации и списка участников, отличный от русского. Вы уверены?")) {
             axios.post(props.routeCreate, {
                 ...competition.value
             }).then(r => {
@@ -563,6 +572,7 @@ function onClear() {
         registration_finish: '',
         participants_list_available_to_anyone: true,
         includes_mixed_team_events: false,
+        allow_countries: false,
         ui_language: "RU",
         groups: []
     }

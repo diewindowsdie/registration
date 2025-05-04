@@ -15,8 +15,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $competition_id
  * @property string $division_code
  * @property string $class_code
- * @property string|null $sport_school
- * @property string|null $sport_organisation
+ * @property string|null $sport_school_code
+ * @property string|null $sport_organisation_code
  * @property string $contact_information
  * @property string|null $coach_name
  * @property int $participate_teams
@@ -25,6 +25,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property-read \App\Models\Athlete|null $athlete
  * @property-read \App\Models\Competition|null $competition
  * @property-read \App\Models\Division|null $division
+ * @property-read \App\Models\SportOrganisation|null $sportOrganisation
+ * @property-read \App\Models\SportSchool|null $sportSchool
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant query()
@@ -38,8 +40,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereParticipateMixedTeams($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereParticipateTeams($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereSportOrganisation($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereSportSchool($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereSportOrganisationCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereSportSchoolCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereUpdatedAt($value)
  * @mixin \Eloquent
  */

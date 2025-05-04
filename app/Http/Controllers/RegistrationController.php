@@ -46,9 +46,7 @@ class RegistrationController extends Controller
             return view("errors.competitionNotFound");
         }
 
-        if ($competition->ui_language !== "RU") {
-            App::setlocale("EN");
-        }
+        App::setlocale($competition->ui_language);
 
         if ($competition->registration_start->isAfter(Carbon::now()) ||
             $competition->registration_finish->isBefore(Carbon::now())) {
@@ -57,10 +55,14 @@ class RegistrationController extends Controller
             ]);
         }
 
+        $regions = $competition->allow_countries
+            ? AthleteRegion::orderBy("full_name", "asc")->get()
+            : AthleteRegion::where("is_country", "=", "0")->orderBy("full_name", "asc")->get();
+
         return view('pages.registration.registrationForm', [
             "competition" => $competition,
             "qualifications" => SportQualification::orderBy("order", "desc")->get(),
-            "regions" => AthleteRegion::orderBy("full_name", "asc")->get(),
+            "regions" => $regions,
             "sport_schools" => SportSchool::orderBy("full_title", "asc")->get(),
             "sport_organisations" => SportOrganisation::orderBy("full_title", "asc")->get()
         ]);
