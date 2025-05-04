@@ -28,7 +28,7 @@
                                    @focusout='onSurnameFocusOut()'
                             />
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                               v-if="formErrors.surname"><span class="font-medium">{{ trans("registration.error.namePatternCyrillic") }}</span>
+                               v-if="formErrors.surname"><span class="font-medium">{{ trans("registration.error.namePattern") }}</span>
                             </p>
                             <div
                                 class="absolute border bg-gray-50 border-gray-300 ml-1 mt-1 text-gray-900 w-85 rounded-lg text-sm outline-1 outline-gray-300 z-40  dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:outline-gray-500"
@@ -64,7 +64,7 @@
                                    @focusout='validateModel(athlete.first_name, namePattern, "first_name")'
                             />
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                               v-if="formErrors.first_name"><span class="font-medium">{{ trans("registration.error.namePatternCyrillic") }}</span>
+                               v-if="formErrors.first_name"><span class="font-medium">{{ trans("registration.error.namePattern") }}</span>
                             </p>
                         </div>
 
@@ -77,7 +77,7 @@
                                    @focusout='validateModel(athlete.patronymic, patronymicPattern, "patronymic")'
                             />
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                               v-if="formErrors.patronymic"><span class="font-medium">{{ trans("registration.error.optionalNamePatternCyrillic") }}</span>
+                               v-if="formErrors.patronymic"><span class="font-medium">{{ trans("registration.error.optionalnamePattern") }}</span>
                             </p>
                         </div>
 
@@ -238,11 +238,7 @@
                             <input type="text" v-model="athlete.coach_name" name="coach_name" id="coach_name"
                                    :class="formErrors.coach_name ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
                                     : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
-                                   @focusout="validateModel(athlete.coach_name, optionalTextPattern, 'coach_name')"
                             />
-                            <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                               v-if="formErrors.coach_name"><span
-                                class="font-medium">{{ trans("registration.error.coachInfo") }}</span></p>
                         </div>
                     </div>
                 </div>
@@ -316,15 +312,13 @@ const formErrors = ref({
     birth_date: false,
     region: false,
     contact_information: false,
-    coach_name: false
 });
 const globalErrors = ref([]);
 
-const namePattern = /^[а-яА-ЯёËa-zA-Z\-]{2,}$/;
-const patronymicPattern = /^[а-яА-ЯёËa-zA-Z\-]*$/;
+const namePattern = /^[^\d.,!@#$%^&*()_+=\[\]{}\\|;:"<>\/?~№]+$/;
+const patronymicPattern = /^[^\d.,!@#$%^&*()_+=\[\]{}\\|;:"<>\/?~№]*$/;
 const genderPattern = /^[MF]{1}$/;
-const requiredTextPattern = /^[а-яА-ЯёË\w\-«»!?:;()\[\]&#№%+ "'.,]{2,}$/;
-const optionalTextPattern = /^[а-яА-ЯёË\w\-«»!?:;()\[\]&#№%+ "'.,]*$/;
+const requiredTextPattern = /^.{2,}$/;
 
 function formatGenders(genders) {
     return genders
@@ -402,7 +396,6 @@ function resetFormErrors() {
         birth_date: false,
         region: false,
         contact_information: false,
-        coach_name: false
     }
     globalErrors.value = [];
 }
@@ -435,7 +428,6 @@ function onSubmit() {
     validateBirthDate();
     regionSelectValidate();
     formErrors.value.contact_information = !requiredTextPattern.test(athlete.value.contact_information);
-    formErrors.value.coach_name = !optionalTextPattern.test(athlete.value.coach_name);
 
     athlete.value.competition_id = props.competition.id;
 
