@@ -114,9 +114,8 @@
                                         :class="formErrors.division[group.id] ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
                                             : 'vue-select-tailwind vue-select-tailwind-deselect-hidden'"
                                         v-model="group.division_code"
-                                        :options="divisions"
+                                        :options="enrichedDivisions"
                                         :reduce="division => division.code"
-                                        label="title"
                                         @search:blur="validateDivision(group)"
                                     />
                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500"
@@ -131,9 +130,8 @@
                                         :class="formErrors.archery_class[group.id] ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
                                             : 'vue-select-tailwind vue-select-tailwind-deselect-hidden'"
                                         v-model="group.class_code"
-                                        :options="archery_classes"
+                                        :options="enrichedClasses"
                                         :reduce="archery_class => archery_class.code"
-                                        label="title"
                                         @option:selected="recalculateAgeAndGenderLimits(group, 'archery_class_' + group.id)"
                                         @search:blur="validateArcheryClass(group)"
                                     />
@@ -267,15 +265,25 @@
     </section>
 </template>
 <script setup>
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import axios from "axios";
 import dayjs from 'dayjs';
 import {Popover} from "flowbite";
 import vSelect from 'vue-select';
+import {trans} from "laravel-vue-i18n";
 
 const requiredTextPattern = /^[а-яА-ЯёË\w\-«»!?:;()\[\]&#№%+ "'.,]{2,}$/;
 
 const props = defineProps(["routeCreate", "routeRegistration", "divisions", "archery_classes"]);
+
+const enrichedDivisions = computed(() => props.divisions.map(division => {
+    division.label = trans("divisions." + division.code);
+    return division;
+}));
+const enrichedClasses = computed(() => props.archery_classes.map(archeryClass => {
+    archeryClass.label = trans("classes." + archeryClass.code);
+    return archeryClass;
+}));
 
 const competition = ref({
     title: '',

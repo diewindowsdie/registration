@@ -14,7 +14,7 @@
                             wTrans("participants.totalRegistered", {count: sortedParticipants(group.division_code, group.class_code).length, whitespace: " "})
                         }}
                     </span>
-                    <span>{{ group.division.title }} {{ group.archery_class.title }}</span>
+                    <span>{{ trans("divisions." + group.division.code) }} {{ trans("classes." + group.archery_class.code) }}</span>
                 </div>
                 <template v-if="sortedParticipants(group.division_code, group.class_code).length > 0">
                     <!--сама таблица-->
