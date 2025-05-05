@@ -93,6 +93,8 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
             ["birth_date", "=", $athlete->birth_date]
         ])->first();
         if ($existingAthlete !== null) {
+            //чтобы сохранить время последнего участия в соревнованиях
+            $existingAthlete->touch();
             return $existingAthlete;
         }
 
