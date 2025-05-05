@@ -27,7 +27,6 @@
                                     v-if="isSecretary"></th>
                                 <th scope="col"
                                     :class="['px-4', 'py-3', 'hover:cursor-pointer', 'select-none', getWidthClass('athlete')]"
-
                                     @click="toggleOrderBy('athlete.surname', group.division_code, group.class_code)">
                                     <div class="flex items-center">
                                         <div>{{ trans("participants.athlete") }}</div>
@@ -75,17 +74,16 @@
                                 </template>
                                 <th scope="col"
                                     :class="['px-4', 'py-3', 'hover:cursor-pointer', 'hidden', 'sm:table-cell', 'select-none', getWidthClass('region')]"
-                                    @click="toggleOrderBy('athlete.region.full_name', group.division_code, group.class_code)">
+                                    @click="toggleOrderBy('region.full_name', group.division_code, group.class_code)">
                                     <div class="flex items-center">
-                                        <div class="w-min">{{ trans("participants.region") }}</div>
+                                        <div class="w-min">{{ competition.allow_countries ? trans("participants.regionOrCountry", {whitespace: '&nbsp;'}) : trans("participants.region") }}</div>
                                         <sort-order-indicator
-                                            field="athlete.region.full_name"
+                                            field="region.full_name"
                                             :division_code="group.division_code"
                                             :class_code="group.class_code"
                                             :orderBy="orderBy">
                                         </sort-order-indicator>
                                     </div>
-                                    <!--todo если будем использовать флаг "без регионов, тут нужна страна-->
                                 </th>
                                 <th scope="col"
                                     :class="['px-4', 'py-3', 'hover:cursor-pointer', 'hidden', 'sm:table-cell', 'select-none', getWidthClass('qualification')]"
@@ -197,7 +195,7 @@
                                         <a class="hover:cursor-pointer"
                                            @click="confirmDeleteParticipant(participant.id)">❌</a>
                                     </th>
-                                    <td class="participant-cell">
+                                    <td class="px-4 py-3 font-medium text-gray-900 dark:text-white whitespace-normal text-ellipsis overflow-hidden">
                                         {{ participant.athlete.surname }} {{
                                             participant.athlete.first_name
                                         }}{{
@@ -217,9 +215,9 @@
                                         </svg>
                                     </td>
                                     <td class="participant-cell">{{
-                                            participant.athlete.region.is_country
-                                                ? trans("countries." + participant.athlete.region_code)
-                                                : trans("regions." + participant.athlete.region_code)
+                                            participant.region.is_country
+                                                ? trans("countries." + participant.region_code)
+                                                : trans("regions." + participant.region_code)
                                         }}
                                     </td>
                                     <td class="participant-cell">
@@ -271,9 +269,14 @@
                                             <p v-if="isSecretary && participant.athlete.using_chair === 1"><b>{{
                                                     trans("participants.usingWheelchairFull")
                                                 }}</b></p>
-                                            <p><b>{{ trans("participants.region") }}:</b>
-                                                {{ participant.athlete.region.full_name }}</p>
-                                            <!--todo если будем использовать флаг "без регионов, тут нужна страна-->
+                                            <p v-if="participant.region.is_country">
+                                                <b>{{ trans("participants.country") }}:</b>
+                                                {{ trans("countries." + participant.region_code) }}
+                                            </p>
+                                            <p v-else>
+                                                <b>{{ trans("participants.region") }}:</b>
+                                                {{ trans("regions." + participant.region_code) }}
+                                            </p>
                                             <p><b>{{ trans("participants.qualification") }}:</b>
                                                 {{ participant.athlete.qualification.full_title }}</p>
                                             <p v-if="participant.sport_school !== null">
@@ -342,12 +345,9 @@ const props = defineProps(["competition", "participants", "isSecretary", "routeD
 
 const orderBy = ref([]);
 const participants_copy = ref(props.participants.map(participant => {
-    //todo поправить тут на самого participant когда будем менять модель региона
-    if (participant.athlete !== null) {
-       participant.athlete.region.full_name = participant.athlete.region.is_country
-            ? trans("countries." + participant.athlete.region.code)
-            : trans("regions." + participant.athlete.region.code);
-    }
+    participant.region.full_name = participant.region.is_country
+        ? trans("countries." + participant.region.code)
+        : trans("regions." + participant.region.code);
 
     return participant;
 }));

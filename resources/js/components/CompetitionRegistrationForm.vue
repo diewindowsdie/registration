@@ -77,7 +77,7 @@
                                    @focusout='validateModel(athlete.patronymic, patronymicPattern, "patronymic")'
                             />
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                               v-if="formErrors.patronymic"><span class="font-medium">{{ trans("registration.error.optionalnamePattern") }}</span>
+                               v-if="formErrors.patronymic"><span class="font-medium">{{ trans("registration.error.optionalNamePattern") }}</span>
                             </p>
                         </div>
 
@@ -125,7 +125,7 @@
 
                         <div class="sm:col-span-5">
                             <label for="region"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.region") }}</label>
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ competition.allow_countries ? trans("registration.regionOrCountry", {whitespace: '&nbsp;'}) : trans("registration.region") }}</label>
                             <vSelect
                                 id="region"
                                 :class="formErrors.region ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
@@ -137,7 +137,7 @@
                                 @focusout="regionSelectValidate()"
                             />
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                               v-if="formErrors.region"><span class="font-medium">{{ trans("registration.error.region") }}</span></p>
+                               v-if="formErrors.region"><span class="font-medium">{{ competition.allow_countries ? trans("registration.error.regionOrCountry", {whitespace: '&nbsp;'}) : trans("registration.error.region") }}</span></p>
                         </div>
 
                         <div class="sm:col-span-15">
@@ -288,7 +288,13 @@ const enrichedRegions = computed(() => props.regions.map(region => {
         ? trans("countries." + region.code)
         : trans("regions." + region.code);
     return region;
-}).sort((a, b) => ('' + a.full_name).localeCompare(b.full_name)));
+}).sort((a, b) => {
+    if (a.is_country !== b.is_country) {
+        return b.is_country - a.is_country;
+    }
+
+    return ('' + a.full_name).localeCompare(b.full_name)
+}));
 
 const athlete = ref({
     athlete_id: '',

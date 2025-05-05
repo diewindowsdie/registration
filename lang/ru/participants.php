@@ -10,6 +10,7 @@ return [
     "usingWheelchairFull" => "Использует стул,:whitespaceколяску",
     "region" => "Регион",
     "country" => "Страна",
+    "regionOrCountry" => "Страна или:whitespaceрегион",
     "qualification" => "Разряд, звание",
     "sportSchoolOrClub" => "Спортивная школа, клуб или организация",
     "sportSchool" => "Спортивная школа",

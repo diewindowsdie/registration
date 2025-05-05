@@ -43,10 +43,10 @@ export function ianseoData(toExport, transliterate = false) {
                         : participant.athlete.patronymic)
                     : "") + TAB +
                 participant.athlete.gender + TAB +
-                participant.athlete.region.code + TAB +
-                (participant.athlete.region.is_country
-                    ? trans("countries." + participant.athlete.region_code)
-                    : trans("regions." + participant.athlete.region_code)) + TAB +
+                participant.region_code + TAB +
+                (participant.region.is_country
+                    ? trans("countries." + participant.region_code)
+                    : trans("regions." + participant.region_code)) + TAB +
                 dayjs(participant.athlete.birth_date).format("DD.MM.YYYY") + TAB +
                 participant.athlete.qualification.code + TAB +
                 sport_school_code + TAB +

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -21,11 +21,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string|null $coach_name
  * @property int $participate_teams
  * @property int $participate_mixed_teams
- * @property string $sport_school_or_club
+ * @property string|null $sport_school_or_club
+ * @property string $region_code
  * @property-read \App\Models\ArcheryClass|null $archeryClass
  * @property-read \App\Models\Athlete|null $athlete
  * @property-read \App\Models\Competition|null $competition
  * @property-read \App\Models\Division|null $division
+ * @property-read \App\Models\AthleteRegion|null $region
  * @property-read \App\Models\SportOrganisation|null $sportOrganisation
  * @property-read \App\Models\SportSchool|null $sportSchool
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant newModelQuery()
@@ -41,6 +43,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereParticipateMixedTeams($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereParticipateTeams($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereRegionCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereSportOrganisationCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereSportSchoolCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereSportSchoolOrClub($value)
@@ -49,7 +52,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  */
 class CompetitionParticipant extends Model
 {
-    protected $with = ["athlete", "competition", "division", "archeryClass", "sportSchool", "sportOrganisation"];
+    protected $with = ["athlete", "competition", "division", "archeryClass", "sportSchool", "sportOrganisation", "region"];
 
     public function athlete(): HasOne
     {
@@ -79,5 +82,10 @@ class CompetitionParticipant extends Model
     public function sportOrganisation(): HasOne
     {
         return $this->hasOne(SportOrganisation::class, "code", "sport_organisation_code");
+    }
+
+    public function region(): HasOne
+    {
+        return $this->hasOne(AthleteRegion::class, "code", "region_code");
     }
 }

@@ -5,16 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- *
+ * 
  *
  * @property string $code
- * @property string $full_name
  * @property int $is_country
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AthleteRegion newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AthleteRegion newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AthleteRegion query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AthleteRegion whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|AthleteRegion whereFullName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AthleteRegion whereIsCountry($value)
  * @mixin \Eloquent
  */

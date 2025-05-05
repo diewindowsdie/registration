@@ -10,6 +10,7 @@ return [
     "usingWheelchairFull" => "Using wheelchair",
     "region" => "Region",
     "country" => "Country",
+    "regionOrCountry" => "Country or:whitespaceregion",
     "qualification" => "Sport qualification",
     "sportSchoolOrClub" => "Sport school, club or organisation",
     "sportSchool" => "Sport school",

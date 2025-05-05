@@ -158,7 +158,11 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
         $existingAthlete->birth_date = $athlete->birth_date;
         $existingAthlete->gender = $athlete->gender;
         $existingAthlete->qualification_code = $athlete->qualification_code;
-        $existingAthlete->region_code = $athlete->region_code;
+        //если у текущей записи о спортсмене регион это страна, или нам пришел регион, не являющийся страной - заменим
+        //оставим все как есть если текущий регион это не страна, а новый - страна
+        if ($existingAthlete->region->is_country || !AthleteRegion::find($athlete->region_code)->is_country) {
+            $existingAthlete->region_code = $athlete->region_code;
+        }
         $existingAthlete->using_chair = $athlete->using_chair;
         $existingAthlete->save();
 
@@ -232,6 +236,7 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
                 $participant = new CompetitionParticipant();
                 $participant->competition_id = $request->input("competition_id");
                 $participant->athlete_id = $athlete->id;
+                $participant->region_code = $request->input("region_code");
                 if ($competition->allow_input_school_and_club) {
                     $participant->sport_school_or_club = $request->input("sport_school_or_club");
                 } else {
