@@ -1,0 +1,3 @@
+.participant-cell {
+    @apply px-4 py-3 font-medium text-gray-900 dark:text-white hidden sm:table-cell whitespace-normal text-ellipsis overflow-hidden
+}

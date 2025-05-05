@@ -232,8 +232,12 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
                 $participant = new CompetitionParticipant();
                 $participant->competition_id = $request->input("competition_id");
                 $participant->athlete_id = $athlete->id;
-                $participant->sport_school_code = $request->input("sport_school_code");
-                $participant->sport_organisation_code = $request->input("sport_organisation_code");
+                if ($competition->allow_input_school_and_club) {
+                    $participant->sport_school_or_club = $request->input("sport_school_or_club");
+                } else {
+                    $participant->sport_school_code = $request->input("sport_school_code");
+                    $participant->sport_organisation_code = $request->input("sport_organisation_code");
+                }
                 $participant->contact_information = $request->input("contact_information");
                 $participant->coach_name = $request->input("coach_name");
 

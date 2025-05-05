@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string|null $coach_name
  * @property int $participate_teams
  * @property int $participate_mixed_teams
+ * @property string $sport_school_or_club
  * @property-read \App\Models\ArcheryClass|null $archeryClass
  * @property-read \App\Models\Athlete|null $athlete
  * @property-read \App\Models\Competition|null $competition
@@ -42,6 +43,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereParticipateTeams($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereSportOrganisationCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereSportSchoolCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereSportSchoolOrClub($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CompetitionParticipant whereUpdatedAt($value)
  * @mixin \Eloquent
  */

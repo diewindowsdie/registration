@@ -192,33 +192,40 @@
                                 </div>
                             </template>
                         </div>
-
-                        <div>
-                            <label for="sport_school"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.sportSchool") }}</label>
-                            <vSelect
-                                id="sport_school"
-                                class="vue-select-tailwind"
-                                v-model="athlete.sport_school_code"
-                                :options="sport_schools"
-                                :reduce="sport_school => sport_school.code"
-                                label="full_title"
+                        <div v-if="competition_copy.allow_input_school_and_club"
+                             class="sm:col-span-2">
+                            <label for="sport_school_or_club"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.sportSchoolOrClub") }}</label>
+                            <input type="text" v-model="athlete.sport_school_or_club" name="sport_school_or_club" id="sport_school_or_club"
+                                   class="border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             />
                         </div>
-
-                        <div>
-                            <label for="sport_organisation"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.sportOrganisation") }}</label>
-                            <vSelect
-                                id="sport_school"
-                                class="vue-select-tailwind"
-                                v-model="athlete.sport_organisation_code"
-                                :options="sport_organisations"
-                                :reduce="sport_organisation => sport_organisation.code"
-                                label="full_title"
-                            />
-                        </div>
-
+                        <template v-else>
+                            <div>
+                                <label for="sport_school"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.sportSchool") }}</label>
+                                <vSelect
+                                    id="sport_school"
+                                    class="vue-select-tailwind"
+                                    v-model="athlete.sport_school_code"
+                                    :options="sport_schools"
+                                    :reduce="sport_school => sport_school.code"
+                                    label="full_title"
+                                />
+                            </div>
+                            <div>
+                                <label for="sport_organisation"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.sportOrganisation") }}</label>
+                                <vSelect
+                                    id="sport_school"
+                                    class="vue-select-tailwind"
+                                    v-model="athlete.sport_organisation_code"
+                                    :options="sport_organisations"
+                                    :reduce="sport_organisation => sport_organisation.code"
+                                    label="full_title"
+                                />
+                            </div>
+                        </template>
                         <div>
                             <label for="contact_info"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.contactInfo") }}</label>
@@ -288,6 +295,7 @@ const athlete = ref({
     region_code: null,
     sport_school_code: '',
     sport_organisation_code: '',
+    sport_school_or_club: "",
     contact_information: '',
     coach_name: '',
     using_chair: ''
@@ -477,6 +485,7 @@ function onClear() {
         region_code: null,
         sport_school_code: null,
         sport_organisation_code: null,
+        sport_school_or_club: null,
         contact_information: '',
         coach_name: '',
         using_chair: false

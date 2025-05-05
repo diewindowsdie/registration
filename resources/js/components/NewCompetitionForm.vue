@@ -2,7 +2,10 @@
     <section class="bg-transparent" v-if="competitionRegistrationUrl === ''">
         <div class="px-4 mx-auto max-w-6xl">
             <form @submit.prevent="onSubmit" method="post" :action="routeCreate">
-                <div class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
+                <div class="p-3 mb-3 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 rounded-2xl border border-gray-300 dark:border-gray-600">
+                    <div class="col-span-1 sm:col-span-2">
+                            <span class="text-xl font-bold text-gray-900 dark:text-white">Основные настройки соревнования:</span>
+                    </div>
                     <div class="sm:col-span-2">
                         <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                             Название соревнований
@@ -76,7 +79,6 @@
                            v-for="errorMessage in formErrors.registration_start"><span
                             class="font-medium">{{ errorMessage }}</span></p>
                     </div>
-
                     <div class="col-span-1">
                         <label for="registration_finish"
                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Регистрация
@@ -97,107 +99,115 @@
                             class="font-medium"></span>
                         </p>
                     </div>
-                    <div class="col-span-1 sm:col-span-2" v-if="competition.groups.length > 0">
-                        <div class="col-span-1 sm:col-span-1 mb-1 flex items-end align-bottom">
-                            <span class="text-xl font-bold text-gray-900 dark:text-white">В соревновании могут
-                                участвовать:</span>
-                        </div>
-                        <div
-                            class="border-gray-300 dark:border-gray-600 rounded-2xl border px-5 py-4 col-span-1 sm:col-span-2"
-                            v-for="group in competition.groups" :key="group.id">
-                            <div class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
-                                <div class="col-span-1 sm:col-span-3">
-                                    <label for="division"
-                                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Дивизион</label>
-                                    <vSelect
-                                        :id="`division_${group.id}`"
-                                        :class="formErrors.division[group.id] ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
-                                            : 'vue-select-tailwind vue-select-tailwind-deselect-hidden'"
-                                        v-model="group.division_code"
-                                        :options="enrichedDivisions"
-                                        :reduce="division => division.code"
-                                        @search:blur="validateDivision(group)"
-                                    />
-                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                                       v-if="formErrors.division[group.id]"><span
-                                        class="font-medium">Выберите дивизион</span></p>
-                                </div>
-                                <div class="col-span-1 sm:col-span-3">
-                                    <label for="archery_class"
-                                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Класс</label>
-                                    <vSelect
-                                        :id="`archery_class_${group.id}`"
-                                        :class="formErrors.archery_class[group.id] ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
-                                            : 'vue-select-tailwind vue-select-tailwind-deselect-hidden'"
-                                        v-model="group.class_code"
-                                        :options="enrichedClasses"
-                                        :reduce="archery_class => archery_class.code"
-                                        @option:selected="recalculateAgeAndGenderLimits(group, 'archery_class_' + group.id)"
-                                        @search:blur="validateArcheryClass(group)"
-                                    />
-                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                                       v-if="formErrors.archery_class[group.id]"><span
-                                        class="font-medium">Выберите класс</span></p>
-                                </div>
-                                <div class="col-span-1 sm:col-span-2">
-                                    <label for="max_birth_date"
-                                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Дата
-                                        рождения спортсмена, от</label>
-                                    <input v-model="group.min_birth_date" type="date" name="min_birth_date"
-                                           id="min_birth_date"
-                                           :class="Array.isArray(formErrors.min_birth_date[group.id]) && formErrors.min_birth_date[group.id].length > 0 ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
-                                    : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
-                                           @focusout="validateMinBirthDate(group)"
-                                    />
-                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                                       v-for="errorMessage in formErrors.min_birth_date[group.id]"><span
-                                        class="font-medium">{{ errorMessage }}</span></p>
-                                </div>
-                                <div class="col-span-1 sm:col-span-2">
-                                    <label for="min_birth_date"
-                                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Дата
-                                        рождения спортсмена, до</label>
-                                    <input v-model="group.max_birth_date" type="date" name="max_birth_date"
-                                           id="max_birth_date"
-                                           :class="Array.isArray(formErrors.max_birth_date[group.id]) && formErrors.max_birth_date[group.id].length > 0 ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
-                                    : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
-                                           @focusout="validateMaxBirthDate(group)"
-                                    />
-                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                                       v-for="errorMessage in formErrors.max_birth_date[group.id]"><span
-                                        class="font-medium">{{ errorMessage }}</span></p>
-                                </div>
-                                <div class="col-span-1 sm:col-span-2">
-                                    <label for="allowed_genders"
-                                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Разрешённый
-                                        пол спортсмена</label>
-                                    <vSelect
-                                        multiple
-                                        id="allowed_genders"
-                                        :class="formErrors.allowed_genders[group.id] ? 'vue-select-tailwind vue-select-tailwind-error'
-                                            : 'vue-select-tailwind'"
-                                        v-model="group.allowed_genders"
-                                        :options="[{label: 'Мужской', code: 'M'}, {label: 'Женский', code: 'F'}]"
-                                        :reduce="option => option.code"
-                                        @focusout="validateAllowedGenders(group)"
-                                        @option:deselected="validateAllowedGenders(group)"
-                                    />
-                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                                       v-if="formErrors.allowed_genders[group.id]"><span
-                                        class="font-medium">Укажите пол допущенных спортсменов</span></p>
-                                </div>
-                                <div class="col-span-1 sm:col-span-3 flex items-center-safe">
-                                    <input id="teams" type="checkbox" v-model="group.includes_teams"
-                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                    />
-                                    <label for="teams"
-                                           class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">В этой
-                                        группе будут команды</label>
-                                </div>
-                                <div class="col-span-1 text-2xl sm:col-span-3 text-right -mt-2"><a
-                                    class="cursor-pointer"
-                                    @click="competition.groups = competition.groups.filter((v) => v !== group)">❌</a>
-                                </div>
+                    <div class="col-span-1 sm:col-span-2">
+                        <input id="competition_includes_mixed_team_events" type="checkbox"
+                               v-model="competition.includes_mixed_team_events"
+                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        >
+                        <label for="competition_includes_mixed_team_events"
+                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">На соревновании будут
+                            команды-микс</label>
+                    </div>
+                </div>
+                <div class="p-3 mb-3 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 rounded-2xl border border-gray-300 dark:border-gray-600">
+                    <div class="col-span-1 sm:col-span-2">
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">В соревновании могут участвовать:</span>
+                    </div>
+                    <div
+                        class="border-gray-300 dark:border-gray-600 rounded-2xl border px-5 py-4 col-span-1 sm:col-span-2"
+                        v-for="group in competition.groups" :key="group.id">
+                        <div class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
+                            <div class="col-span-1 sm:col-span-3">
+                                <label for="division"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Дивизион</label>
+                                <vSelect
+                                    :id="`division_${group.id}`"
+                                    :class="formErrors.division[group.id] ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
+                                           : 'vue-select-tailwind vue-select-tailwind-deselect-hidden'"
+                                    v-model="group.division_code"
+                                    :options="enrichedDivisions"
+                                    :reduce="division => division.code"
+                                    @search:blur="validateDivision(group)"
+                                />
+                                <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                                   v-if="formErrors.division[group.id]"><span
+                                    class="font-medium">Выберите дивизион</span></p>
+                            </div>
+                            <div class="col-span-1 sm:col-span-3">
+                                <label for="archery_class"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Класс</label>
+                                <vSelect
+                                    :id="`archery_class_${group.id}`"
+                                    :class="formErrors.archery_class[group.id] ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
+                                           : 'vue-select-tailwind vue-select-tailwind-deselect-hidden'"
+                                    v-model="group.class_code"
+                                    :options="enrichedClasses"
+                                    :reduce="archery_class => archery_class.code"
+                                    @option:selected="recalculateAgeAndGenderLimits(group, 'archery_class_' + group.id)"
+                                    @search:blur="validateArcheryClass(group)"
+                                />
+                                <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                                   v-if="formErrors.archery_class[group.id]"><span
+                                    class="font-medium">Выберите класс</span></p>
+                            </div>
+                            <div class="col-span-1 sm:col-span-2">
+                                <label for="max_birth_date"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Дата
+                                    рождения спортсмена, от</label>
+                                <input v-model="group.min_birth_date" type="date" name="min_birth_date"
+                                       id="min_birth_date"
+                                       :class="Array.isArray(formErrors.min_birth_date[group.id]) && formErrors.min_birth_date[group.id].length > 0 ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                   : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                                       @focusout="validateMinBirthDate(group)"
+                                />
+                                <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                                   v-for="errorMessage in formErrors.min_birth_date[group.id]"><span
+                                    class="font-medium">{{ errorMessage }}</span></p>
+                            </div>
+                            <div class="col-span-1 sm:col-span-2">
+                                <label for="min_birth_date"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Дата
+                                    рождения спортсмена, до</label>
+                                <input v-model="group.max_birth_date" type="date" name="max_birth_date"
+                                       id="max_birth_date"
+                                       :class="Array.isArray(formErrors.max_birth_date[group.id]) && formErrors.max_birth_date[group.id].length > 0 ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                   : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                                       @focusout="validateMaxBirthDate(group)"
+                                />
+                                <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                                   v-for="errorMessage in formErrors.max_birth_date[group.id]"><span
+                                    class="font-medium">{{ errorMessage }}</span></p>
+                            </div>
+                            <div class="col-span-1 sm:col-span-2">
+                                <label for="allowed_genders"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Разрешённый
+                                    пол спортсмена</label>
+                                <vSelect
+                                    multiple
+                                    id="allowed_genders"
+                                    :class="formErrors.allowed_genders[group.id] ? 'vue-select-tailwind vue-select-tailwind-error'
+                                           : 'vue-select-tailwind'"
+                                    v-model="group.allowed_genders"
+                                    :options="[{label: 'Мужской', code: 'M'}, {label: 'Женский', code: 'F'}]"
+                                    :reduce="option => option.code"
+                                    @focusout="validateAllowedGenders(group)"
+                                    @option:deselected="validateAllowedGenders(group)"
+                                />
+                                <p class="mt-2 text-sm text-red-600 dark:text-red-500"
+                                   v-if="formErrors.allowed_genders[group.id]"><span
+                                    class="font-medium">Укажите пол допущенных спортсменов</span></p>
+                            </div>
+                            <div class="col-span-1 sm:col-span-3 flex items-center-safe">
+                                <input id="teams" type="checkbox" v-model="group.includes_teams"
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                />
+                                <label for="teams"
+                                       class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">В этой
+                                    группе будут команды</label>
+                            </div>
+                            <div class="col-span-1 text-2xl sm:col-span-3 text-right -mt-2"><a
+                                class="cursor-pointer"
+                                @click="competition.groups = competition.groups.filter((v) => v !== group)">❌</a>
                             </div>
                         </div>
                     </div>
@@ -208,35 +218,12 @@
                             Добавить группу
                         </button>
                     </div>
-                    <div class="col-span-1">
-                        <label for="ui_language"
-                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Язык формы
-                            регистрации и списка участников</label>
-                        <select id="ui_language"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                v-model="competition.ui_language">
-                            <option value="RU">Русский</option>
-                            <option value="EN">Английский</option>
-                        </select>
-                    </div>
+                </div>
+                <div class="p-3 mb-3 grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2 rounded-2xl border border-gray-300 dark:border-gray-600">
                     <div class="col-span-1 sm:col-span-2">
-                        <input id="competition_includes_mixed_team_events" type="checkbox"
-                               v-model="competition.includes_mixed_team_events"
-                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        >
-                        <label for="competition_includes_mixed_team_events"
-                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">На соревновании будут
-                            команды-микс</label>
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">Дополнительные настройки соревнования:</span>
                     </div>
-                    <div class="col-span-1 sm:col-span-2">
-                        <input id="allow_countries" type="checkbox"
-                               v-model="competition.allow_countries"
-                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        >
-                        <label for="allow_countries"
-                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Разрешить выбирать страны в качестве регионов участников</label>
-                    </div>
-                    <div class="col-span-1 sm:col-span-2">
+                    <div class="col-span-1 p-2 rounded-sm border border-gray-300 dark:border-gray-600">
                         <input id="participants_list_available_to_anyone" type="checkbox" checked
                                v-model="competition.participants_list_available_to_anyone"
                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
@@ -245,6 +232,36 @@
                                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Список участников
                             соревнования доступен всем</label>
                     </div>
+                    <div class="col-span-1 p-2 rounded-sm border border-gray-300 dark:border-gray-600">
+                        <input id="allow_countries" type="checkbox"
+                               v-model="competition.allow_countries"
+                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        >
+                        <label for="allow_countries"
+                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Разрешить выбирать страны в качестве регионов участников</label>
+                    </div>
+                    <div class="col-span-1 p-2 rounded-sm border border-gray-300 dark:border-gray-600 items-center content-center">
+                        <div class="flex items-center mb-4">
+                            <input v-model="competition.allow_input_school_and_club" id="sport_school_select" type="radio" value="false" name="allow_input_sport_school_and_club" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="sport_school_select" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Спортивная школа, клуб и организация выбираются из двух списков</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input v-model="competition.allow_input_school_and_club" id="sport_school_input" type="radio" value="true" name="allow_input_sport_school_and_club" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="sport_school_input" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Спортивная школа, клуб и организация вводятся вручную в одно поле</label>
+                        </div>
+                    </div>
+                    <div class="col-span-1 p-2 rounded-sm border border-gray-300 dark:border-gray-600">
+                        <label for="ui_language"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Язык формы
+                            регистрации и списка участников</label>
+                        <select id="ui_language"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                v-model="competition.ui_language">
+                            <option value="ru">Русский</option>
+                            <option value="en">Английский</option>
+                        </select>
+                    </div>
+
                 </div>
 
                 <button type="button"
@@ -302,7 +319,8 @@ const competition = ref({
     participants_list_available_to_anyone: true,
     includes_mixed_team_events: false,
     allow_countries: false,
-    ui_language: "RU",
+    allow_input_school_and_club: false,
+    ui_language: "ru",
     groups: []
 });
 
@@ -543,7 +561,7 @@ function onSubmit() {
     });
 
     if (validationSuccessful()) {
-        if (competition.value.ui_language === "RU" || confirm("Вы выбрали язык формы регистрации и списка участников, отличный от русского. Вы уверены?")) {
+        if (competition.value.ui_language === "ru" || confirm("Вы выбрали язык формы регистрации и списка участников, отличный от русского. Вы уверены?")) {
             axios.post(props.routeCreate, {
                 ...competition.value
             }).then(r => {
@@ -573,7 +591,8 @@ function onClear() {
         participants_list_available_to_anyone: true,
         includes_mixed_team_events: false,
         allow_countries: false,
-        ui_language: "RU",
+        ui_language: "ru",
+        allow_input_school_and_club: false,
         groups: []
     }
 }

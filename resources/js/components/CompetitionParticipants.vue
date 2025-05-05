@@ -63,7 +63,7 @@
                                         :class="['px-4', 'py-3', 'hover:cursor-pointer', 'hidden', 'sm:table-cell', 'select-none', getWidthClass('wheelchair')]"
                                         @click="toggleOrderBy('athlete.using_chair', group.division_code, group.class_code)">
                                         <div class="flex items-center">
-                                            <div>{{ trans("participants.usingWheelchair", {whitespace: "&nbsp;"}) }}</div>
+                                            <div class="w-min">{{ trans("participants.usingWheelchair", {whitespace: "&nbsp;"}) }}</div>
                                             <sort-order-indicator
                                                 field="athlete.using_chair"
                                                 :division_code="group.division_code"
@@ -77,7 +77,7 @@
                                     :class="['px-4', 'py-3', 'hover:cursor-pointer', 'hidden', 'sm:table-cell', 'select-none', getWidthClass('region')]"
                                     @click="toggleOrderBy('athlete.region.full_name', group.division_code, group.class_code)">
                                     <div class="flex items-center">
-                                        <div>{{ trans("participants.region") }}</div>
+                                        <div class="w-min">{{ trans("participants.region") }}</div>
                                         <sort-order-indicator
                                             field="athlete.region.full_name"
                                             :division_code="group.division_code"
@@ -91,7 +91,7 @@
                                     :class="['px-4', 'py-3', 'hover:cursor-pointer', 'hidden', 'sm:table-cell', 'select-none', getWidthClass('qualification')]"
                                     @click="toggleOrderBy('athlete.qualification.order', group.division_code, group.class_code)">
                                     <div class="flex items-center">
-                                        <div>{{ trans("participants.qualification") }}</div>
+                                        <div class="w-min">{{ trans("participants.qualification") }}</div>
                                         <sort-order-indicator
                                             field="athlete.qualification.order"
                                             :division_code="group.division_code"
@@ -100,38 +100,54 @@
                                         </sort-order-indicator>
                                     </div>
                                 </th>
-                                <th scope="col"
-                                    :class="['px-4', 'py-3', 'hover:cursor-pointer', 'hidden', 'sm:table-cell', 'select-none', getWidthClass('sport_school')]"
-                                    @click="toggleOrderBy('sport_school.full_title', group.division_code, group.class_code)">
-                                    <div class="flex items-center">
-                                        <div>{{ trans("participants.sportSchool") }}</div>
-                                        <sort-order-indicator
-                                            field="sport_school.full_title"
-                                            :division_code="group.division_code"
-                                            :class_code="group.class_code"
-                                            :orderBy="orderBy">
-                                        </sort-order-indicator>
-                                    </div>
+                                <th v-if="competition.allow_input_school_and_club"
+                                    scope="col"
+                                    :class="['px-4', 'py-3', 'hover:cursor-pointer', 'hidden', 'sm:table-cell', 'select-none', getWidthClass('sport_school_or_club')]"
+                                    @click="toggleOrderBy('sport_school_or_club', group.division_code, group.class_code)">
+                                        <div class="flex items-center">
+                                            <div>{{ trans("participants.sportSchoolOrClub") }}</div>
+                                            <sort-order-indicator
+                                                field="sport_school_or_club"
+                                                :division_code="group.division_code"
+                                                :class_code="group.class_code"
+                                                :orderBy="orderBy">
+                                            </sort-order-indicator>
+                                        </div>
                                 </th>
-                                <th scope="col"
-                                    :class="['px-4', 'py-3', 'hover:cursor-pointer', 'hidden', 'sm:table-cell', 'select-none', getWidthClass('sport_organisation')]"
-                                    @click="toggleOrderBy('sport_organisation.full_title', group.division_code, group.class_code)">
-                                    <div class="flex items-center">
-                                        <div>{{ trans("participants.clubAndOrganisation") }}</div>
-                                        <sort-order-indicator
-                                            field="sport_organisation.full_title"
-                                            :division_code="group.division_code"
-                                            :class_code="group.class_code"
-                                            :orderBy="orderBy">
-                                        </sort-order-indicator>
-                                    </div>
-                                </th>
+                                <template v-else>
+                                    <th scope="col"
+                                        :class="['px-4', 'py-3', 'hover:cursor-pointer', 'hidden', 'sm:table-cell', 'select-none', getWidthClass('sport_school')]"
+                                        @click="toggleOrderBy('sport_school.full_title', group.division_code, group.class_code)">
+                                        <div class="flex items-center">
+                                            <div>{{ trans("participants.sportSchool") }}</div>
+                                            <sort-order-indicator
+                                                field="sport_school.full_title"
+                                                :division_code="group.division_code"
+                                                :class_code="group.class_code"
+                                                :orderBy="orderBy">
+                                            </sort-order-indicator>
+                                        </div>
+                                    </th>
+                                    <th scope="col"
+                                        :class="['px-4', 'py-3', 'hover:cursor-pointer', 'hidden', 'sm:table-cell', 'select-none', getWidthClass('sport_organisation')]"
+                                        @click="toggleOrderBy('sport_organisation.full_title', group.division_code, group.class_code)">
+                                        <div class="flex items-center">
+                                            <div>{{ trans("participants.clubAndOrganisation") }}</div>
+                                            <sort-order-indicator
+                                                field="sport_organisation.full_title"
+                                                :division_code="group.division_code"
+                                                :class_code="group.class_code"
+                                                :orderBy="orderBy">
+                                            </sort-order-indicator>
+                                        </div>
+                                    </th>
+                                </template>
                                 <template v-if="isSecretary">
                                     <th scope="col"
                                         :class="['px-4', 'py-3', 'hover:cursor-pointer', 'hidden', 'sm:table-cell', 'select-none', getWidthClass('contact_information')]"
                                         @click="toggleOrderBy('contact_information', group.division_code, group.class_code)">
                                         <div class="flex items-center">
-                                            <div>{{ trans("participants.contactInfo") }}</div>
+                                            <div class="w-min">{{ trans("participants.contactInfo") }}</div>
                                             <sort-order-indicator
                                                 field="contact_information"
                                                 :division_code="group.division_code"
@@ -144,7 +160,7 @@
                                         :class="['px-4', 'py-3', 'hover:cursor-pointer', 'hidden', 'sm:table-cell', 'select-none', getWidthClass('coach_name')]"
                                         @click="toggleOrderBy('coach_name', group.division_code, group.class_code)">
                                         <div class="flex items-center">
-                                            <div>{{ trans("participants.coachInfo") }}</div>
+                                            <div class="w-min">{{ trans("participants.coachInfo") }}</div>
                                             <sort-order-indicator
                                                 field="coach_name"
                                                 :division_code="group.division_code"
@@ -176,22 +192,22 @@
                                 v-for="participant in sortedParticipants(group.division_code, group.class_code)">
                                 <tr class="border-t dark:border-gray-700">
                                     <th scope="row"
-                                        :class="['px-4', 'py-3', 'font-medium', 'text-gray-900', 'dark:text-white', 'hidden', 'sm:table-cell']"
+                                        class="px-4 py-3 font-medium text-gray-900 dark:text-white hidden sm:table-cell"
                                         v-if="isSecretary">
                                         <a class="hover:cursor-pointer"
                                            @click="confirmDeleteParticipant(participant.id)">❌</a>
                                     </th>
-                                    <td class="px-4 py-3 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                    <td class="participant-cell">
                                         {{ participant.athlete.surname }} {{
                                             participant.athlete.first_name
                                         }}{{
                                             participant.athlete.patronymic !== null ? " " + participant.athlete.patronymic : ""
                                         }}
                                     </td>
-                                    <td class="px-4 py-3 font-medium text-gray-900 dark:text-white hidden sm:table-cell">
+                                    <td class="participant-cell">
                                         {{ dayjs(participant.athlete.birth_date).format("DD.MM.YYYY") }}
                                     </td>
-                                    <td v-if="isSecretary" class="px-4 py-3 font-medium text-gray-900 dark:text-white hidden sm:table-cell">
+                                    <td v-if="isSecretary" class="participant-cell">
                                         <svg v-if="participant.athlete.using_chair === 1"
                                              class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                              xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -200,25 +216,31 @@
                                                   stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
                                         </svg>
                                     </td>
-                                    <td class="px-4 py-3 font-medium text-gray-900 dark:text-white hidden sm:table-cell whitespace-nowrap">{{
+                                    <td class="participant-cell">{{
                                             participant.athlete.region.full_name
                                         }}
                                     </td>
-                                    <td class="px-4 py-3 font-medium text-gray-900 dark:text-white hidden sm:table-cell">
+                                    <td class="participant-cell">
                                         {{ participant.athlete.qualification.short_title }}
                                     </td>
-                                    <td class="px-4 py-3 font-medium text-gray-900 dark:text-white hidden sm:table-cell">
-                                        {{
-                                            participant.sport_school !== null ? participant.sport_school.full_title : ""
-                                        }}
+                                    <td v-if="competition.allow_input_school_and_club"
+                                        class="participant-cell">
+                                        {{ participant.sport_school_or_club }}
                                     </td>
-                                    <td class="px-4 py-3 font-medium text-gray-900 dark:text-white hidden sm:table-cell">{{
-                                            participant.sport_organisation !== null ? participant.sport_organisation.full_title : ""
-                                        }}
-                                    </td>
-                                    <td v-if="isSecretary" class="px-4 py-3 font-medium text-gray-900 dark:text-white hidden sm:table-cell">{{ participant.contact_information }}</td>
-                                    <td v-if="isSecretary" class="px-4 py-3 font-medium text-gray-900 dark:text-white hidden sm:table-cell">{{ participant.coach_name }}</td>
-                                    <td class="px-4 py-3 font-medium text-gray-900 dark:text-white hidden sm:table-cell">{{ dayjs(participant.created_at).format("DD.MM.YYYY HH:mm:ss") }}</td>
+                                    <template v-else>
+                                        <td class="participant-cell">
+                                            {{
+                                                participant.sport_school !== null ? participant.sport_school.full_title : ""
+                                            }}
+                                        </td>
+                                        <td class="participant-cell">{{
+                                                participant.sport_organisation !== null ? participant.sport_organisation.full_title : ""
+                                            }}
+                                        </td>
+                                    </template>
+                                    <td v-if="isSecretary" class="participant-cell">{{ participant.contact_information }}</td>
+                                    <td v-if="isSecretary" class="participant-cell">{{ participant.coach_name }}</td>
+                                    <td class="participant-cell">{{ dayjs(participant.created_at).format("DD.MM.YYYY HH:mm:ss") }}</td>
                                     <td class="px-4 py-3 flex items-center justify-end sm:hidden">
                                         <!--скрываем этот столбец начиная с размера sm-->
                                         <button :id="'dropdown-button-' + participant.id"
@@ -321,13 +343,14 @@ const participants_copy = ref(props.participants);
 
 const widthClasses = {
     delete: {true: "w-[2%]", false: "w-0"},
-    athlete: {true: "sm:w-[20%]", false: "sm:w-[24%]"},
-    birth_date: {true: "w-[5.5%]", false: "w-[10%]"},
-    wheelchair: {true: "w-[6.5%]", false: "w-0"},
+    athlete: {true: "sm:w-[18%]", false: "sm:w-[24%]"},
+    birth_date: {true: "w-[6%]", false: "w-[10%]"},
+    wheelchair: {true: "w-[7%]", false: "w-0"},
     region: {true: "w-[12%]", false: "w-[20%]"},
-    qualification: {true: "w-[4.5%]", false: "w-[10%]"},
+    qualification: {true: "w-[6.5%]", false: "w-[10%]"},
     sport_school: {true: "w-[12%]", false: "w-[22%]"},
     sport_organisation: {true: "w-[12%]", false: "w-[19%]"},
+    sport_school_or_club: {true: "w-[16%]", false: "w-[16%]"},
     contact_information: {true: "w-[10%]", false: "w-0"},
     coach_name: {true: "w-[9%]", false: "w-0"},
     created_at: {true: "w-[10%]", false: "w-[15%]"},
@@ -401,7 +424,7 @@ function toggleOrderBy(field, division_code, class_code) {
 }
 
 function confirmDeleteParticipant(id) {
-    if (window.confirm(trans("participants.confirmParticipantDelete"))) {
+    if (confirm(trans("participants.confirmParticipantDelete"))) {
         const path = props.routeDeleteParticipant.replace(":participant_id", id);
         axios.delete(path).then(response => {
             if (response.data.status === "ok") {

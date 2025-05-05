@@ -35,6 +35,7 @@ class CompetitionsController extends Controller
         $competition->includes_mixed_team_events = self::wrapUnsafeBooleanFromRequest($request, 'includes_mixed_team_events');
         $competition->participants_list_available_to_anyone = self::wrapUnsafeBooleanFromRequest($request, 'participants_list_available_to_anyone');
         $competition->allow_countries = self::wrapUnsafeBooleanFromRequest($request, 'allow_countries');
+        $competition->allow_input_school_and_club = self::wrapUnsafeBooleanFromRequest($request, 'allow_input_school_and_club');
         $competition->ui_language = $request->input('ui_language');
         $competition->created_by = ClientCertificateOrBasicAuthAuthenticator::getAuthenticatedUserName();
 

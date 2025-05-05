@@ -11,6 +11,7 @@ return [
     "region" => "Регион",
     "country" => "Страна",
     "qualification" => "Разряд, звание",
+    "sportSchoolOrClub" => "Спортивная школа, клуб или организация",
     "sportSchool" => "Спортивная школа",
     "clubAndOrganisation" => "Клуб, организация",
     "contactInfo" => "Контактная информация",

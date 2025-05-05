@@ -23,6 +23,7 @@ return [
     "usingWheelchair" => "Использую стул / инвалидную коляску",
     "sportSchool" => "Спортивная школа",
     "sportOrganisation" => "Спортивный клуб или организация",
+    "sportSchoolOrClub" => "Спортивная школа, клуб или организация",
     "contactInfo" => "Контактная информация",
     "coachInfo" => "Тренер",
     "bornM" => "родился",

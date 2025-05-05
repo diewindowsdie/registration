@@ -23,6 +23,7 @@ return [
     "usingWheelchair" => "Using wheelchair",
     "sportSchool" => "Sport school",
     "sportOrganisation" => "Club or organisation",
+    "sportSchoolOrClub" => "Sport school, club or organisation",
     "contactInfo" => "Contact information",
     "coachInfo" => "Coach",
     "bornM" => "born",

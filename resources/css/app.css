@@ -3,6 +3,7 @@
 @import "flowbite/src/themes/default.css";
 @import 'vue-select/dist/vue-select.css';
 @import './vue-select-tailwind.css';
+@import './participants.css';
 
 @plugin "flowbite/plugin";
 @source "../node_modules/flowbite";

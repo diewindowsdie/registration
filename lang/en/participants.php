@@ -11,6 +11,7 @@ return [
     "region" => "Region",
     "country" => "Country",
     "qualification" => "Sport qualification",
+    "sportSchoolOrClub" => "Sport school, club or organisation",
     "sportSchool" => "Sport school",
     "clubAndOrganisation" => "Club, organisation",
     "contactInfo" => "Contact information",
