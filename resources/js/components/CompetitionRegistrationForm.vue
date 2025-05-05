@@ -46,7 +46,7 @@
                                             }}</p>
                                         <p v-if="item.gender === 'M'" class="text-right text-gray-400">{{ item.qualification.short_title }}, {{ trans("registration.bornM") }}
                                             {{ dayjs(item.birth_date).format("DD.MM.YYYY") }},
-                                            {{ item.region.full_name }}</p>
+                                            {{ item.region.is_country ? trans("countries." + item.region.code) : trans("regions." + item.region.code) }}</p>
                                         <p v-else-if="item.gender === 'F'" class="text-right text-gray-400">{{ item.qualification.short_title }}, {{ trans("registration.bornF") }}
                                             {{ dayjs(item.birth_date).format("DD.MM.YYYY") }},
                                             {{ item.region.full_name }}</p>
@@ -131,7 +131,7 @@
                                 :class="formErrors.region ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
                                     : 'vue-select-tailwind vue-select-tailwind-deselect-hidden'"
                                 v-model="athlete.region_code"
-                                :options="regions"
+                                :options="enrichedRegions"
                                 :reduce="region => region.code"
                                 label="full_name"
                                 @focusout="regionSelectValidate()"
@@ -270,7 +270,7 @@
         {{ trans("registration.registrationSuccess") }}</p></section>
 </template>
 <script setup>
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import axios from "axios";
 import dayjs from 'dayjs';
 import vSelect from 'vue-select';
@@ -282,6 +282,13 @@ competition_copy.value.groups.forEach(group => {
     group.participate_teams = group.includes_teams === 1;
     group.participate_mixed_teams = competition_copy.value.includes_mixed_team_events === 1;
 });
+
+const enrichedRegions = computed(() => props.regions.map(region => {
+    region.full_name = region.is_country
+        ? trans("countries." + region.code)
+        : trans("regions." + region.code);
+    return region;
+}).sort((a, b) => ('' + a.full_name).localeCompare(b.full_name)));
 
 const athlete = ref({
     athlete_id: '',
@@ -499,7 +506,9 @@ function fillForm(data) {
     athlete.value.patronymic = data.patronymic;
     athlete.value.gender = data.gender;
     athlete.value.birth_date = dayjs(data.birth_date).format("YYYY-MM-DD");
-    athlete.value.region_code = data.region.code;
+    athlete.value.region_code = enrichedRegions.value.map(region => region.code).includes(data.region_code)
+        ? data.region.code
+        : null;
     athlete.value.qualification = data.qualification.code;
     athlete.value.using_chair = data.using_chair == 1;
 

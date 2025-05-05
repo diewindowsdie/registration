@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import {translit} from 'gost-transliteration';
+import {trans} from "laravel-vue-i18n";
 
 export function ianseoData(toExport, transliterate = false) {
     const TAB = "\t";
@@ -43,8 +44,9 @@ export function ianseoData(toExport, transliterate = false) {
                     : "") + TAB +
                 participant.athlete.gender + TAB +
                 participant.athlete.region.code + TAB +
-                //todo брать тут локализованное название региона
-                participant.athlete.region.full_name + TAB +
+                (participant.athlete.region.is_country
+                    ? trans("countries." + participant.athlete.region_code)
+                    : trans("regions." + participant.athlete.region_code)) + TAB +
                 dayjs(participant.athlete.birth_date).format("DD.MM.YYYY") + TAB +
                 participant.athlete.qualification.code + TAB +
                 sport_school_code + TAB +

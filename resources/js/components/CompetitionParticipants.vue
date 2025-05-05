@@ -217,7 +217,9 @@
                                         </svg>
                                     </td>
                                     <td class="participant-cell">{{
-                                            participant.athlete.region.full_name
+                                            participant.athlete.region.is_country
+                                                ? trans("countries." + participant.athlete.region_code)
+                                                : trans("regions." + participant.athlete.region_code)
                                         }}
                                     </td>
                                     <td class="participant-cell">
@@ -339,7 +341,16 @@ import {trans, wTrans} from 'laravel-vue-i18n'
 const props = defineProps(["competition", "participants", "isSecretary", "routeDeleteParticipant"]);
 
 const orderBy = ref([]);
-const participants_copy = ref(props.participants);
+const participants_copy = ref(props.participants.map(participant => {
+    //todo поправить тут на самого participant когда будем менять модель региона
+    if (participant.athlete !== null) {
+       participant.athlete.region.full_name = participant.athlete.region.is_country
+            ? trans("countries." + participant.athlete.region.code)
+            : trans("regions." + participant.athlete.region.code);
+    }
+
+    return participant;
+}));
 
 const widthClasses = {
     delete: {true: "w-[2%]", false: "w-0"},

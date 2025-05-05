@@ -56,8 +56,8 @@ class RegistrationController extends Controller
         }
 
         $regions = $competition->allow_countries
-            ? AthleteRegion::orderBy("full_name", "asc")->get()
-            : AthleteRegion::where("is_country", "=", "0")->orderBy("full_name", "asc")->get();
+            ? AthleteRegion::all()
+            : AthleteRegion::where("is_country", "=", "0")->get();
 
         return view('pages.registration.registrationForm', [
             "competition" => $competition,
