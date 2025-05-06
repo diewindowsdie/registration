@@ -11,6 +11,7 @@ return [
     "lastName" => "Last Name",
     "firstName" => "First Name",
     "middleName" => "Middle Name",
+    "noMiddleName" => "No middle name",
     "gender" => "Gender",
     "gender_M" => "Male",
     "gender_F" => "Female",
@@ -45,7 +46,7 @@ return [
     "registrationSuccess" => "You have successfully registered for the competition participation.",
 
     "error.namePattern" => "Please use letters, quote and hyphen, one or more character",
-    "error.optionalNamePattern" => "Please use letters, quote and hyphen",
+    "error.patronymic" => "Please use letters, quote and hyphen, one or more character. If you don't have a middle name, please tick checkbox above.",
     "error.gender" => "Please select gender",
     "error.birthDate" => "Please select correct birth date",
     "error.region" => "Please select region",

@@ -68,16 +68,30 @@
                             </p>
                         </div>
 
-                        <div class="sm:col-span-5">
+                        <div class="sm:col-span-5 flex flex-col">
                             <label for="patronymic"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.middleName") }}</label>
                             <input type="text" v-model="athlete.patronymic" name="patronymic" id="patronymic"
-                                   :class="formErrors.patronymic ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
-                                   : 'border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
-                                   @focusout='validateModel(athlete.patronymic, patronymicPattern, "patronymic")'
+                                   :class="athlete.noMiddleName
+                                        ? 'border cursor-not-allowed bg-gray-200 border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white'
+                                        : (formErrors.patronymic
+                                            ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                            : 'border bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                                          )"
+                                   :disabled="athlete.noMiddleName"
+                                   @focusout="validatePatronymic()"
                             />
+                            <div class="flex justify-end items-center text-sm">
+                                <input id="no_patronymic" type="checkbox" value=""
+                                       class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                       v-model="athlete.noMiddleName"
+                                       @change="onNoMiddleNameChange"
+                                />
+                                <label for="no_patronymic"
+                                       class="ms-2 text-l font-medium text-gray-900 dark:text-gray-300 select-none">{{ trans("registration.noMiddleName") }}</label>
+                            </div>
                             <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                               v-if="formErrors.patronymic"><span class="font-medium">{{ trans("registration.error.optionalNamePattern") }}</span>
+                               v-if="formErrors.patronymic"><span class="font-medium">{{ trans("registration.error.patronymic") }}</span>
                             </p>
                         </div>
 
@@ -140,7 +154,7 @@
                                v-if="formErrors.region"><span class="font-medium">{{ competition.allow_countries ? trans("registration.error.regionOrCountry", {whitespace: '&nbsp;'}) : trans("registration.error.region") }}</span></p>
                         </div>
 
-                        <div class="sm:col-span-15">
+                        <div class="sm:col-span-15 flex items-center">
                             <input id="wheelchair" type="checkbox" value=""
                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                    v-model="athlete.using_chair"/>
@@ -302,6 +316,7 @@ const athlete = ref({
     first_name: '',
     surname: '',
     patronymic: '',
+    noMiddleName: false,
     gender: '',
     birth_date: '',
     qualification: 'NO',
@@ -337,7 +352,6 @@ const formErrors = ref({
 const globalErrors = ref([]);
 
 const namePattern = /^[^\d.,!@#$%^&*()_+=\[\]{}\\|;:"<>\/?~№]+$/;
-const patronymicPattern = /^[^\d.,!@#$%^&*()_+=\[\]{}\\|;:"<>\/?~№]*$/;
 const genderPattern = /^[MF]{1}$/;
 const requiredTextPattern = /^.{2,}$/;
 
@@ -378,7 +392,9 @@ function isGroupAvailable(group) {
     const isAthleteDataKnown =
         athlete.value.surname !== '' && formErrors.value.surname === false &&
         athlete.value.first_name !== '' && formErrors.value.first_name === false &&
-        formErrors.value.patronymic === false &&
+        //группы не скрываются если не ввели отчество, но скрываются если были ошибки его валидации
+        //иначе люди будут не понимать почему нет доступных групп
+        (athlete.value.noMiddleName || formErrors.value.patronymic === false) &&
         athlete.value.gender !== '' && formErrors.value.gender === false &&
         athlete.value.birth_date !== '' && formErrors.value.birth_date === false &&
         athlete.value.region_code !== '' && formErrors.value.region === false;
@@ -424,14 +440,30 @@ function resetFormErrors() {
 let preventAthletesSearchResultsCleanup = false;
 
 function onSurnameFocusOut() {
-        validateModel(athlete.value.surname, namePattern, "surname");
-        if (!preventAthletesSearchResultsCleanup) {
-            athletes.value = [];
-        }
+    validateModel(athlete.value.surname, namePattern, "surname");
+    if (!preventAthletesSearchResultsCleanup) {
+        athletes.value = [];
+    }
+}
+
+function onNoMiddleNameChange() {
+    if (athlete.value.noMiddleName) {
+        formErrors.value.patronymic = '';
+        athlete.value.patronymic = '';
+    } else {
+        resetParticipation();
+    }
 }
 
 function validateModel(model, pattern, errorTarget) {
-    formErrors.value[errorTarget] = !pattern.test(model);
+    formErrors.value[errorTarget] = !pattern.test(model) || model === null;
+}
+
+function validatePatronymic() {
+    formErrors.value.patronymic = false;
+    if (athlete.value.noMiddleName === false) {
+        validateModel(athlete.value.patronymic, namePattern, "patronymic");
+    }
 }
 
 function validateBirthDate() {
@@ -442,13 +474,13 @@ function validateBirthDate() {
 function onSubmit() {
     resetFormErrors();
 
-    formErrors.value.surname = !namePattern.test(athlete.value.surname);
-    formErrors.value.first_name = !namePattern.test(athlete.value.first_name);
-    formErrors.value.patronymic = !patronymicPattern.test(athlete.value.patronymic);
-    formErrors.value.gender = !genderPattern.test(athlete.value.gender);
+    onSurnameFocusOut();
+    validateModel(athlete.value.first_name, namePattern, "first_name");
+    validatePatronymic();
+    validateModel(athlete.value.gender, genderPattern, "gender");
     validateBirthDate();
     regionSelectValidate();
-    formErrors.value.contact_information = !requiredTextPattern.test(athlete.value.contact_information);
+    validateModel(athlete.value.contact_information, requiredTextPattern, 'contact_information');
 
     athlete.value.competition_id = props.competition.id;
 
@@ -492,6 +524,7 @@ function onClear() {
         first_name: '',
         surname: '',
         patronymic: '',
+        noMiddleName: false,
         gender: '',
         birth_date: '',
         qualification: "NO",
@@ -510,6 +543,7 @@ function fillForm(data) {
     athlete.value.first_name = data.first_name;
     athlete.value.surname = data.surname;
     athlete.value.patronymic = data.patronymic;
+    athlete.value.noMiddleName = false;
     athlete.value.gender = data.gender;
     athlete.value.birth_date = dayjs(data.birth_date).format("YYYY-MM-DD");
     athlete.value.region_code = enrichedRegions.value.map(region => region.code).includes(data.region_code)

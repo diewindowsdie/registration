@@ -107,7 +107,11 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
         $athlete = new Athlete();
         $athlete->surname = $request->input("surname");
         $athlete->first_name = $request->input("first_name");
-        $athlete->patronymic = $request->input("patronymic");
+        if (self::wrapUnsafeBooleanFromRequest($request, 'noMiddleName')) {
+            $athlete->patronymic = null;
+        } else {
+            $athlete->patronymic = $request->input("patronymic");
+        }
         $athlete->birth_date = $request->input("birth_date");
 
         $athlete->gender = $request->input("gender");
