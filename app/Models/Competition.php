@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $ui_language
  * @property int $allow_countries
  * @property int $allow_input_school_and_club
+ * @property int $use_sport_qualification
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CompetitionGroup> $groups
  * @property-read int|null $groups_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition newModelQuery()
@@ -41,6 +42,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereUiLanguage($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereUseSportQualification($value)
  * @mixin \Eloquent
  */
 class Competition extends Model

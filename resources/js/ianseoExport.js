@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import {translit} from 'gost-transliteration';
 import {trans} from "laravel-vue-i18n";
 
-export function ianseoData(toExport, transliterate = false) {
+export function ianseoData(toExport, competition) {
     const TAB = "\t";
     return toExport
         .filter(participant => participant.athlete !== null)
@@ -21,7 +21,7 @@ export function ianseoData(toExport, transliterate = false) {
             }
 
             //todo если решим транслитерировать названия, раскомментировать
-            // if (transliterate) {
+            // if (competition.ui_language !== "ru") {
             //     sport_school_name = translit(sport_school_name);
             // }
 
@@ -35,10 +35,10 @@ export function ianseoData(toExport, transliterate = false) {
                 "1" + TAB +
                 participant.participate_teams + TAB +
                 participant.participate_mixed_teams + TAB +
-                (transliterate ? translit(participant.athlete.surname) : participant.athlete.surname) + TAB +
-                (transliterate ? translit(participant.athlete.first_name) : participant.athlete.first_name) + TAB +
+                (competition.ui_language !== "ru" ? translit(participant.athlete.surname) : participant.athlete.surname) + TAB +
+                (competition.ui_language !== "ru" ? translit(participant.athlete.first_name) : participant.athlete.first_name) + TAB +
                 (participant.athlete.patronymic !== null
-                    ? (transliterate
+                    ? (competition.ui_language !== "ru"
                         ? translit(participant.athlete.patronymic)
                         : participant.athlete.patronymic)
                     : "") + TAB +
@@ -48,7 +48,7 @@ export function ianseoData(toExport, transliterate = false) {
                     ? trans("countries." + participant.region_code)
                     : trans("regions." + participant.region_code)) + TAB +
                 dayjs(participant.athlete.birth_date).format("DD.MM.YYYY") + TAB +
-                participant.athlete.qualification.code + TAB +
+                (competition.use_sport_qualification ? participant.athlete.qualification.code : "") + TAB +
                 sport_school_code + TAB +
                 sport_school_name + TAB +
                 (participant.sport_organisation !== null ? participant.sport_organisation.code : "") + TAB +
@@ -62,13 +62,13 @@ export function ianseoData(toExport, transliterate = false) {
         }).reduce((exportData, row) => exportData + row + "\n", "");
 }
 
-export async function ianseoExportToFile(participants, competitionCode, divisionAndClassCode = null, transliterate = false) {
-    var data = new Blob([ianseoData(participants)], {type: 'text/plain'});
+export async function ianseoExportToFile(participants, competition, divisionAndClassCode = null) {
+    var data = new Blob([ianseoData(participants, competition)], {type: 'text/plain'});
     var tempLink = document.createElement("a");
 
-    var fileName = "ianseo_participants_" + competitionCode + ".txt";
+    var fileName = "ianseo_participants_" + competition.id + ".txt";
     if (divisionAndClassCode !== null) {
-        fileName = "ianseo_participants_" + competitionCode + "_" + divisionAndClassCode + ".txt";
+        fileName = "ianseo_participants_" + competition.id + "_" + divisionAndClassCode + ".txt";
     }
     tempLink.setAttribute('href', URL.createObjectURL(data));
     tempLink.setAttribute('download', fileName);

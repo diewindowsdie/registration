@@ -223,22 +223,44 @@
                     <div class="col-span-1 sm:col-span-2">
                         <span class="text-xl font-bold text-gray-900 dark:text-white">Дополнительные настройки соревнования:</span>
                     </div>
-                    <div class="col-span-1 p-2 rounded-sm border border-gray-300 dark:border-gray-600">
-                        <input id="participants_list_available_to_anyone" type="checkbox" checked
-                               v-model="competition.participants_list_available_to_anyone"
-                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        >
-                        <label for="participants_list_available_to_anyone"
-                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Список участников
-                            соревнования доступен всем</label>
+                    <div class="flex col-span-1 p-2 rounded-sm border border-gray-300 dark:border-gray-600">
+                        <div class="flex items-center h-5">
+                            <input id="participants_list_available_to_anyone" type="checkbox" checked
+                                v-model="competition.participants_list_available_to_anyone"
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            >
+                        </div>
+                        <div class="ms-2 text-sm">
+                            <label for="participants_list_available_to_anyone"
+                                   class="text-sm font-medium text-gray-900 dark:text-gray-300">Список участников соревнования доступен всем</label>
+                            <p id="participants_list_available_to_anyone-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">Если снять, список участников будет видеть только секретарь</p>
+                        </div>
                     </div>
-                    <div class="col-span-1 p-2 rounded-sm border border-gray-300 dark:border-gray-600">
-                        <input id="allow_countries" type="checkbox"
-                               v-model="competition.allow_countries"
-                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        >
-                        <label for="allow_countries"
-                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Разрешить выбирать страны в качестве регионов участников</label>
+                    <div class="flex col-span-1 p-2 rounded-sm border border-gray-300 dark:border-gray-600">
+                        <div class="flex items-center h-5">
+                            <input id="allow_countries" type="checkbox"
+                                   v-model="competition.allow_countries"
+                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            >
+                        </div>
+                        <div class="ms-2 text-sm">
+                            <label for="allow_countries"
+                                   class="text-sm font-medium text-gray-900 dark:text-gray-300">Разрешить выбирать страны в качестве регионов участников</label>
+                            <p id="allow_countries-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">По умолчанию в качестве региона спортсмен может выбрать только регион РФ</p>
+                        </div>
+                    </div>
+                    <div class="flex col-span-1 p-2 rounded-sm border border-gray-300 dark:border-gray-600">
+                        <div class="flex items-center h-5">
+                            <input id="use_sport_qualification" type="checkbox"
+                                   v-model="competition.use_sport_qualification"
+                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            >
+                        </div>
+                        <div class="ms-2 text-sm">
+                            <label for="use_sport_qualification"
+                                   class="text-sm font-medium text-gray-900 dark:text-gray-300">Использовать разряды и спортивные звания</label>
+                            <p id="use_sport_qualification-text" class="text-xs font-normal text-gray-500 dark:text-gray-300">Если снять, у спортсменов не будут спрашивать разряд, в списке участников и при экспорте в IANSEO тоже не будет разрядов и званий</p>
+                        </div>
                     </div>
                     <div class="col-span-1 p-2 rounded-sm border border-gray-300 dark:border-gray-600 items-center content-center">
                         <div class="flex items-center mb-4">
@@ -252,8 +274,7 @@
                     </div>
                     <div class="col-span-1 p-2 rounded-sm border border-gray-300 dark:border-gray-600">
                         <label for="ui_language"
-                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Язык формы
-                            регистрации и списка участников</label>
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Язык формы регистрации и списка участников:</label>
                         <select id="ui_language"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 v-model="competition.ui_language">
@@ -317,6 +338,7 @@ const competition = ref({
     registration_start: '',
     registration_finish: '',
     participants_list_available_to_anyone: true,
+    use_sport_qualification: true,
     includes_mixed_team_events: false,
     allow_countries: false,
     allow_input_school_and_club: false,
@@ -561,7 +583,26 @@ function onSubmit() {
     });
 
     if (validationSuccessful()) {
-        if (competition.value.ui_language === "ru" || confirm("Вы выбрали язык формы регистрации и списка участников, отличный от русского. Вы уверены?")) {
+        let askToConfirm = false;
+        let confirmMessage = "";
+        if (competition.value.ui_language !== "ru" ||
+            competition.value.use_sport_qualification === false ||
+            competition.value.allow_countries === true) {
+            askToConfirm = true;
+            confirmMessage = "Вы выбрали следующие нестандартные настройки соревнования:\n\n";
+            if (competition.value.allow_countries === true) {
+                confirmMessage += "* Разрешить выбирать страны в качестве регионов участников\n";
+            }
+            if (competition.value.use_sport_qualification === false) {
+                confirmMessage += "* Не использовать разряды и спортивные звания\n";
+            }
+            if (competition.value.ui_language !== "ru") {
+                confirmMessage += "* Язык формы регистрации и списка участников, отличный от русского\n";
+            }
+
+            confirmMessage += "\nВы уверены?";
+        }
+        if (!askToConfirm || confirm(confirmMessage)) {
             axios.post(props.routeCreate, {
                 ...competition.value
             }).then(r => {
@@ -589,6 +630,7 @@ function onClear() {
         registration_start: '',
         registration_finish: '',
         participants_list_available_to_anyone: true,
+        use_sport_qualification: true,
         includes_mixed_team_events: false,
         allow_countries: false,
         ui_language: "ru",

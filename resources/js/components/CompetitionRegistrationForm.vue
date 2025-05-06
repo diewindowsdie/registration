@@ -44,12 +44,12 @@
                                             }}&nbsp;{{ item.first_name }}{{
                                                 item.patronymic != null ? "&nbsp;" + item.patronymic : ""
                                             }}</p>
-                                        <p v-if="item.gender === 'M'" class="text-right text-gray-400">{{ item.qualification.short_title }}, {{ trans("registration.bornM") }}
+                                        <p v-if="item.gender === 'M'" class="text-right text-gray-400">{{ competition_copy.use_sport_qualification ? (item.qualification.short_title + ", " ) : "" }}{{ trans("registration.bornM") }}
                                             {{ dayjs(item.birth_date).format("DD.MM.YYYY") }},
                                             {{ item.region.is_country ? trans("countries." + item.region.code) : trans("regions." + item.region.code) }}</p>
-                                        <p v-else-if="item.gender === 'F'" class="text-right text-gray-400">{{ item.qualification.short_title }}, {{ trans("registration.bornF") }}
+                                        <p v-else-if="item.gender === 'F'" class="text-right text-gray-400">{{ competition_copy.use_sport_qualification ? (item.qualification.short_title + ", " ) : "" }}{{ trans("registration.bornF") }}
                                             {{ dayjs(item.birth_date).format("DD.MM.YYYY") }},
-                                            {{ item.region.full_name }}</p>
+                                            {{ item.region.is_country ? trans("countries." + item.region.code) : trans("regions." + item.region.code) }}</p>
                                     </div>
                                 </template>
                             </div>
@@ -110,7 +110,7 @@
                                v-if="formErrors.birth_date"><span
                                 class="font-medium">{{ trans("registration.error.birthDate") }}</span></p>
                         </div>
-                        <div class="sm:col-span-5">
+                        <div class="sm:col-span-5" v-if="competition_copy.use_sport_qualification">
                             <label for="qualifications"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ trans("registration.qualification") }}</label>
                             <select id="qualifications"
@@ -494,7 +494,7 @@ function onClear() {
         patronymic: '',
         gender: '',
         birth_date: '',
-        qualification: null,
+        qualification: "NO",
         region_code: null,
         sport_school_code: null,
         sport_organisation_code: null,

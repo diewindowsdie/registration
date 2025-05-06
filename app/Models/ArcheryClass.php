@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- *
+ * 
  *
  * @property string $code
  * @property array<array-key, mixed> $allowed_genders

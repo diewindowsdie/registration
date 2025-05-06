@@ -86,6 +86,7 @@
                                     </div>
                                 </th>
                                 <th scope="col"
+                                    v-if="competition.use_sport_qualification"
                                     :class="['px-4', 'py-3', 'hover:cursor-pointer', 'hidden', 'sm:table-cell', 'select-none', getWidthClass('qualification')]"
                                     @click="toggleOrderBy('athlete.qualification.order', group.division_code, group.class_code)">
                                     <div class="flex items-center">
@@ -220,7 +221,8 @@
                                                 : trans("regions." + participant.region_code)
                                         }}
                                     </td>
-                                    <td class="participant-cell">
+                                    <td class="participant-cell"
+                                        v-if="competition.use_sport_qualification">
                                         {{ participant.athlete.qualification.short_title }}
                                     </td>
                                     <td v-if="competition.allow_input_school_and_club"
@@ -277,7 +279,7 @@
                                                 <b>{{ trans("participants.region") }}:</b>
                                                 {{ trans("regions." + participant.region_code) }}
                                             </p>
-                                            <p><b>{{ trans("participants.qualification") }}:</b>
+                                            <p v-if="competition.use_sport_qualification"><b>{{ trans("participants.qualification") }}:</b>
                                                 {{ participant.athlete.qualification.full_title }}</p>
                                             <p v-if="participant.sport_school !== null">
                                                 <b>{{ trans("participants.sportSchool") }}:</b>
@@ -308,7 +310,7 @@
                             {{ trans("participants.exportGroupViaClipboard") }}
                         </button>
                         <button v-if="isSecretary" type="button"
-                                @click="ianseoExportToFile(sortedParticipants(group.division_code, group.class_code), competition.id, group.division_code + group.class_code)"
+                                @click="ianseoExportToFile(sortedParticipants(group.division_code, group.class_code), competition, group.division_code + group.class_code)"
                                 class="inline-flex items-center px-3 py-2.5 mr-2 text-xs font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-0 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
                             {{ trans("participants.exportGroupViaFile") }}
                         </button>
@@ -321,7 +323,7 @@
                 {{ trans("participants.exportAllViaClipboard") }}
             </button>
             <button v-if="isSecretary" type="button"
-                    @click="ianseoExportToFile(participants_copy, competition.id)"
+                    @click="ianseoExportToFile(participants_copy, competition)"
                     class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-0 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
                 {{ trans("participants.exportAllViaFile") }}
             </button>
@@ -453,11 +455,11 @@ const clipboard = new ClipboardJS('.exportViaClipboard', {
         if (trigger.id) {
             const args = trigger.id.split("_");
             if (args[0] !== '' && args[1] !== '') {
-                return ianseoData(sortedParticipants(args[0], args[1]));
+                return ianseoData(sortedParticipants(args[0], args[1]), props.competition);
             }
         }
 
-        return ianseoData(participants_copy.value);
+        return ianseoData(participants_copy.value, props.competition);
     }
 });
 clipboard.on('success', function (e) {
