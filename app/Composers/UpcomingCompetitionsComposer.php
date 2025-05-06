@@ -9,6 +9,6 @@ class UpcomingCompetitionsComposer
 {
     public function compose(View $view): void
     {
-        $view->with('competitions', Competition::orderBy("start_date", "asc")->limit(5)->get());
+        $view->with('competitions', Competition::whereDate("end_date", ">=", now())->orderBy("start_date", "asc")->limit(5)->get());
     }
 }
