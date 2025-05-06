@@ -49,7 +49,7 @@
                 </svg>
             </div>
             <div class="col-span-7 text-gray-500 dark:text-gray-400 hover:underline mt-1 px-2 flex items-center-safe"><a
-                    href="{{ route('competitions.registrationForm', $competition_item->id) }}">{{ __("navbar.register") }}</a></div>
+                    href="{{ route('competitions.registrationForm', $competition_item->alias) }}">{{ __("navbar.register") }}</a></div>
             @endif
             @if($competition_item->participants_list_available_to_anyone ||
             \App\Auth\ClientCertificateOrBasicAuthAuthenticator::isAuthenticated())
@@ -71,7 +71,7 @@
                 </svg>
             </div>
             <div class="col-span-7 text-gray-500 dark:text-gray-400 hover:underline mt-1 px-2 flex items-center-safe"><a
-                    href="{{ route('competitions.participants', $competition_item->id) }}">{{ __("navbar.participants") }}</a>
+                    href="{{ route('competitions.participants', $competition_item->alias) }}">{{ __("navbar.participants") }}</a>
             </div>
             @endif
             @if(\App\Auth\ClientCertificateOrBasicAuthAuthenticator::isAuthenticated())

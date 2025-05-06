@@ -39,9 +39,10 @@ class RegistrationController extends Controller
         return view('pages.registration');
     }
 
-    public function registrationForm($id): View
+    public function registrationForm($idOrAlias): View
     {
-        $competition = Competition::find($id);
+        $competition = Competition::where("alias", "=", $idOrAlias)
+            ->orWhere("id", "=", $idOrAlias)->first();
         if ($competition === null) {
             return view("errors.competitionNotFound");
         }

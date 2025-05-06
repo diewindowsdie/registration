@@ -14,9 +14,9 @@ Route::prefix('athletes')->name('athletes.')->group(function () {
 Route::prefix('competitions')->name('competitions.')->group(function () {
     Route::get('new', [CompetitionsController::class, 'new'])->name('new')->middleware(SecretaryOnlyAccess::class);
     Route::post('create', [CompetitionsController::class, 'create'])->name('create')->middleware(SecretaryOnlyAccess::class);
-    Route::get("registration/{id}", [RegistrationController::class, "registrationForm"])->name("registrationForm");
+    Route::get("registration/{idOrAlias}", [RegistrationController::class, "registrationForm"])->name("registrationForm");
     Route::post("register", [RegistrationController::class, "register"])->name("register");
-    Route::get("participants/{id}", [CompetitionsController::class, "getParticipants"])->name("participants");
+    Route::get("participants/{idOrAlias}", [CompetitionsController::class, "getParticipants"])->name("participants");
     Route::delete("participants/delete/{id}", [CompetitionsController::class, "deleteParticipant"])->name("deleteParticipant")->middleware(SecretaryOnlyAccess::class);
 });
 

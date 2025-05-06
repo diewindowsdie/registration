@@ -28,6 +28,7 @@ class CompetitionsController extends Controller
     {
         $competition = new Competition();
         $competition->title = $request->input('title');
+        $competition->alias = $request->input('alias');
         $competition->start_date = $request->input('start_date');
         $competition->end_date = $request->input('end_date');
         $competition->registration_start = $request->input('registration_start');
@@ -59,9 +60,10 @@ class CompetitionsController extends Controller
         ]);
     }
 
-    public function getParticipants($id): object
+    public function getParticipants($idOrAlias): object
     {
-        $competition = Competition::find($id);
+        $competition = Competition::where("alias", "=", $idOrAlias)
+            ->orWhere("id", "=", $idOrAlias)->first();
         if ($competition === null) {
             return view("errors.competitionNotFound");
         }
@@ -73,7 +75,7 @@ class CompetitionsController extends Controller
 
         App::setlocale($competition->ui_language);
 
-        $participants = CompetitionParticipant::where("competition_id", "=", $id)->get();
+        $participants = CompetitionParticipant::where("competition_id", "=", $competition->id)->get();
         if (!ClientCertificateOrBasicAuthAuthenticator::isAuthenticated()) {
             $participants = $participants->makeHidden(["contact_information", "coach_name"]);
         }

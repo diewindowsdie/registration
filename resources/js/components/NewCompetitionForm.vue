@@ -105,8 +105,7 @@
                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                         >
                         <label for="competition_includes_mixed_team_events"
-                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">На соревновании будут
-                            команды-микс</label>
+                               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">На соревновании будут команды-микс</label>
                     </div>
                 </div>
                 <div class="p-3 mb-3 grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 rounded-2xl border border-gray-300 dark:border-gray-600">
@@ -223,6 +222,17 @@
                     <div class="col-span-1 sm:col-span-2">
                         <span class="text-xl font-bold text-gray-900 dark:text-white">Дополнительные настройки соревнования:</span>
                     </div>
+                    <div class="col-span-1 mb-5">
+                        <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Уникальный код соревнований</label>
+                        <input type="text" v-model="competition.alias" name="title" id="title"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               @focusout="onAliasFocusOut()"
+                        />
+                        <p id="alias_helper_text" class="mt-0 text-sm text-gray-500 dark:text-gray-400">Нужен для облегчения читаемости адресов регистрации и списка участников. Пример: <b>CHSPB_2025_LETO</b></p>
+                    </div>
+                    <div>
+
+                    </div>
                     <div class="flex col-span-1 p-2 rounded-sm border border-gray-300 dark:border-gray-600">
                         <div class="flex items-center h-5">
                             <input id="participants_list_available_to_anyone" type="checkbox" checked
@@ -317,6 +327,7 @@ import dayjs from 'dayjs';
 import {Popover} from "flowbite";
 import vSelect from 'vue-select';
 import {trans} from "laravel-vue-i18n";
+import {translit} from "gost-transliteration";
 
 const requiredTextPattern = /^[а-яА-ЯёË\w\-«»!?:;()\[\]&#№%+ "'.,]{2,}$/;
 
@@ -333,6 +344,7 @@ const enrichedClasses = computed(() => props.archery_classes.map(archeryClass =>
 
 const competition = ref({
     title: '',
+    alias: "",
     start_date: '',
     end_date: '',
     registration_start: '',
@@ -524,6 +536,14 @@ function recalculateAgeAndGenderLimits(group, targetId = null) {
 
 function validateCompetitionTitle() {
     formErrors.value.title = !requiredTextPattern.test(competition.value.title);
+
+    onAliasFocusOut();
+}
+
+function onAliasFocusOut() {
+    if (competition.value.title !== "" && competition.value.alias === "") {
+        competition.value.alias = translit(competition.value.title.toUpperCase().substring(0, 10));
+    }
 }
 
 function validateDivision(group) {
@@ -606,7 +626,7 @@ function onSubmit() {
             axios.post(props.routeCreate, {
                 ...competition.value
             }).then(r => {
-                competitionRegistrationUrl.value = props.routeRegistration.replace(':competition_id', r.data.competition_id);
+                competitionRegistrationUrl.value = props.routeRegistration.replace(':competition_id', competition.value.alias);
             }).catch(e => {
                 if (e.response && e.response.data && e.response.data.errors) {
                     this.errors = e.response.data.errors;
@@ -625,6 +645,7 @@ function onClear() {
 
     competition.value = {
         title: '',
+        alias: "",
         start_date: '',
         end_date: '',
         registration_start: '',

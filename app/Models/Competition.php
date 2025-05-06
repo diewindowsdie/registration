@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string $title
+ * @property string $alias
  * @property \Illuminate\Support\Carbon $start_date
  * @property \Illuminate\Support\Carbon $end_date
  * @property string $created_by
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereAlias($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereAllowCountries($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereAllowInputSchoolAndClub($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Competition whereCreatedAt($value)
