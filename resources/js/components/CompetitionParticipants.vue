@@ -289,7 +289,7 @@
                                                 {{ participant.sport_organisation.full_title }}</p>
                                             <p v-if="isSecretary"><b>{{ trans("participants.contactInfo") }}:</b>
                                                 {{ participant.contact_information }}</p>
-                                            <p v-if="isSecretary && participant.coach_name !== null"><b>Тренер:</b>
+                                            <p v-if="isSecretary && participant.coach_name !== null"><b>{{ trans("participants.coachInfo") }}:</b>
                                                 {{ participant.coach_name }}</p>
                                             <p><b>{{ trans("participants.registrationDateTime") }}:</b>
                                                 {{ dayjs(participant.created_at).format("DD.MM.YYYY HH:mm:ss") }}</p>

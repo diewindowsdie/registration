@@ -15,8 +15,8 @@ return [
     "sportSchoolOrClub" => "Спортивная школа, клуб или организация",
     "sportSchool" => "Спортивная школа",
     "clubAndOrganisation" => "Клуб, организация",
-    "contactInfo" => "Контактная информация",
-    "coachInfo" => "Тренер",
+    "contactInfo" => "Контакты спортсмена",
+    "coachInfo" => "Контакты тренера или представителя",
     "registrationDateTime" => "Дата и время регистрации",
 
     "exportGroupViaClipboard" => "Экспорт группы в IANSEO (буфер обмена)",

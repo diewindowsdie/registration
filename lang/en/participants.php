@@ -15,8 +15,8 @@ return [
     "sportSchoolOrClub" => "Sport school, club or organisation",
     "sportSchool" => "Sport school",
     "clubAndOrganisation" => "Club, organisation",
-    "contactInfo" => "Contact information",
-    "coachInfo" => "Coach",
+    "contactInfo" => "Athlete contacts",
+    "coachInfo" => "Coach or representative contacts",
     "registrationDateTime" => "Registration date and time",
 
     "exportGroupViaClipboard" => "Export group to IANSEO (clipboard)",

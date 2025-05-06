@@ -26,8 +26,8 @@ return [
     "sportSchool" => "Sport school",
     "sportOrganisation" => "Club or organisation",
     "sportSchoolOrClub" => "Sport school, club or organisation",
-    "contactInfo" => "Contact information",
-    "coachInfo" => "Coach",
+    "contactInfo" => "Athlete contact information",
+    "coachInfo" => "Coach or representative name and contact information",
     "bornM" => "born",
     "bornF" => "born",
 
@@ -52,6 +52,7 @@ return [
     "error.region" => "Please select region",
     "error.regionOrCountry" => "Please select country or region",
     "error.contactInfo" => "Please specify some contact information",
+    "error.coachInfo" => "Please specify your coach or representative and some contact information",
     "error.global.athleteAlreadyRegistered" => "This athlete is already registered for the competition",
     "error.global.invalidGenderForGroup" => "Athlete gender does not meet the requirements of the selected division and class",
     "error.global.invalidBirthDateForGroup" => "Athlete birth date does not meet the requirements of the selected division and class",
