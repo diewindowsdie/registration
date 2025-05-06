@@ -25,6 +25,13 @@ export function ianseoData(toExport, competition) {
             //     sport_school_name = translit(sport_school_name);
             // }
 
+            const firstName = (competition.ui_language !== "ru" ? translit(participant.athlete.first_name) : participant.athlete.first_name);
+            const patronymic = (participant.athlete.patronymic !== null
+                ? (competition.ui_language !== "ru"
+                    ? translit(participant.athlete.patronymic)
+                    : participant.athlete.patronymic)
+                : "");
+
             return participant.id + TAB +
                 "" + TAB +
                 participant.division_code + TAB +
@@ -36,12 +43,10 @@ export function ianseoData(toExport, competition) {
                 participant.participate_teams + TAB +
                 participant.participate_mixed_teams + TAB +
                 (competition.ui_language !== "ru" ? translit(participant.athlete.surname) : participant.athlete.surname) + TAB +
-                (competition.ui_language !== "ru" ? translit(participant.athlete.first_name) : participant.athlete.first_name) + TAB +
-                (participant.athlete.patronymic !== null
-                    ? (competition.ui_language !== "ru"
-                        ? translit(participant.athlete.patronymic)
-                        : participant.athlete.patronymic)
-                    : "") + TAB +
+                (competition.ui_language === "ru"
+                    ? firstName + TAB + patronymic + TAB
+                    : firstName + " " + patronymic + TAB
+                ) +
                 participant.athlete.gender + TAB +
                 participant.region_code + TAB +
                 (participant.region.is_country
