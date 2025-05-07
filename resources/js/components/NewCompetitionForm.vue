@@ -312,12 +312,12 @@
         </div>
     </section>
     <section v-if="competitionRegistrationUrl !== ''">
-        <p class="block text-2xl mt-0 ml-2 font-medium text-gray-900 dark:text-white">Соревнование успешно
+        <p class="block text-2xl mt-0 ml-2 mb-5 font-medium text-gray-900 dark:text-white">Соревнование успешно
             добавлено.</p>
         <p class="block text-xl ml-2 font-medium text-gray-900 dark:text-white">Ссылка для регистрации на соревнования:
-            <a class="hover:underline text-blue-600" :href="competitionRegistrationUrl">{{
-                    competitionRegistrationUrl
-                }}</a></p>
+            <a class="hover:underline text-blue-600" :href="competitionRegistrationUrl">{{competitionRegistrationUrl }}</a></p>
+        <p v-if="competition.participants_list_available_to_anyone" class="block text-xl ml-2 font-medium text-gray-900 dark:text-white">Список участников соревнования:
+            <a class="hover:underline text-blue-600" :href="competitionParticipantsUrl">{{ competitionParticipantsUrl }}</a></p>
     </section>
 </template>
 <script setup>
@@ -331,7 +331,7 @@ import {translit} from "gost-transliteration";
 
 const requiredTextPattern = /^[а-яА-ЯёË\w\-«»!?:;()\[\]&#№%+ "'.,]{2,}$/;
 
-const props = defineProps(["routeCreate", "routeRegistration", "divisions", "archery_classes"]);
+const props = defineProps(["routeCreate", "routeRegistration", "routeParticipants", "divisions", "archery_classes"]);
 
 const enrichedDivisions = computed(() => props.divisions.map(division => {
     division.label = trans("divisions." + division.code);
@@ -359,6 +359,7 @@ const competition = ref({
 });
 
 const competitionRegistrationUrl = ref("");
+const competitionParticipantsUrl = ref("");
 
 const formErrors = ref({});
 resetFormErrors();
@@ -627,6 +628,7 @@ function onSubmit() {
                 ...competition.value
             }).then(r => {
                 competitionRegistrationUrl.value = props.routeRegistration.replace(':competition_id', competition.value.alias);
+                competitionParticipantsUrl.value = props.routeParticipants.replace(':competition_id', competition.value.alias);
             }).catch(e => {
                 if (e.response && e.response.data && e.response.data.errors) {
                     this.errors = e.response.data.errors;
