@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Auth\ClientCertificateOrBasicAuthAuthenticator;
+use App\Composers\UpcomingCompetitionsComposer;
 use App\Http\Requests\Athlete\SaveRequest;
 use App\Models\ArcheryClass;
 use App\Models\Competition;
@@ -57,6 +58,26 @@ class CompetitionsController extends Controller
         return response()->json([
             'status' => 'ok',
             'competition_id' => $competition->id,
+        ]);
+    }
+
+    public function deleteCompetition($id): JsonResponse
+    {
+        Competition::destroy($id);
+
+        //Сразу не удаляем, какое-то время история поживет
+        CompetitionParticipant::where("competition_id", "=", $id)->update(["competition_id" => "0"]);
+
+        return response()->json([
+            'status' => 'ok'
+        ]);
+    }
+
+    public function loadUpcoming(): JsonResponse
+    {
+        return response()->json([
+            'status' => 'ok',
+            'competitions' => UpcomingCompetitionsComposer::loadUpcomingCompetitions()
         ]);
     }
 

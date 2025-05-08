@@ -32,11 +32,13 @@ import CompetitionRegistrationForm from "./components/CompetitionRegistrationFor
 import NewCompetitionForm from "./components/NewCompetitionForm.vue";
 import CompetitionParticipants from "./components/CompetitionParticipants.vue";
 import SortOrderIndicator from "./components/SortOrderIndicator.vue";
+import NavigationMenu from "./components/NavigationMenu.vue";
 
 app.component('CompetitionRegistrationForm', CompetitionRegistrationForm);
 app.component('NewCompetitionForm', NewCompetitionForm);
 app.component('CompetitionParticipants', CompetitionParticipants);
 app.component('SortOrderIndicator', SortOrderIndicator);
+app.component('NavigationMenu', NavigationMenu);
 
 app.mount('#app')
 
@@ -91,5 +93,4 @@ themeToggleBtn.addEventListener('click', function() {
         localStorage.setItem('color-theme', 'light');
         themeToggleLightIcon.classList.remove('hidden');
     }
-
 });

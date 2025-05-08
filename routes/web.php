@@ -18,5 +18,7 @@ Route::prefix('competitions')->name('competitions.')->group(function () {
     Route::post("register", [RegistrationController::class, "register"])->name("register");
     Route::get("participants/{idOrAlias}", [CompetitionsController::class, "getParticipants"])->name("participants");
     Route::delete("participants/delete/{id}", [CompetitionsController::class, "deleteParticipant"])->name("deleteParticipant")->middleware(SecretaryOnlyAccess::class);
+    Route::delete("delete/{id}", [CompetitionsController::class, "deleteCompetition"])->name("delete")->middleware(SecretaryOnlyAccess::class);
+    Route::get("upcoming", [CompetitionsController::class, "loadUpcoming"])->name("loadUpcoming");
 });
 

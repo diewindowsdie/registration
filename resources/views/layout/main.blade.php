@@ -91,7 +91,16 @@
         id="drawer-navigation"
     >
         <div class="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800">
-            @include('layout.navbar')
+            <navigation-menu
+                :competitions="{{ $competitions }}"
+                :current-competition="{{ $competition ?? 'null' }}"
+                :is-secretary="{{ \App\Auth\ClientCertificateOrBasicAuthAuthenticator::isAuthenticated() ? 1 : 0 }}"
+                route-registration-form="{{ route('competitions.registrationForm', ':competition_id') }}"
+                route-participants-list="{{ route('competitions.participants', ':competition_id') }}"
+                route-new-competition="{{ route('competitions.new') }}"
+                route-delete-competition="{{ route('competitions.delete', ':competition_id') }}"
+                route-load-upcoming-competitions="{{ route('competitions.loadUpcoming') }}"
+            ></navigation-menu>
         </div>
         <div
             class="absolute bottom-0 left-0 justify-center p-6 space-x-4 w-full flex bg-white dark:bg-gray-800 z-20 border-r border-gray-200 dark:border-gray-700">
