@@ -3,7 +3,7 @@
         <div class="mx-auto max-w-screen-3xl px-4 lg:px-12">
             <h2 class="mb-4 py-2 text-3xl font-bold text-gray-900 dark:text-white">{{ competition.title }}, <br
                 class="sm:hidden block"/>{{ dayjs(competition.start_date).format("DD.MM.YYYY") }} -
-                {{ dayjs(competition.end_date).format("DD.MM.YYYY") }}</h2>
+                {{ dayjs(competition.end_date).format("DD.MM.YYYY") }}<span v-if="isSecretary"> ({{ trans("participants.createdBy") }}: {{ competition.created_by}})</span></h2>
             <!--группа-->
             <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden mb-5"
                  v-for="group in competition.groups">
@@ -317,7 +317,6 @@
                     </div>
                 </template>
             </div>
-            <!--todo когда сделаю алисаы, поменять тут на алиас-->
             <button v-if="isSecretary" type="button"
                     class="exportViaClipboard inline-flex items-center px-5 py-2.5 mb-1 sm:mb-0 mr-3 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-0 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600">
                 {{ trans("participants.exportAllViaClipboard") }}

@@ -1,6 +1,7 @@
 <?php
 return [
     "title" => "Список участников соревнования",
+    "createdBy" => "добавлено",
 
     "totalRegistered" => "Всего участников: :count",
 

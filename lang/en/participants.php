@@ -1,6 +1,7 @@
 <?php
 return [
     "title" => "Participating athletes list",
+    "createdBy" => "created by",
 
     "totalRegistered" => "Athletes: :count",
 
