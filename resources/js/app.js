@@ -1,6 +1,6 @@
 import './bootstrap';
 
-import { createApp } from 'vue';
+import {createApp, reactive} from 'vue';
 import { i18nVue } from 'laravel-vue-i18n';
 import { initFlowbite } from 'flowbite';
 import dayjs from 'dayjs';
@@ -40,7 +40,7 @@ app.component('CompetitionParticipants', CompetitionParticipants);
 app.component('SortOrderIndicator', SortOrderIndicator);
 app.component('NavigationMenu', NavigationMenu);
 
-app.mount('#app')
+app.mount('#app');
 
 /**
  * dark mode button

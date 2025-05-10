@@ -121,7 +121,7 @@
                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Дивизион</label>
                                 <vSelect
                                     :id="`division_${group.id}`"
-                                    :class="formErrors.division[group.id] ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
+                                    :class="formErrors.division.get(group.id) ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
                                            : 'vue-select-tailwind vue-select-tailwind-deselect-hidden'"
                                     v-model="group.division_code"
                                     :options="enrichedDivisions"
@@ -129,7 +129,7 @@
                                     @search:blur="validateDivision(group)"
                                 />
                                 <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                                   v-if="formErrors.division[group.id]"><span
+                                   v-if="formErrors.division.get(group.id)"><span
                                     class="font-medium">Выберите дивизион</span></p>
                             </div>
                             <div class="col-span-1 sm:col-span-3">
@@ -137,7 +137,7 @@
                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Класс</label>
                                 <vSelect
                                     :id="`archery_class_${group.id}`"
-                                    :class="formErrors.archery_class[group.id] ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
+                                    :class="formErrors.archery_class.get(group.id) ? 'vue-select-tailwind vue-select-tailwind-deselect-hidden vue-select-tailwind-error'
                                            : 'vue-select-tailwind vue-select-tailwind-deselect-hidden'"
                                     v-model="group.class_code"
                                     :options="enrichedClasses"
@@ -146,7 +146,7 @@
                                     @search:blur="validateArcheryClass(group)"
                                 />
                                 <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                                   v-if="formErrors.archery_class[group.id]"><span
+                                   v-if="formErrors.archery_class.get(group.id)"><span
                                     class="font-medium">Выберите класс</span></p>
                             </div>
                             <div class="col-span-1 sm:col-span-2">
@@ -155,12 +155,12 @@
                                     рождения спортсмена, от</label>
                                 <input v-model="group.min_birth_date" type="date" name="min_birth_date"
                                        id="min_birth_date"
-                                       :class="Array.isArray(formErrors.min_birth_date[group.id]) && formErrors.min_birth_date[group.id].length > 0 ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                       :class="Array.isArray(formErrors.min_birth_date.get(group.id)) && formErrors.min_birth_date.get(group.id).length > 0 ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
                                    : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
                                        @focusout="validateMinBirthDate(group)"
                                 />
                                 <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                                   v-for="errorMessage in formErrors.min_birth_date[group.id]"><span
+                                   v-for="errorMessage in formErrors.min_birth_date.get(group.id)"><span
                                     class="font-medium">{{ errorMessage }}</span></p>
                             </div>
                             <div class="col-span-1 sm:col-span-2">
@@ -169,12 +169,12 @@
                                     рождения спортсмена, до</label>
                                 <input v-model="group.max_birth_date" type="date" name="max_birth_date"
                                        id="max_birth_date"
-                                       :class="Array.isArray(formErrors.max_birth_date[group.id]) && formErrors.max_birth_date[group.id].length > 0 ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+                                       :class="Array.isArray(formErrors.max_birth_date.get(group.id)) && formErrors.max_birth_date.get(group.id).length > 0 ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
                                    : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
                                        @focusout="validateMaxBirthDate(group)"
                                 />
                                 <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                                   v-for="errorMessage in formErrors.max_birth_date[group.id]"><span
+                                   v-for="errorMessage in formErrors.max_birth_date.get(group.id)"><span
                                     class="font-medium">{{ errorMessage }}</span></p>
                             </div>
                             <div class="col-span-1 sm:col-span-2">
@@ -184,7 +184,7 @@
                                 <vSelect
                                     multiple
                                     id="allowed_genders"
-                                    :class="formErrors.allowed_genders[group.id] ? 'vue-select-tailwind vue-select-tailwind-error'
+                                    :class="formErrors.allowed_genders.get(group.id) ? 'vue-select-tailwind vue-select-tailwind-error'
                                            : 'vue-select-tailwind'"
                                     v-model="group.allowed_genders"
                                     :options="[{label: 'Мужской', code: 'M'}, {label: 'Женский', code: 'F'}]"
@@ -193,7 +193,7 @@
                                     @option:deselected="validateAllowedGenders(group)"
                                 />
                                 <p class="mt-2 text-sm text-red-600 dark:text-red-500"
-                                   v-if="formErrors.allowed_genders[group.id]"><span
+                                   v-if="formErrors.allowed_genders.get(group.id)"><span
                                     class="font-medium">Укажите пол допущенных спортсменов</span></p>
                             </div>
                             <div class="col-span-1 sm:col-span-3 flex items-center-safe">
@@ -206,14 +206,14 @@
                             </div>
                             <div class="col-span-1 text-2xl sm:col-span-3 text-right -mt-2"><a
                                 class="cursor-pointer"
-                                @click="competition.groups = competition.groups.filter((v) => v !== group)">❌</a>
+                                @click="deleteGroup(group.id)">❌</a>
                             </div>
                         </div>
                     </div>
                     <div class="col-span-1 sm:col-span-2 -mt-2">
                         <button type="button"
                                 class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600"
-                                @click="competition.groups.push({ id: -1 * Math.floor(Math.random() * 100000)})">
+                                @click="competition.groups.push({ id: -1 * Math.floor(Math.random() * 100000), allowed_genders: []})">
                             Добавить группу
                         </button>
                     </div>
@@ -225,7 +225,11 @@
                     <div class="col-span-1 mb-5">
                         <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Уникальный код соревнований</label>
                         <input type="text" v-model="competition.alias" name="title" id="title"
-                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               :class="competition.id
+                               ? 'cursor-not-allowed bg-gray-200 border  border-gray-300 text-gray-500 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400'
+                               : 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'"
+                               :disabled="competition.id ? 'false' : 'true'"
+                               :readonly="competition.id ? 'false' : 'true'"
                                @focusout="onAliasFocusOut()"
                         />
                         <p id="alias_helper_text" class="mt-0 text-sm text-gray-500 dark:text-gray-400">Нужен для облегчения читаемости адресов регистрации и списка участников. Пример: <b>CHSPB_2025_LETO</b></p>
@@ -312,8 +316,8 @@
         </div>
     </section>
     <section v-if="competitionRegistrationUrl !== ''">
-        <p class="block text-2xl mt-0 ml-2 mb-5 font-medium text-gray-900 dark:text-white">Соревнование успешно
-            добавлено.</p>
+        <p class="block text-2xl mt-0 ml-2 mb-5 font-medium text-gray-900 dark:text-white" v-if="competition.id">Настройки соревнования успешно обновлены.</p>
+        <p class="block text-2xl mt-0 ml-2 mb-5 font-medium text-gray-900 dark:text-white" v-else>Соревнование успешно добавлено.</p>
         <p class="block text-xl ml-2 font-medium text-gray-900 dark:text-white">Ссылка для регистрации на соревнования:
             <a class="hover:underline text-blue-600" :href="competitionRegistrationUrl">{{competitionRegistrationUrl }}</a></p>
         <p v-if="competition.participants_list_available_to_anyone" class="block text-xl ml-2 font-medium text-gray-900 dark:text-white">Список участников соревнования:
@@ -331,7 +335,33 @@ import {translit} from "gost-transliteration";
 
 const requiredTextPattern = /^[а-яА-ЯёË\w\-«»!?:;()\[\]&#№%+ "'.,]{2,}$/;
 
-const props = defineProps(["routeCreate", "routeRegistration", "routeParticipants", "divisions", "archery_classes"]);
+const props = defineProps({
+    originalCompetition: {
+        type: Object,
+        default: {
+            id: null,
+            title: '',
+            alias: "",
+            start_date: '',
+            end_date: '',
+            registration_start: '',
+            registration_finish: '',
+            participants_list_available_to_anyone: true,
+            use_sport_qualification: true,
+            includes_mixed_team_events: false,
+            allow_countries: false,
+            allow_input_school_and_club: false,
+            ui_language: "ru",
+            groups: []
+        }
+    },
+    routeCreate: String,
+    routeRegistration: String,
+    routeParticipants: String,
+    routeLoadUpcomingCompetitions: String,
+    divisions: Object,
+    archery_classes: Object
+});
 
 const enrichedDivisions = computed(() => props.divisions.map(division => {
     division.label = trans("divisions." + division.code);
@@ -342,21 +372,27 @@ const enrichedClasses = computed(() => props.archery_classes.map(archeryClass =>
     return archeryClass;
 }));
 
-const competition = ref({
-    title: '',
-    alias: "",
-    start_date: '',
-    end_date: '',
-    registration_start: '',
-    registration_finish: '',
-    participants_list_available_to_anyone: true,
-    use_sport_qualification: true,
-    includes_mixed_team_events: false,
-    allow_countries: false,
-    allow_input_school_and_club: false,
-    ui_language: "ru",
-    groups: []
+const competition = ref(props.originalCompetition);
+//обработаем напильником все даты
+competition.value.start_date = dayjs(competition.value.start_date).format('YYYY-MM-DD');
+competition.value.end_date = dayjs(competition.value.end_date).format('YYYY-MM-DD');
+competition.value.registration_start = dayjs(competition.value.registration_start).format('YYYY-MM-DDTHH:mm');
+competition.value.registration_finish = dayjs(competition.value.registration_finish).format('YYYY-MM-DDTHH:mm');
+competition.value.groups.forEach(group => {
+    if (group.min_birth_date !== null) {
+       group.min_birth_date = dayjs(group.min_birth_date).format('YYYY-MM-DD');
+    }
+    group.max_birth_date = dayjs(group.max_birth_date).format('YYYY-MM-DD');
+
+    //флаги группы
+    group.includes_teams = !!group.includes_teams;
 });
+//флаги соревнования
+competition.value.participants_list_available_to_anyone = !!competition.value.participants_list_available_to_anyone;
+competition.value.includes_mixed_team_events = !!competition.value.includes_mixed_team_events;
+competition.value.use_sport_qualification = !!competition.value.use_sport_qualification;
+competition.value.allow_countries = !!competition.value.allow_countries;
+competition.value.allow_input_school_and_club = !!competition.value.allow_input_school_and_club;
 
 const competitionRegistrationUrl = ref("");
 const competitionParticipantsUrl = ref("");
@@ -364,7 +400,7 @@ const competitionParticipantsUrl = ref("");
 const formErrors = ref({});
 resetFormErrors();
 
-function onCompetitionRegistrationStartChange(revalidateRegistrationFinish = false) {
+function  onCompetitionRegistrationStartChange(revalidateRegistrationFinish = false) {
     //валидный момент времени и раньше даты начала соревнования, если дата начала указана
     formErrors.value.registration_start = [];
     const beforeCompetitionStartError = "Начало регистрации должно быть раньше начала соревнования";
@@ -389,13 +425,13 @@ function onCompetitionRegistrationStartChange(revalidateRegistrationFinish = fal
         }
     }
 
-    if (revalidateRegistrationFinish) {
+    if (revalidateRegistrationFinish && dayjs(competition.value.registration_finish, 'YYYY-MM-DDTHH:mm', true).isValid()) {
         onCompetitionRegistrationFinishChange(false);
     }
 }
 
 function onCompetitionRegistrationFinishChange(revalidateRegistrationStart = false) {
-    formErrors.value.registration_finish = ref([]);
+    formErrors.value.registration_finish = [];
     const beforeCompetitionStartError = "Окончание регистрации должно быть раньше начала соревнования";
     const beforeRegistrationFinishError = "Окончание регистрации должно быть позже начала регистрации"
 
@@ -418,7 +454,7 @@ function onCompetitionRegistrationFinishChange(revalidateRegistrationStart = fal
         }
     }
 
-    if (revalidateRegistrationStart) {
+    if (revalidateRegistrationStart && dayjs(competition.value.registration_start, 'YYYY-MM-DDTHH:mm', true).isValid()) {
         onCompetitionRegistrationStartChange(false);
     }
 }
@@ -432,9 +468,13 @@ function onCompetitionStartDateChange() {
     validateCompetitionStartDate();
 
     if (formErrors.value.start_date === false) {
-        //если дата начала валидна - нужно провалидировать дату начала и конца регистрации
-        onCompetitionRegistrationStartChange();
-        onCompetitionRegistrationFinishChange();
+        //если дата начала валидна - нужно провалидировать дату начала и конца регистрации, если их уже указали
+        if (dayjs(competition.value.registration_start, 'YYYY-MM-DDTHH:mm', true).isValid()) {
+            onCompetitionRegistrationStartChange();
+        }
+        if (dayjs(competition.value.registration_finish, 'YYYY-MM-DDTHH:mm', true).isValid()) {
+            onCompetitionRegistrationFinishChange();
+        }
         toggleDatesRecalculatedPopup('start_date');
     }
 }
@@ -456,7 +496,8 @@ function validateMinBirthDate(group) {
         ? dayjs(competition.value.start_date)
         : dayjs();
 
-    formErrors.value.min_birth_date[group.id] = [];
+    const errors = [];
+    formErrors.value.min_birth_date.set(group.id, errors);
 
     //дата может быть не указана
     if (group.min_birth_date) {
@@ -465,11 +506,11 @@ function validateMinBirthDate(group) {
             //если указана, валидная и в прошлом - она должна быть меньше или равна максимальной даты рождения, если та указана
             if (dayjs(group.max_birth_date, 'YYYY-MM-DD', true).isValid()) {
                 if (!dayjs(group.min_birth_date).isBefore(dayjs(group.max_birth_date))) {
-                    formErrors.value.min_birth_date[group.id].push(lessThanMaxBirthDate);
+                    errors.push(lessThanMaxBirthDate);
                 }
             }
         } else {
-            formErrors.value.min_birth_date[group.id].push(validDateInThePast);
+            errors.push(validDateInThePast);
         }
     }
 }
@@ -477,25 +518,29 @@ function validateMinBirthDate(group) {
 function validateMaxBirthDate(group) {
     //если указана валидная дата начала соревнования, сравнивать будем с ней, иначе - с текущей датой
     const validDateInThePast = (competition.value.start_date != "" && dayjs(competition.value.start_date, 'YYYY-MM-DD', true).isValid())
-        ? "Укажите корректную дату, не превышающую дату начала соревнования, или оставьте поле пустым"
-        : "Укажите корректную дату в прошлом или оставьте поле пустым";
+        ? "Укажите корректную дату, не превышающую дату начала соревнования"
+        : "Укажите корректную дату в прошлом";
     const greaterThanMinBirthDate = "Укажите дату, превышающую минимальную дату рождения";
     const dateToCompareWith = (competition.value.start_date != "" && dayjs(competition.value.start_date, 'YYYY-MM-DD', true).isValid())
         ? dayjs(competition.value.start_date)
         : dayjs();
 
-    formErrors.value.max_birth_date[group.id] = [];
+    const errors = [];
+    formErrors.value.max_birth_date.set(group.id, errors);
+    console.log(group.min_birth_date);
+    console.log(dayjs(group.min_birth_date, 'YYYY-MM-DD', true));
+    console.log(dayjs(group.min_birth_date, 'YYYY-MM-DD', true).isValid());
 
     //если указана, она должна быть валидной и быть не позже даты начала соревнования, или в прошлом
-    if (dayjs(group.max_birth_date, 'YYYY-MM-DD', true).isValid() && !dayjs(group.max_birth_date).isAfter(dateToCompareWith)) {
+    if (group.max_birth_date && dayjs(group.max_birth_date, 'YYYY-MM-DD', true).isValid() && !dayjs(group.max_birth_date).isAfter(dateToCompareWith)) {
         //если указана, валидная и в прошлом - она должна быть меньше или равна максимальной даты рождения, если та указана
-        if (dayjs(group.min_birth_date, 'YYYY-MM-DD', true).isValid()) {
+        if (group.min_birth_date && dayjs(group.min_birth_date, 'YYYY-MM-DD', true).isValid()) {
             if (!dayjs(group.min_birth_date).isBefore(dayjs(group.max_birth_date))) {
-                formErrors.value.max_birth_date[group.id].push(greaterThanMinBirthDate);
+                errors.push(greaterThanMinBirthDate);
             }
         }
     } else {
-        formErrors.value.max_birth_date[group.id].push(validDateInThePast);
+        errors.push(validDateInThePast);
     }
 }
 
@@ -542,21 +587,23 @@ function validateCompetitionTitle() {
 }
 
 function onAliasFocusOut() {
-    if (competition.value.title !== "" && competition.value.alias === "") {
-        competition.value.alias = translit(competition.value.title.toUpperCase().substring(0, 10));
+    if (!competition.value.id) {
+        if (competition.value.title !== "" && competition.value.alias === "") {
+            competition.value.alias = translit(competition.value.title.toUpperCase().substring(0, 10));
+        }
     }
 }
 
 function validateDivision(group) {
-    formErrors.value.division[group.id] = (group.division_code == null);
+    formErrors.value.division.set(group.id, group.division_code == null);
 }
 
 function validateArcheryClass(group) {
-    formErrors.value.archery_class[group.id] = (group.class_code == null);
+    formErrors.value.archery_class.set(group.id, group.class_code == null);
 }
 
 function validateAllowedGenders(group) {
-    formErrors.value.allowed_genders[group.id] = group.allowed_genders.length === 0;
+    formErrors.value.allowed_genders.set(group.id, group.allowed_genders.length === 0);
 }
 
 function resetFormErrors() {
@@ -566,12 +613,22 @@ function resetFormErrors() {
         end_date: false,
         registration_start: [],
         registration_finish: [],
-        division: [],
-        archery_class: [],
-        min_birth_date: [],
-        max_birth_date: [],
-        allowed_genders: []
+        division: new Map(),
+        archery_class: new Map(),
+        min_birth_date: new Map(),
+        max_birth_date: new Map(),
+        allowed_genders: new Map()
     };
+}
+
+function deleteGroup(id) {
+    competition.value.groups = competition.value.groups.filter(existing => existing.id !== id);
+    formErrors.value.division.delete(id);
+    formErrors.value.archery_class.delete(id);
+    formErrors.value.division.delete(id);
+    formErrors.value.allowed_genders.delete(id);
+    formErrors.value.min_birth_date.delete(id);
+    formErrors.value.max_birth_date.delete(id);
 }
 
 function validationSuccessful() {
@@ -580,11 +637,11 @@ function validationSuccessful() {
         formErrors.value.end_date === false &&
         formErrors.value.registration_start.length === 0 &&
         formErrors.value.registration_finish.length === 0 &&
-        formErrors.value.division.length === 0 &&
-        formErrors.value.archery_class.length === 0 &&
-        formErrors.value.min_birth_date.length === 0 &&
-        formErrors.value.max_birth_date.length === 0 &&
-        formErrors.value.allowed_genders.length === 0 &&
+        Array.from(formErrors.value.division.values()).every((divisionError) => divisionError === false) &&
+        Array.from(formErrors.value.archery_class.values()).every(classError => classError === false) &&
+        Array.from(formErrors.value.min_birth_date.values()).every(minBirthDateErrors => minBirthDateErrors.length === 0) &&
+        Array.from(formErrors.value.max_birth_date.values()).every(maxBirthDateErrors => maxBirthDateErrors.length === 0) &&
+        Array.from(formErrors.value.allowed_genders.values()).every(genderError => genderError === false) &&
         competition.value.groups.length > 0;
 }
 

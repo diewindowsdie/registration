@@ -61,8 +61,8 @@
                                     </g>
                                 </svg>
                             </div>
-                            <div class="col-span-7 text-gray-500 dark:text-gray-400 hover:underline mt-1 px-2 flex items-center-safe"><a
-                                :href="routeParticipantsList.replace(':competition_id', competition.alias)">{{ trans("navbar.participants") }}</a>
+                            <div class="col-span-7 text-gray-500 dark:text-gray-400 hover:underline mt-1 px-2 flex items-center-safe">
+                                <a :href="routeParticipantsList.replace(':competition_id', competition.alias)">{{ trans("navbar.participants") }}</a>
                             </div>
                         </template>
                         <template v-if="isSecretary">
@@ -81,7 +81,7 @@
                                 </svg>
                             </div>
                             <div class="col-span-7 text-gray-500 dark:text-gray-400 hover:underline mt-1 px-2 flex items-center-safe">
-                                {{ trans("navbar.settings") }}
+                                <a :href="routeEditCompetition.replace(':competition_id', competition.alias)">{{ trans("navbar.settings") }}</a>
                             </div>
                             <div class="col-span-1 text-gray-500 dark:text-gray-400 mt-1 flex items-center-safe justify-center">
                                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -119,6 +119,7 @@ const props = defineProps({
     isSecretary: Number,
     routeRegistrationForm: String,
     routeParticipantsList: String,
+    routeEditCompetition: String,
     routeNewCompetition: String,
     routeDeleteCompetition: String,
     routeLoadUpcomingCompetitions: String,

@@ -1,9 +1,10 @@
 @extends('layout.main')
 
-@section('title', 'Добавление соревнования')
+@section('title', 'Редактирование соревнования')
 
 @section('content')
 <new-competition-form
+    :original-competition="{{ $competition }}"
     route-create="{{ route('competitions.create') }}"
     route-registration="{{ route('competitions.registrationForm', ':competition_id') }}"
     route-participants="{{ route('competitions.participants', ':competition_id') }}"

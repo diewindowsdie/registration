@@ -97,6 +97,7 @@
                 :is-secretary="{{ \App\Auth\ClientCertificateOrBasicAuthAuthenticator::isAuthenticated() ? 1 : 0 }}"
                 route-registration-form="{{ route('competitions.registrationForm', ':competition_id') }}"
                 route-participants-list="{{ route('competitions.participants', ':competition_id') }}"
+                route-edit-competition="{{ route('competitions.edit', ':competition_id') }}"
                 route-new-competition="{{ route('competitions.new') }}"
                 route-delete-competition="{{ route('competitions.delete', ':competition_id') }}"
                 route-load-upcoming-competitions="{{ route('competitions.loadUpcoming') }}"

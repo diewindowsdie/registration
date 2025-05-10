@@ -25,9 +25,25 @@ class CompetitionsController extends Controller
         ]);
     }
 
-    public function create(FormRequest $request): JsonResponse
+    public function edit($idOrAlias): View
     {
-        $competition = new Competition();
+        $competition = Competition::where("alias", "=", $idOrAlias)
+            ->orWhere("id", "=", $idOrAlias)->first();
+        if ($competition === null) {
+            return view("errors.competitionNotFound");
+        }
+
+        return view('pages.competitions.edit', [
+            "competition" => $competition,
+            "divisions" => Division::orderBy("order", "asc")->get(),
+            "archery_classes" => ArcheryClass::orderBy("order", "asc")->get()
+        ]);
+    }
+
+
+    public function save(FormRequest $request): JsonResponse
+    {
+        $competition = Competition::findOrNew($request->input('id'));
         $competition->title = $request->input('title');
         $competition->alias = $request->input('alias');
         $competition->start_date = $request->input('start_date');
@@ -40,11 +56,25 @@ class CompetitionsController extends Controller
         $competition->allow_input_school_and_club = self::wrapUnsafeBooleanFromRequest($request, 'allow_input_school_and_club');
         $competition->use_sport_qualification = self::wrapUnsafeBooleanFromRequest($request, 'use_sport_qualification');
         $competition->ui_language = $request->input('ui_language');
-        $competition->created_by = ClientCertificateOrBasicAuthAuthenticator::getAuthenticatedUserName();
+        if ($competition->created_by === null) {
+            //не обновляем инфу о создавшем соревнование
+            $competition->created_by = ClientCertificateOrBasicAuthAuthenticator::getAuthenticatedUserName();
+        }
 
         $competition->save();
+        if ($request->input('id') !== null) {
+            //удалим существующие, которых нет в запросе
+            $existingGroups = CompetitionGroup::where("competition_id", "=", $competition->id)->get();
+            $receivedGroups = array_map(static function ($group) { return $group["id"]; }, $request->input("groups"));
+            foreach ($existingGroups as $existingGroup) {
+                if (!in_array($existingGroup->id, $receivedGroups)) {
+                    CompetitionGroup::destroy($existingGroup->id);
+                }
+            }
+        }
         foreach ($request->input("groups") as $group) {
-            $competitionGroup = new CompetitionGroup();
+            //обновляем существующие и создаем новые
+            $competitionGroup = CompetitionGroup::findOrNew($group["id"]);
             $competitionGroup->competition_id = $competition->id;
             $competitionGroup->division_code = $group["division_code"];
             $competitionGroup->class_code = $group["class_code"];
