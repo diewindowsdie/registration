@@ -15,7 +15,11 @@ class UpcomingCompetitionsComposer
 
     public static function loadUpcomingCompetitions(): Collection
     {
-        return Competition::whereDate("end_date", ">=", now())
-            ->orderBy("start_date", "asc")->limit(5)->get();
+        $current = Competition::whereDate("start_date", "<", now())
+            ->orderBy("start_date", "desc")->limit(1);
+        $upcoming = Competition::whereDate("end_date", ">=", now())
+            ->orderBy("start_date", "asc")->limit(5);
+
+        return $current->union($upcoming)->orderBy("start_date", "asc")->limit(5)->get();
     }
 }
