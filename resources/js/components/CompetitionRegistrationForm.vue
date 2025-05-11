@@ -1,7 +1,7 @@
 <template>
     <section class="bg-transparent" v-if="registrationSuccess === false">
         <div class="px-4 mx-auto max-w-6xl">
-            <h2 class="mb-4 py-2 text-4xl font-bold text-gray-900 dark:text-white">{{ competition.title }}, {{ dayjs(competition.start_date).format("DD.MM.YYYY") }} - {{ dayjs(competition.end_date).format("DD.MM.YYYY" )}}</h2>
+            <h2 class="mb-4 py-2 text-4xl font-bold text-gray-900 dark:text-white">{{ competition.title }}, {{ dayjs(competition.start_date).format("DD.MM.YYYY") }}<template v-if="!dayjs(competition.start_date).isSame(dayjs(competition.end_date))"> - {{ dayjs(competition.end_date).format('DD.MM.YYYY') }}</template></h2>
             <h2 class="mb-4 py-2 text-2xl text-gray-900 dark:text-white">{{ trans("registration.registrationOpenTitle") }} {{ trans("general.dateFrom") }}
                 <b>{{ dayjs(competition.registration_start).format("DD.MM.YYYY HH:mm:ss") }}</b> {{ trans("general.dateTo") }} <b>{{ dayjs(competition.registration_finish).format("DD.MM.YYYY HH:mm:ss")}}</b></h2>
             <form @submit.prevent="onSubmit" method="post" :action="routeSave">
