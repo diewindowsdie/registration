@@ -15,17 +15,17 @@
                         "
                                     :aria-expanded="(currentCompetition !== null ? currentCompetition.id : null)  === competition.id"
                                     :aria-controls="(isSecretary || isRegistrationOpen(competition)) ? ('dropdown-competitions-' + competition.id) : ''"
-                                    :data-accordion-target="(isSecretary || isRegistrationOpen(competition)) ? ('#dropdown-competitions-' + competition.id) : ''"
+                                    :data-accordion-target="(isSecretary || isRegistrationOpen(competition) || competition.participants_list_available_to_anyone) ? ('#dropdown-competitions-' + competition.id) : null"
                     >
                     <span class="flex-1 text-left">{{ competition.title }},<br/>
                         {{ dayjs(competition.start_date).format('DD.MM') }}<template v-if="!dayjs(competition.start_date).isSame(dayjs(competition.end_date))"> - {{ dayjs(competition.end_date).format('DD.MM') }}</template></span>
-                    <svg v-if="isSecretary || isRegistrationOpen(competition)" data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
+                    <svg v-if="isSecretary || isRegistrationOpen(competition) || competition.participants_list_available_to_anyone" data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
                          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M9 5 5 1 1 5"/>
                     </svg>
                 </button>
-                <template v-if="isSecretary || isRegistrationOpen(competition)">
+                <template v-if="isSecretary || isRegistrationOpen(competition) || competition.participants_list_available_to_anyone">
                     <div class="grid grid-cols-8 pl-6 hidden" :id="'dropdown-competitions-' + competition.id">
                         <template v-if="isRegistrationOpen(competition)">
                             <div class="col-span-1 text-gray-500 dark:text-gray-400 mt-1 flex items-center-safe justify-center">
