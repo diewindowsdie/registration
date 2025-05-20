@@ -266,6 +266,13 @@
                         </div>
                     </div>
                 </div>
+                <div class="mt-5">
+                    <input id="personalDataHandling" type="checkbox" value=""
+                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                           v-model="personalDataHandling"/>
+                    <label for="personalDataHandling"
+                           class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">{{ trans("registration.personalDataProcessing.prefix") }}<a href="/policy" class="hover:underline">{{ trans("registration.personalDataProcessing.text") }}</a></label>
+                </div>
                 <button type="button"
                         class="inline-flex items-center px-5 py-2.5 mt-5 sm:mt-10 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600 mr-1"
                         @click.prevent="onClear">
@@ -273,9 +280,9 @@
                 </button>
 
                 <button type="submit"
-                        :class="isAtLeastOneGroupSelected() ? 'inline-flex items-center px-5 py-2.5 mt-5 sm:mt-10 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800'
+                        :class="isAtLeastOneGroupSelected() && personalDataHandling ? 'inline-flex items-center px-5 py-2.5 mt-5 sm:mt-10 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800'
                         : 'text-white bg-blue-400 dark:bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center'"
-                        :disabled="!isAtLeastOneGroupSelected()"
+                        :disabled="!(isAtLeastOneGroupSelected() && personalDataHandling)"
                     >
                     {{ trans("registration.submitButton") }}
                 </button>
@@ -354,6 +361,7 @@ const formErrors = ref({
     coach_name: false
 });
 const globalErrors = ref([]);
+const personalDataHandling = ref(false);
 
 const namePattern = /^[^\d.,!@#$%^&*()_+=\[\]{}\\|;:"<>\/?~№]+$/;
 const genderPattern = /^[MF]{1}$/;
@@ -477,6 +485,10 @@ function validateBirthDate() {
 }
 
 function onSubmit() {
+    if (!personalDataHandling.value) {
+        return;
+    }
+
     resetFormErrors();
 
     onSurnameFocusOut();
@@ -542,6 +554,8 @@ function onClear() {
         coach_name: '',
         using_chair: false
     }
+
+    personalDataHandling.value = false;
 }
 
 function fillForm(data) {

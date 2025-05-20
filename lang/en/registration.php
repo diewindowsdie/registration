@@ -45,6 +45,9 @@ return [
     "confirmReset" => "Are you sure you wish to reset the registration form?",
     "registrationSuccess" => "You have successfully registered for the competition participation.",
 
+    "personalDataProcessing.prefix" => 'I agree with the ',
+    "personalDataProcessing.text" => 'personal data collecting and storing policy (in Russian)',
+
     "error.namePattern" => "Please use letters, quote and hyphen, one or more character",
     "error.patronymic" => "Please use letters, quote and hyphen, one or more character. If you don't have a middle name, please tick checkbox above.",
     "error.gender" => "Please select gender",

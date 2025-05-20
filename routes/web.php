@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [RegistrationController::class, 'index'])->name('index');
 
+Route::view('/policy', "pages.policy");
+
 Route::prefix('athletes')->name('athletes.')->group(function () {
     Route::get("find", [RegistrationController::class, "findAthletes"])->name("find");
 });
