@@ -33,7 +33,7 @@ export function ianseoData(toExport, competition) {
                 : "");
 
             return participant.id + TAB +
-                "" + TAB +
+                "1" + TAB +
                 participant.division_code + TAB +
                 participant.class_code + TAB +
                 "" + TAB +
