@@ -331,7 +331,7 @@ import dayjs from 'dayjs';
 import {Popover} from "flowbite";
 import vSelect from 'vue-select';
 import {trans} from "laravel-vue-i18n";
-import {translit} from "gost-transliteration";
+import { transliterate as tr} from "transliteration";
 
 const requiredTextPattern = /^[а-яА-ЯёË\w\-«»!?:;()\[\]&#№%+ "'.,]{2,}$/;
 
@@ -589,7 +589,7 @@ function validateCompetitionTitle() {
 function onAliasFocusOut() {
     if (!competition.value.id) {
         if (competition.value.title !== "" && competition.value.alias === "") {
-            competition.value.alias = translit(competition.value.title.toUpperCase().substring(0, 10));
+            competition.value.alias = tr(competition.value.title.toUpperCase().substring(0, 10));
         }
     }
 }

@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import {translit} from 'gost-transliteration';
+import { transliterate as tr} from "transliteration";
 import {trans} from "laravel-vue-i18n";
 
 export function ianseoData(toExport, competition) {
@@ -22,13 +22,13 @@ export function ianseoData(toExport, competition) {
 
             //todo если решим транслитерировать названия, раскомментировать
             // if (competition.ui_language !== "ru") {
-            //     sport_school_name = translit(sport_school_name);
+            //     sport_school_name = tr(sport_school_name);
             // }
 
-            const firstName = (competition.ui_language !== "ru" ? translit(participant.athlete.first_name) : participant.athlete.first_name);
+            const firstName = (competition.ui_language !== "ru" ? tr(participant.athlete.first_name) : participant.athlete.first_name);
             const patronymic = (participant.athlete.patronymic !== null
                 ? (competition.ui_language !== "ru"
-                    ? translit(participant.athlete.patronymic)
+                    ? tr(participant.athlete.patronymic)
                     : participant.athlete.patronymic)
                 : "");
 
@@ -42,7 +42,7 @@ export function ianseoData(toExport, competition) {
                 "1" + TAB +
                 participant.participate_teams + TAB +
                 participant.participate_mixed_teams + TAB +
-                (competition.ui_language !== "ru" ? translit(participant.athlete.surname) : participant.athlete.surname) + TAB +
+                (competition.ui_language !== "ru" ? tr(participant.athlete.surname) : participant.athlete.surname) + TAB +
                 (competition.ui_language === "ru"
                     ? firstName + TAB + patronymic + TAB
                     : firstName + " " + patronymic + TAB
@@ -60,7 +60,7 @@ export function ianseoData(toExport, competition) {
                 //todo если решим транслитерировать названия, убрать false
                 (participant.sport_organisation !== null
                     ? (false
-                        ? translit(participant.sport_organisation.full_title)
+                        ? tr(participant.sport_organisation.full_title)
                         : participant.sport_organisation.full_title)
                     : "") + TAB + "\n" +
                 "##WHEELCHAIR##" + TAB + participant.id + TAB + (participant.athlete.using_chair ? "1" : "0");

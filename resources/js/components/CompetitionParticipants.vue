@@ -197,10 +197,10 @@
                                            @click="confirmDeleteParticipant(participant.id)">❌</a>
                                     </th>
                                     <td class="px-4 py-3 font-medium text-gray-900 dark:text-white whitespace-normal text-ellipsis overflow-hidden">
-                                        {{ competition.ui_language !== "ru" ? translit(participant.athlete.surname) : participant.athlete.surname}} {{
-                                            competition.ui_language !== "ru" ? translit(participant.athlete.first_name) : participant.athlete.first_name
+                                        {{ competition.ui_language !== "ru" ? tr(participant.athlete.surname) : participant.athlete.surname}} {{
+                                            competition.ui_language !== "ru" ? tr(participant.athlete.first_name) : participant.athlete.first_name
                                         }}{{
-                                            participant.athlete.patronymic !== null ? " " + (competition.ui_language !== "ru" ? translit(participant.athlete.patronymic) : participant.athlete.patronymic) : ""
+                                            participant.athlete.patronymic !== null ? " " + (competition.ui_language !== "ru" ? tr(participant.athlete.patronymic) : participant.athlete.patronymic) : ""
                                         }}
                                     </td>
                                     <td class="participant-cell">
@@ -341,7 +341,7 @@ import {Tooltip} from 'flowbite';
 import {ianseoExportToFile, ianseoData} from "../ianseoExport.js";
 import {ref} from "vue";
 import {trans, wTrans} from 'laravel-vue-i18n'
-import {translit} from "gost-transliteration";
+import { transliterate as tr} from "transliteration";
 
 const props = defineProps(["competition", "participants", "isSecretary", "routeDeleteParticipant"]);
 
