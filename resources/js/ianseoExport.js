@@ -3,7 +3,7 @@ import { transliterate as tr} from "transliteration";
 import {trans} from "laravel-vue-i18n";
 
 export function ianseoData(toExport, competition) {
-    const TAB = "\t";
+    const SEPARATOR = ";";
     return toExport
         .filter(participant => participant.athlete !== null)
         .map((participant) => {
@@ -16,7 +16,7 @@ export function ianseoData(toExport, competition) {
                 : "";
             //если введено произвольное название спортшколы - берем в качестве кода первые символы названия
             if (participant.sport_school_or_club !== null) {
-                sport_school_code = participant.sport_school_or_club.substring(0, 6).trim();
+                sport_school_code = tr(participant.sport_school_or_club).substring(0, 6).trim();
                 sport_school_name = participant.sport_school_or_club;
             }
 
@@ -25,45 +25,42 @@ export function ianseoData(toExport, competition) {
             //     sport_school_name = tr(sport_school_name);
             // }
 
-            const firstName = (competition.ui_language !== "ru" ? tr(participant.athlete.first_name) : participant.athlete.first_name);
             const patronymic = (participant.athlete.patronymic !== null
                 ? (competition.ui_language !== "ru"
                     ? tr(participant.athlete.patronymic)
                     : participant.athlete.patronymic)
                 : "");
 
-            return participant.id + TAB +
-                "1" + TAB +
-                participant.division_code + TAB +
-                participant.class_code + TAB +
-                "" + TAB +
-                "1" + TAB +
-                participant.participate_teams + TAB +
-                "1" + TAB +
-                participant.participate_teams + TAB +
-                participant.participate_mixed_teams + TAB +
-                (competition.ui_language !== "ru" ? tr(participant.athlete.surname) : participant.athlete.surname) + TAB +
-                (competition.ui_language === "ru"
-                    ? firstName + TAB + patronymic + TAB
-                    : firstName + " " + patronymic + TAB
-                ) +
-                participant.athlete.gender + TAB +
-                participant.region_code + TAB +
+            return participant.id + SEPARATOR +
+                "1" + SEPARATOR +
+                participant.division_code + SEPARATOR +
+                participant.class_code + SEPARATOR +
+                "" + SEPARATOR +
+                "1" + SEPARATOR +
+                participant.participate_teams + SEPARATOR +
+                "1" + SEPARATOR +
+                participant.participate_teams + SEPARATOR +
+                participant.participate_mixed_teams + SEPARATOR +
+                (competition.ui_language !== "ru" ? tr(participant.athlete.surname) : participant.athlete.surname) + SEPARATOR +
+                (competition.ui_language !== "ru" ? tr(participant.athlete.first_name) : participant.athlete.first_name) + SEPARATOR +
+                patronymic + SEPARATOR +
+                participant.athlete.gender + SEPARATOR +
+                participant.region_code + SEPARATOR +
                 (participant.region.is_country
                     ? trans("countries." + participant.region_code)
-                    : trans("regions." + participant.region_code)) + TAB +
-                dayjs(participant.athlete.birth_date).format("DD.MM.YYYY") + TAB +
-                (competition.use_sport_qualification ? participant.athlete.qualification.code : "") + TAB +
-                sport_school_code + TAB +
-                sport_school_name + TAB +
-                (participant.sport_organisation !== null ? participant.sport_organisation.code : "") + TAB +
+                    : trans("regions." + participant.region_code)) + SEPARATOR +
+                dayjs(participant.athlete.birth_date).format("DD.MM.YYYY") + SEPARATOR +
+                (competition.use_sport_qualification ? participant.athlete.qualification.code : "") + SEPARATOR +
+                sport_school_code + SEPARATOR +
+                sport_school_name + SEPARATOR +
+                (participant.sport_organisation !== null ? participant.sport_organisation.code : "") + SEPARATOR +
                 //todo если решим транслитерировать названия, убрать false
                 (participant.sport_organisation !== null
                     ? (false
                         ? tr(participant.sport_organisation.full_title)
                         : participant.sport_organisation.full_title)
-                    : "") + TAB + "\n" +
-                "##WHEELCHAIR##" + TAB + participant.id + TAB + (participant.athlete.using_chair ? "1" : "0");
+                    : "") + SEPARATOR + "\n" +
+                "##WHEELCHAIR##" + SEPARATOR + participant.id + SEPARATOR + (participant.athlete.using_chair ? "1" : "0");
         }).reduce((exportData, row) => exportData + row + "\n", "");
 }
 
