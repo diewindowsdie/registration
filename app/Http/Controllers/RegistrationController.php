@@ -138,23 +138,17 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
         if ($athlete->first_name !== $existingAthlete->first_name) {
             $differenceCount++;
         }
+        if ($athlete->patronymic !== $existingAthlete->patronymic) {
+            $differenceCount++;
+        }
         if ($athlete->gender !== $existingAthlete->gender) {
             $differenceCount++;
         }
         if (!$existingAthlete->birth_date->eq($athlete->birth_date)) {
             $differenceCount++;
         }
-        if ($athlete->qualification_code !== $existingAthlete->qualification_code) {
-            $differenceCount++;
-        }
-        if ($athlete->region_code !== $existingAthlete->region_code) {
-            $differenceCount++;
-        }
-        if ($athlete->using_chair !== $existingAthlete->using_chair) {
-            $differenceCount++;
-        }
 
-        if ($differenceCount >= 3) {
+        if ($differenceCount >= 2) {
             return $this->createNewAthlete($athlete);
         }
 
