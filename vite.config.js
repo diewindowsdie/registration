@@ -1,10 +1,18 @@
-import { defineConfig } from 'vite';
+import {defineConfig} from 'vite';
 import laravel from 'laravel-vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
 import i18n from 'laravel-vue-i18n/vite';
 
 export default defineConfig({
+    server: {
+        cors: {
+            origin: 'http://registration.local',
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            allowedHeaders: ['Content-Type', 'Authorization'],
+            credentials: true
+        }
+    },
     plugins: [
         laravel({
             input: [
