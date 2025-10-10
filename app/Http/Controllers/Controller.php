@@ -21,6 +21,6 @@ abstract class Controller
             return 0;
         }
 
-        return $request->input($key) == true;
+        return $request->input($key) === "true" || $request->input($key) === "1";
     }
 }

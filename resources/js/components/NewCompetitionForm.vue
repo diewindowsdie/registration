@@ -527,9 +527,6 @@ function validateMaxBirthDate(group) {
 
     const errors = [];
     formErrors.value.max_birth_date.set(group.id, errors);
-    console.log(group.min_birth_date);
-    console.log(dayjs(group.min_birth_date, 'YYYY-MM-DD', true));
-    console.log(dayjs(group.min_birth_date, 'YYYY-MM-DD', true).isValid());
 
     //если указана, она должна быть валидной и быть не позже даты начала соревнования, или в прошлом
     if (group.max_birth_date && dayjs(group.max_birth_date, 'YYYY-MM-DD', true).isValid() && !dayjs(group.max_birth_date).isAfter(dateToCompareWith)) {
