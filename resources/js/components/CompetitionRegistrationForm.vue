@@ -182,17 +182,20 @@
                             <label class="block mb-2 text-2xl font-medium text-gray-900 dark:text-white select-none">{{ trans("registration.competitionParticipation") }}</label>
                             <template v-for="group in competition_copy.groups">
                                 <div
-                                    class="grid grid-cols-1 gap-x-6 gap-y-0 sm:grid-cols-2 items-center p-4 mt-2 text-sm text-gray-800 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
-                                    v-if="isGroupAvailable(group)">
+                                    :class="isGroupAvailable(group) ? 'grid grid-cols-1 gap-x-6 gap-y-0 sm:grid-cols-2 items-center p-4 mt-2 text-sm text-gray-800 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600'
+                                                                    : 'grid grid-cols-1 gap-x-6 gap-y-0 sm:grid-cols-2 items-center p-4 mt-2 text-sm text-gray-800 border border-gray-300 rounded-lg bg-gray-200 dark:bg-gray-500 dark:text-gray-300 dark:border-gray-600'"
+                                    >
                                     <div class="flex items-center col-span=1 sm:col-span-1">
                                         <input id="participation_{{group.id}}" type="checkbox" value=""
-                                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                               v-model="group.participation"/>
+                                               :class="isGroupAvailable(group) ? 'w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+                                                                               : 'w-4 h-4 text-blue-600 bg-gray-200 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-600 dark:border-gray-600'"
+                                               v-model="group.participation" :disabled="!isGroupAvailable(group)"/>
                                         <label for="participation_{{group.id}}"
                                                class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none">{{ trans("divisions." + group.division.code) }} {{ trans("classes." + group.archery_class.code) }}</label>
                                     </div>
                                     <div class="text-right block">
                                         <p class="text-xs font-bold">{{ trans("registration.groupEligibilityCriteria") }}</p>
+                                        <p class="text-xs" v-if="competition_copy.use_sport_qualification && group.min_qualification_code !== 'NO'">{{ trans("registration.qualificationEligibility") }} <b>{{group.min_qualification.short_title}}</b></p>
                                         <p class="text-xs" v-if="group.min_birth_date !== null">{{ trans("registration.birthDateEligibility") }} <b>{{dayjs(group.min_birth_date).format("DD.MM.YYYY")}} {{ trans("registration.birthDateEligibilityTo") }} {{dayjs(group.max_birth_date).format("DD.MM.YYYY")}}</b></p>
                                         <p class="text-xs" v-if="group.min_birth_date === null">{{ trans("registration.birthDateEligibilityFrom") }} <b>{{dayjs(group.max_birth_date).format("DD.MM.YYYY")}}</b> {{ trans("registration.birthDateEligibilityAndOlder") }}</p>
                                         <p class="text-xs" v-if="JSON.stringify(group.allowed_genders) !== JSON.stringify(group.archery_class.allowed_genders)">
@@ -347,6 +350,7 @@ const errorMessages = {
     "ALREADY_EXISTS": wTrans("registration.error.global.athleteAlreadyRegistered"),
     "INVALID_GENDER_FOR_GROUP": wTrans("registration.error.global.invalidGenderForGroup"),
     "INVALID_BIRTH_DATE_FOR_GROUP": wTrans("registration.error.global.invalidBirthDateForGroup"),
+    "INVALID_QUALIFICATION_FOR_GROUP": wTrans("registration.error.global.invalidQualificationForGroup"),
     "DIFFERENT_CLASSES_IN_SAME_COMPETITION": wTrans("registration.error.global.differentClassesInSameCompetition")
 }
 
@@ -425,7 +429,10 @@ function isGroupAvailable(group) {
         (group.min_birth_date === null || (group.min_birth_date != null && dayjs(athlete.value.birth_date).diff(dayjs(group.min_birth_date)) >= 0) &&
             dayjs(athlete.value.birth_date).diff(dayjs(group.max_birth_date)) <= 0);
 
-    return genderCriteriaMet && sameClassCriteriaMet && birthDateCriteriaMet;
+    const qualificationCriteriaMet = isAthleteDataKnown && (!competition_copy.value.use_sport_qualification ||
+        (props.qualifications.find(qualification => qualification.code === athlete.value.qualification).order >= group.min_qualification.order));
+
+    return genderCriteriaMet && sameClassCriteriaMet && birthDateCriteriaMet && qualificationCriteriaMet;
 }
 
 function isAtLeastOneGroupSelected() {

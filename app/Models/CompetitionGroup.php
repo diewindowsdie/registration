@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property int $competition_id
@@ -34,7 +34,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class CompetitionGroup extends Model
 {
     public $timestamps = false;
-    protected $with = ["division", "archeryClass"];
+    protected $with = ["division", "archeryClass", "minQualification"];
 
     protected $casts = [
         'min_birth_date' => 'date',
@@ -50,5 +50,10 @@ class CompetitionGroup extends Model
     public function archeryClass(): HasOne
     {
         return $this->hasOne(ArcheryClass::class, "code", "class_code");
+    }
+
+    public function minQualification(): HasOne
+    {
+        return $this->hasOne(SportQualification::class, "code", "min_qualification_code");
     }
 }

@@ -25,6 +25,7 @@ enum RegistrationError implements \JsonSerializable
     case INVALID_GENDER_FOR_GROUP;
     case INVALID_BIRTH_DATE_FOR_GROUP;
     case DIFFERENT_CLASSES_IN_SAME_COMPETITION;
+    case INVALID_QUALIFICATION_FOR_GROUP;
 
     public function jsonSerialize(): string
     {
@@ -202,6 +203,9 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
                     $athlete->birth_date->gt($existingGroup->max_birth_date)) {
                     return [RegistrationError::INVALID_BIRTH_DATE_FOR_GROUP];
                 }
+                if ($existingGroup->min_qualification !== null && $athlete->qualification->order < $existingGroup->minQualification->order) {
+                    return [RegistrationError::INVALID_QUALIFICATION_FOR_GROUP];
+                }
             }
         }
 
@@ -222,6 +226,7 @@ where a.surname like :surname and coalesce(s.cnt, 0) = 0 limit 3", [":surname" =
         }
 
         $athlete = $this->getRegisteringAthlete($request);
+        $athlete->load(["qualification"]);
         $errors = self::checkRegistrationBusinessLogicErrors($request, $athlete);
         if (count($errors) > 0) {
             Log::warning("Ошибки при регистрации спортсмена на соревнования: competition_id = {competition_id}, athlete_id = {athlete_id}, errors = {errors}",

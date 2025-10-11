@@ -10,6 +10,7 @@ use App\Models\Competition;
 use App\Models\CompetitionGroup;
 use App\Models\CompetitionParticipant;
 use App\Models\Division;
+use App\Models\SportQualification;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
@@ -21,7 +22,8 @@ class CompetitionsController extends Controller
     {
         return view('pages.competitions.new', [
             "divisions" => Division::orderBy("order", "asc")->get(),
-            "archery_classes" => ArcheryClass::orderBy("order", "asc")->get()
+            "archery_classes" => ArcheryClass::orderBy("order", "asc")->get(),
+            "qualifications" => SportQualification::orderBy("order", "desc")->get()
         ]);
     }
 
@@ -36,7 +38,8 @@ class CompetitionsController extends Controller
         return view('pages.competitions.edit', [
             "competition" => $competition,
             "divisions" => Division::orderBy("order", "asc")->get(),
-            "archery_classes" => ArcheryClass::orderBy("order", "asc")->get()
+            "archery_classes" => ArcheryClass::orderBy("order", "asc")->get(),
+            "qualifications" => SportQualification::orderBy("order", "desc")->get()
         ]);
     }
 
@@ -81,6 +84,7 @@ class CompetitionsController extends Controller
             $competitionGroup->allowed_genders = $group["allowed_genders"];
             $competitionGroup->min_birth_date = $group["min_birth_date"];
             $competitionGroup->max_birth_date = $group["max_birth_date"];
+            $competitionGroup->min_qualification_code = $group["min_qualification_code"];
             $competitionGroup->includes_teams = self::wrapUnsafeBoolean($group, "includes_teams");
             $competitionGroup->save();
         }

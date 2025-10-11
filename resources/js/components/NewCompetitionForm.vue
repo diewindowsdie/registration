@@ -116,7 +116,7 @@
                         class="border-gray-300 dark:border-gray-600 rounded-2xl border px-5 py-4 col-span-1 sm:col-span-2"
                         v-for="group in competition.groups" :key="group.id">
                         <div class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-6">
-                            <div class="col-span-1 sm:col-span-3">
+                            <div class="col-span-1 sm:col-span-2">
                                 <label for="division"
                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Дивизион</label>
                                 <vSelect
@@ -132,7 +132,7 @@
                                    v-if="formErrors.division.get(group.id)"><span
                                     class="font-medium">Выберите дивизион</span></p>
                             </div>
-                            <div class="col-span-1 sm:col-span-3">
+                            <div class="col-span-1 sm:col-span-2">
                                 <label for="archery_class"
                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Класс</label>
                                 <vSelect
@@ -148,6 +148,18 @@
                                 <p class="mt-2 text-sm text-red-600 dark:text-red-500"
                                    v-if="formErrors.archery_class.get(group.id)"><span
                                     class="font-medium">Выберите класс</span></p>
+                            </div>
+                            <div class="col-span-1 sm:col-span-2">
+                                <label for="min_qualification"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Минимальная спортивная квалификация</label>
+                                <vSelect
+                                    :id="`min_qualification_${group.id}`"
+                                    class="vue-select-tailwind vue-select-tailwind-deselect-hidden"
+                                    v-model="group.min_qualification_code"
+                                    :options="qualifications"
+                                    label="full_title"
+                                    :reduce="qualification => qualification.code"
+                                />
                             </div>
                             <div class="col-span-1 sm:col-span-2">
                                 <label for="max_birth_date"
@@ -213,7 +225,7 @@
                     <div class="col-span-1 sm:col-span-2 -mt-2">
                         <button type="button"
                                 class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-gray-500 rounded-lg focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-900 hover:bg-gray-600"
-                                @click="competition.groups.push({ id: -1 * Math.floor(Math.random() * 100000), allowed_genders: []})">
+                                @click="competition.groups.push({ id: -1 * Math.floor(Math.random() * 100000), allowed_genders: [], min_qualification_code: 'NO'})">
                             Добавить группу
                         </button>
                     </div>
@@ -360,7 +372,8 @@ const props = defineProps({
     routeParticipants: String,
     routeLoadUpcomingCompetitions: String,
     divisions: Object,
-    archery_classes: Object
+    archery_classes: Object,
+    qualifications: Object
 });
 
 const enrichedDivisions = computed(() => props.divisions.map(division => {

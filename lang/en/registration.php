@@ -36,6 +36,7 @@ return [
     "birthDateEligibilityTo" => "-",
     "birthDateEligibilityFrom" => "Birth date:",
     "birthDateEligibilityAndOlder" => "and older",
+    "qualificationEligibility" => "Sport qualification: at least",
     "teamEventParticipation" => "Participate in team events",
     "mixedTeamEventParticipation" => "Participate in mixed team events",
 
@@ -59,6 +60,7 @@ return [
     "error.global.athleteAlreadyRegistered" => "This athlete is already registered for the competition",
     "error.global.invalidGenderForGroup" => "Athlete gender does not meet the requirements of the selected division and class",
     "error.global.invalidBirthDateForGroup" => "Athlete birth date does not meet the requirements of the selected division and class",
+    "error.global.invalidQualificationForGroup" => "Athlete sport qualification does not meet the requirements of the selected division and class",
     "error.global.differentClassesInSameCompetition" => "Athlete cannot participate in the same competition in different classes",
     "error.unknown" => "Error while registering for competition participation :(",
 

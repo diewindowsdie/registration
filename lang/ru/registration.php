@@ -36,6 +36,7 @@ return [
     "birthDateEligibilityTo" => "-",
     "birthDateEligibilityFrom" => "Дата рождения: от",
     "birthDateEligibilityAndOlder" => "и старше",
+    "qualificationEligibility" => "Спортивная квалификация: не ниже",
     "teamEventParticipation" => "Участвую в командных соревнованиях",
     "mixedTeamEventParticipation" => "Участвую в соревнованиях команд-микс",
 
@@ -59,6 +60,7 @@ return [
     "error.global.athleteAlreadyRegistered" => "Данный спортсмен уже зарегистрирован на эти соревнования",
     "error.global.invalidGenderForGroup" => "Пол спортсмена не соответствует требованиям выбранного дивизиона и класса",
     "error.global.invalidBirthDateForGroup" => "Дата рождения спортсмена не соответствует требованиям выбранного дивизиона и класса",
+    "error.global.invalidQualificationForGroup" => "Спортивная квалификация спортсмена не соответствует требованиям выбранного дивизиона и класса",
     "error.global.differentClassesInSameCompetition" => "Спортсмен не может участвовать в одном соревновании в разных классах",
     "error.unknown" => "Произошла ошибка во время регистрации :(",
 ];

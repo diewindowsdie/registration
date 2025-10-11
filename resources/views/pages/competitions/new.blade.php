@@ -10,5 +10,6 @@
     route-load-upcoming-competitions="{{ route('competitions.loadUpcoming') }}"
     :divisions="{{ $divisions }}"
     :archery_classes="{{ $archery_classes }}"
+    :qualifications="{{ $qualifications }}"
 ></new-competition-form>
 @endsection
