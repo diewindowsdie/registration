@@ -21,6 +21,7 @@ abstract class Controller
             return 0;
         }
 
-        return $request->input($key) === "true" || $request->input($key) === "1";
+        //тут нужна именно проверка, игнорирующая типы, потому что по всей видимости input(..) может вернуть объекты разных типов
+        return $request->input($key) == "true" || $request->input($key) == "1";
     }
 }
