@@ -15,7 +15,7 @@ export function ianseoData(toExport, competition) {
                 ? participant.sport_school.full_title
                 : "";
             //если введено произвольное название спортшколы - берем в качестве кода первые символы названия
-            if (participant.sport_school_or_club !== null) {
+            if (competition.allow_input_school_and_club) {
                 sport_school_code = tr(participant.sport_school_or_club).substring(0, 6).trim();
                 sport_school_name = participant.sport_school_or_club;
             }
